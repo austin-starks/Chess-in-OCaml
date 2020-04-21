@@ -16,5 +16,5 @@ let check t = failwith "Unimplemented"
 
 let checkmate t = failwith "Unimplemented"
 
-(* let score game = 
-  failwith "unimplemented" *)
+let score game = 
+  failwith "unimplemented"
