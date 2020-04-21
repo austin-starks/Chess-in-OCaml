@@ -11,7 +11,10 @@ type piece =
 
 type t = piece list list
 
-type position = string
+type position = {
+  letter : string;
+  number: int
+}
 
 exception IllegalMoveError 
 
@@ -45,5 +48,9 @@ let is_valid_move piece pos1 pos2 =
       (pos1.number = pos2.number +1)
       || (pos1.number = 2 && pos2.number = 4)) then true else false
   | _ -> failwith ""
+
+(** [parse_position pos] is a record representing the string pos
+  Requires: pos to be a1, a2, ... a8, b1, ..., h7, or h8  *)
+let parse_position pos = failwith ""
 
 let move_piece t pos1 pos2 = failwith "Unimplemented"
