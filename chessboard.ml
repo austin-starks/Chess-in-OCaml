@@ -35,10 +35,9 @@ let initialize_chessboard = [
     King White; Bishop White; Knight White; Rook White];
 ]
 
-
-let move_piece t pos1 pos2 = failwith "Unimplemented"
-
 let is_valid_move piece pos1 pos2 = 
   match piece with 
   | Pawn Black-> failwith ""
   | _ -> failwith ""
+
+let move_piece t pos1 pos2 = failwith "Unimplemented"
