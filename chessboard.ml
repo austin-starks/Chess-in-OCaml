@@ -22,22 +22,28 @@ exception SameColorMoveError
 
 let initialize_chessboard = [
   [Rook Black; Knight Black; Bishop Black; Queen Black; 
-    King Black; Bishop Black; Knight Black; Rook Black];
+   King Black; Bishop Black; Knight Black; Rook Black];
   [Pawn Black; Pawn Black; Pawn Black; Pawn Black; 
-    Pawn Black; Pawn Black; Pawn Black; Pawn Black];
+   Pawn Black; Pawn Black; Pawn Black; Pawn Black];
   [None; None; None; None; None; None; None; None;];
   [None; None; None; None; None; None; None; None;];
   [None; None; None; None; None; None; None; None;];
   [None; None; None; None; None; None; None; None;];
   [Pawn White; Pawn White; Pawn White; Pawn White; 
-    Pawn White; Pawn White; Pawn White; Pawn White];
+   Pawn White; Pawn White; Pawn White; Pawn White];
   [Rook White; Knight White; Bishop White; Queen White; 
-    King White; Bishop White; Knight White; Rook White];
+   King White; Bishop White; Knight White; Rook White];
 ]
+
 
 let is_valid_move piece pos1 pos2 = 
   match piece with 
-  | Pawn Black-> failwith ""
+  | Pawn Black-> if pos1.letter = pos2.letter && (
+      (pos1.number = pos2.number -1)
+      || (pos1.number = 7 && pos2.number = 5)) then true else false
+  | Pawn White -> if pos1.letter = pos2.letter && (
+      (pos1.number = pos2.number +1)
+      || (pos1.number = 2 && pos2.number = 4)) then true else false
   | _ -> failwith ""
 
 let move_piece t pos1 pos2 = failwith "Unimplemented"

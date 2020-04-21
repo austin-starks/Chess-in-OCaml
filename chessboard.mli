@@ -20,21 +20,23 @@ type position = string
 exception IllegalMoveError 
 
 (** Raised when the player attempts to move a piece that isn't there (attempts)
-  to move a None piece *)
+    to move a None piece *)
 exception NoPiecePresentError 
 
 (** Raised when a piece is trying to move to a board space containing a d piece 
-  with that same color *)
+    with that same color *)
 exception SameColorMoveError
 
 (** [initialize_chessboard] is a chessboard of pieces in the starting 
-  arrangement *)
+    arrangement *)
 val initialize_chessboard : t 
 
 (** [move_piece t old_pos new_pos] is a new chessboard with the piece at 
-  [old_pos] moved to [new_pos]. 
-  Raises [IllegalMoveError] if that piece cannot move from [old_pos] to [new_pos].
-  Raises [NoPiecePresentError] if there is no piece in [old_pos] 
-  Raises [SameColorMoveError] if a piece is moved to a position where a piece of 
+    [old_pos] moved to [new_pos]. 
+    Raises [IllegalMoveError] if that piece cannot move from [old_pos] to [new_pos].
+    Raises [NoPiecePresentError] if there is no piece in [old_pos] 
+    Raises [SameColorMoveError] if a piece is moved to a position where a piece of 
     the same color is already on.  *)
 val move_piece : t -> position -> position -> t
+
+
