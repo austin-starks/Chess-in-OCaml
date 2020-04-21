@@ -1,9 +1,40 @@
 (** The abstract type representing a chessboard *)
 type t 
 
+(** The type representing the color of the piece *)
+type color = Black | White
+
 (** The type representing a chess piece on the board *)
-type piece = Pawn | Knight | Bishop | King | Queen | Rook 
+type piece = 
+  | Pawn of color 
+  | Knight of color
+  | Bishop of color
+  | King of color 
+  | Queen of color 
+  | Rook of color 
+  | None
+
+type position = string
 
 (** Raised when the player makes a move that is not allowed in chess *)
-exception InvalidMove 
+exception IllegalMoveError 
 
+(** Raised when the player attempts to move a piece that isn't there (attempts)
+  to move a None piece *)
+exception NoPiecePresentError 
+
+(** Raised when a piece is trying to move to a board space containing a d piece 
+  with that same color *)
+exception SameColorMoveError
+
+(** [initialize_chessboard] is a chessboard of pieces in the starting 
+  arrangement *)
+val initialize_chessboard : t 
+
+(** [move_piece t old_pos new_pos] is a new chessboard with the piece at 
+  [old_pos] moved to [new_pos]. 
+  Raises [IllegalMoveError] if that piece cannot move from [old_pos] to [new_pos].
+  Raises [NoPiecePresentError] if there is no piece in [old_pos] 
+  Raises [SameColorMoveError] if a piece is moved to a position where a piece of 
+    the same color is already on.  *)
+val move_piece : t -> position -> position -> t
