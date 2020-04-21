@@ -11,7 +11,10 @@ type piece =
 
 type t = piece list list
 
-type position = string
+type position = {
+  x : string;
+  y: int
+}
 
 exception IllegalMoveError 
 
@@ -39,5 +42,7 @@ let is_valid_move piece pos1 pos2 =
   match piece with 
   | Pawn Black-> failwith ""
   | _ -> failwith ""
+
+
 
 let move_piece t pos1 pos2 = failwith "Unimplemented"

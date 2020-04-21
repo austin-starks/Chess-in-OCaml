@@ -14,7 +14,7 @@ type piece =
   | Rook of color 
   | None
 
-type position = string
+type position 
 
 (** Raised when the player makes a move that is not allowed in chess *)
 exception IllegalMoveError 
