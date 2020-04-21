@@ -7,12 +7,12 @@
    and functions that cause the state to change. *)
 
 (** The abstract type of values representing the game state. *)
+open Chessboard
+
 type t
 
 (** The type representing the people playing the game *)  
 type person = string
-
-
 
 (** [init_state g] is the initial state of the the chess game [g]. In this 
     state, the game is set up as a normal chessboard, with white being the 
