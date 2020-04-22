@@ -1,6 +1,3 @@
-(** The abstract type representing a chessboard *)
-type t 
-
 (** The type representing the color of the piece *)
 type color = Black | White
 
@@ -15,6 +12,9 @@ type piece =
   | Queen of color 
   | Rook of color 
   | None
+
+(** The abstract type representing a chessboard *)
+type t = piece array list
 
 (** Raised when the player makes a move that is not allowed in chess *)
 exception IllegalMoveError 
