@@ -4,6 +4,8 @@ type t
 (** The type representing the color of the piece *)
 type color = Black | White
 
+type position
+
 (** The type representing a chess piece on the board *)
 type piece = 
   | Pawn of color 
