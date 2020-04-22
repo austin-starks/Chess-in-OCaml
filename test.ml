@@ -4,17 +4,6 @@ open Chessboard
 
 let board = Chessboard.initialize_chessboard
 
-let rook_board = [
-  [|None; None; None; None; None; None; None; None;|];
-  [|None; None; None; None; None; None; None; None;|];
-  [|None; None; None; None; None; None; None; None;|];
-  [|None; None; None; None; None; None; None; None;|];
-  [|None; None; None; None; Rook White; None; None; None;|];
-  [|None; None; None; None; None; None; None; None;|];
-  [|None; None; None; None; None; None; None; None;|];
-  [|None; None; None; None; None; None; None; None;|];
-]
-
 let make_is_valid_move_test 
     (name: string)
     (piece: string)
@@ -146,9 +135,93 @@ let is_valid_move_tests = [
     "E1" "E3" false;
   make_is_valid_move_test "Testing if knight: same place" "knight black" 
     "C2" "C2" false;
-
-
 ]
+
+(* Testing move_piece *)
+let _  = (move_piece board "E2" "E4") 
+
+let () = assert (board = [
+    [|Rook Black; Knight Black; Bishop Black; Queen Black; 
+      King Black; Bishop Black; Knight Black; Rook Black|];
+    [|Pawn Black; Pawn Black; Pawn Black; Pawn Black; 
+      Pawn Black; Pawn Black; Pawn Black; Pawn Black|];
+    [|None; None; None; None; None; None; None; None;|];
+    [|None; None; None; None; None; None; None; None;|];
+    [|None; None; None; None; Pawn White; None; None; None;|];
+    [|None; None; None; None; None; None; None; None;|];
+    [|Pawn White; Pawn White; Pawn White; Pawn White; 
+      None; Pawn White; Pawn White; Pawn White|];
+    [|Rook White; Knight White; Bishop White; Queen White; 
+      King White; Bishop White; Knight White; Rook White|];
+  ])
+
+let _  = (move_piece board "E7" "E5") 
+
+let () = assert (board = [
+    [|Rook Black; Knight Black; Bishop Black; Queen Black; 
+      King Black; Bishop Black; Knight Black; Rook Black|];
+    [|Pawn Black; Pawn Black; Pawn Black; Pawn Black; 
+      None; Pawn Black; Pawn Black; Pawn Black|];
+    [|None; None; None; None; None; None; None; None;|];
+    [|None; None; None; None; Pawn Black; None; None; None;|];
+    [|None; None; None; None; Pawn White; None; None; None;|];
+    [|None; None; None; None; None; None; None; None;|];
+    [|Pawn White; Pawn White; Pawn White; Pawn White; 
+      None; Pawn White; Pawn White; Pawn White|];
+    [|Rook White; Knight White; Bishop White; Queen White; 
+      King White; Bishop White; Knight White; Rook White|];
+  ])
+
+let _  = (move_piece board "G1" "F3") 
+
+let () = assert (board = [
+    [|Rook Black; Knight Black; Bishop Black; Queen Black; 
+      King Black; Bishop Black; Knight Black; Rook Black|];
+    [|Pawn Black; Pawn Black; Pawn Black; Pawn Black; 
+      None; Pawn Black; Pawn Black; Pawn Black|];
+    [|None; None; None; None; None; None; None; None;|];
+    [|None; None; None; None; Pawn Black; None; None; None;|];
+    [|None; None; None; None; Pawn White; None; None; None;|];
+    [|None; None; None; None; None; Knight White; None; None;|];
+    [|Pawn White; Pawn White; Pawn White; Pawn White; 
+      None; Pawn White; Pawn White; Pawn White|];
+    [|Rook White; Knight White; Bishop White; Queen White; 
+      King White; Bishop White; None; Rook White|];
+  ]  )
+
+let _  = (move_piece board "G8" "F6") 
+
+let () = assert (board = [
+    [|Rook Black; Knight Black; Bishop Black; Queen Black; 
+      King Black; Bishop Black; None; Rook Black|];
+    [|Pawn Black; Pawn Black; Pawn Black; Pawn Black; 
+      None; Pawn Black; Pawn Black; Pawn Black|];
+    [|None; None; None; None; None; Knight Black; None; None;|];
+    [|None; None; None; None; Pawn Black; None; None; None;|];
+    [|None; None; None; None; Pawn White; None; None; None;|];
+    [|None; None; None; None; None; Knight White; None; None;|];
+    [|Pawn White; Pawn White; Pawn White; Pawn White; 
+      None; Pawn White; Pawn White; Pawn White|];
+    [|Rook White; Knight White; Bishop White; Queen White; 
+      King White; Bishop White; None; Rook White|];
+  ]  )
+
+let _  = (move_piece board "D1" "H5") 
+
+let () = assert (board = [
+    [|Rook Black; Knight Black; Bishop Black; Queen Black; 
+      King Black; Bishop Black; None; Rook Black|];
+    [|Pawn Black; Pawn Black; Pawn Black; Pawn Black; 
+      None; Pawn Black; Pawn Black; Pawn Black|];
+    [|None; None; None; None; None; Knight Black; None; None;|];
+    [|None; None; None; None; Pawn Black; None; None; Queen White;|];
+    [|None; None; None; None; Pawn White; None; None; None;|];
+    [|None; None; None; None; None; Knight White; None; None;|];
+    [|Pawn White; Pawn White; Pawn White; Pawn White; 
+      None; Pawn White; Pawn White; Pawn White|];
+    [|Rook White; Knight White; Bishop White; None; 
+      King White; Bishop White; None; Rook White|];
+  ]  )
 
 
 let suite =
