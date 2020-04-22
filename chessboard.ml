@@ -23,6 +23,8 @@ exception NoPiecePresentError
 
 exception SameColorMoveError
 
+exception NotAPiece
+
 
 let initialize_chessboard =  [
   [|Rook Black; Knight Black; Bishop Black; Queen Black; 
@@ -129,6 +131,7 @@ let is_valid_move piece pos1 pos2 =
     If there's not, it return a unit. Otherwise, raises SameColorMoveError *)
 let check_piece_color piece_to_move piece_at_loc = 
   match piece_to_move, piece_at_loc with 
+  | None, _ -> raise NotAPiece
   | _, None -> () 
   | Rook c1, Rook c2 -> if c1 = c2 then raise SameColorMoveError
   | Rook c1, Knight c2 -> if c1 = c2 then raise SameColorMoveError
@@ -185,5 +188,20 @@ let move_piece t pos1 pos2 =
     let _ = check_piece_color piece_to_move piece_at_loc in 
     chess_row_pos2.(pos2_letter_index) <- piece_to_move;
     chess_row_pos1.(pos1_letter_index) <- None; 
-    List.fold_left (fun lst arr -> (Array.copy arr)::lst) [] t |> List.rev
   else raise IllegalMoveError
+
+let get_piece_from_string str = 
+  match String.lowercase_ascii str with 
+  | "rook black" -> Rook Black
+  | "rook white" -> Rook White
+  | "pawn black" -> Pawn Black
+  | "pawn white" -> Pawn White
+  | "bishop black" -> Bishop Black 
+  | "bishop white" -> Bishop White
+  | "knight black" -> Knight Black 
+  | "knight white" -> Knight White
+  | "queen black" -> Queen Black  
+  | "queen white" -> Queen White  
+  | "king black" -> King Black 
+  | "king White" -> King White 
+  | _ -> raise NotAPiece
