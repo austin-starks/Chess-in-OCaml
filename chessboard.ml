@@ -11,6 +11,7 @@ type piece =
 
 type t = piece array list
 
+(* Internal representation of a position *)
 type position = {
   letter : string;
   number: int
@@ -51,18 +52,15 @@ let pos_letter_assoc_list =
   [("A", 1);  ("B", 2);  ("C", 3);  ("D", 4);  
    ("E", 5);  ("F", 6);  ("G", 7);  ("H", 8); ]
 
-let get_piece t pos = 
-  let position = parse_position pos in  
+
+let get_chess_row t pos = 
   let rec get_row_helper t position = 
     match t, position with 
     | [], _ -> failwith "Invalid chessboard"
     | h::_, {letter = _; number = 8} -> h  
     | _::t, {letter = x; number = y} -> get_row_helper t 
                                         {letter = x; number = y+1}  in 
-  let row = get_row_helper t position in row
-
-
-let move_piece t pos1 pos2 = failwith "Unimplemented"
+   get_row_helper t pos 
 
 
 let is_rook_move piece pos1 pos2 =
@@ -70,12 +68,14 @@ let is_rook_move piece pos1 pos2 =
   || (pos1.number = pos2.number && pos1.letter <> pos2.letter) 
   then true else false
 
+
 let is_bishop_move piece pos1 pos2 = 
   let pos_number_differnece = pos2.number - pos1.number in 
   let pos_letter_difference = List.assoc pos2.letter pos_letter_assoc_list -
                               List.assoc pos1.letter pos_letter_assoc_list in
   if Int.abs pos_number_differnece = Int.abs pos_letter_difference 
   && pos_number_differnece <> 0 then true else false
+
 
 let is_valid_move piece pos1 pos2 = 
   match piece with 
@@ -119,3 +119,66 @@ let is_valid_move piece pos1 pos2 =
   | Rook _ -> is_rook_move piece pos1 pos2
   | None -> false
 
+
+(** [check_piece_color piece_to_move piece_at_loc] takes in two pieces
+  and checks to see if there is a piece of the same color at that position. 
+  If there's not, it return a unit. Otherwise, raises SameColorMoveError *)
+let check_piece_color piece_to_move piece_at_loc = 
+  match piece_to_move, piece_at_loc with 
+  | _, None -> () 
+  | Rook c1, Rook c2 -> if c1 = c2 then raise SameColorMoveError
+  | Rook c1, Knight c2 -> if c1 = c2 then raise SameColorMoveError
+  | Rook c1, Bishop c2 -> if c1 = c2 then raise SameColorMoveError
+  | Rook c1, King c2 -> if c1 = c2 then raise SameColorMoveError
+  | Rook c1, Queen c2 -> if c1 = c2 then raise SameColorMoveError
+  | Rook c1, Pawn c2 -> if c1 = c2 then raise SameColorMoveError
+  | Knight c1, Rook c2 -> if c1 = c2 then raise SameColorMoveError
+  | Knight c1, Knight c2 -> if c1 = c2 then raise SameColorMoveError
+  | Knight c1, Bishop c2 -> if c1 = c2 then raise SameColorMoveError
+  | Knight c1, King c2 -> if c1 = c2 then raise SameColorMoveError
+  | Knight c1, Queen c2 -> if c1 = c2 then raise SameColorMoveError
+  | Knight c1, Pawn c2 -> if c1 = c2 then raise SameColorMoveError  
+  | Bishop c1, Rook c2 -> if c1 = c2 then raise SameColorMoveError
+  | Bishop c1, Knight c2 -> if c1 = c2 then raise SameColorMoveError
+  | Bishop c1, Bishop c2 -> if c1 = c2 then raise SameColorMoveError
+  | Bishop c1, King c2 -> if c1 = c2 then raise SameColorMoveError
+  | Bishop c1, Queen c2 -> if c1 = c2 then raise SameColorMoveError
+  | Bishop c1, Pawn c2 -> if c1 = c2 then raise SameColorMoveError
+  | King c1, Rook c2 -> if c1 = c2 then raise SameColorMoveError
+  | King c1, Knight c2 -> if c1 = c2 then raise SameColorMoveError
+  | King c1, Bishop c2 -> if c1 = c2 then raise SameColorMoveError
+  | King c1, King c2 -> if c1 = c2 then raise SameColorMoveError
+  | King c1, Queen c2 -> if c1 = c2 then raise SameColorMoveError
+  | King c1, Pawn c2 -> if c1 = c2 then raise SameColorMoveError  
+  | Queen c1, Rook c2 -> if c1 = c2 then raise SameColorMoveError
+  | Queen c1, Knight c2 -> if c1 = c2 then raise SameColorMoveError
+  | Queen c1, Bishop c2 -> if c1 = c2 then raise SameColorMoveError
+  | Queen c1, King c2 -> if c1 = c2 then raise SameColorMoveError
+  | Queen c1, Queen c2 -> if c1 = c2 then raise SameColorMoveError
+  | Queen c1, Pawn c2 -> if c1 = c2 then raise SameColorMoveError
+  | Pawn c1, Rook c2 -> if c1 = c2 then raise SameColorMoveError
+  | Pawn c1, Knight c2 -> if c1 = c2 then raise SameColorMoveError
+  | Pawn c1, Bishop c2 -> if c1 = c2 then raise SameColorMoveError
+  | Pawn c1, King c2 -> if c1 = c2 then raise SameColorMoveError
+  | Pawn c1, Queen c2 -> if c1 = c2 then raise SameColorMoveError
+  | Pawn c1, Pawn c2 -> if c1 = c2 then raise SameColorMoveError
+  | _ -> raise IllegalMoveError
+
+
+let move_piece t pos1 pos2 = 
+  let position1 = parse_position pos1 in  
+  let position2 = parse_position pos2 in  
+  let chess_row_pos1 = get_chess_row t position1 in 
+  let pos1_letter_index = List.assoc position1.letter pos_letter_assoc_list - 1 in
+  let piece_to_move = 
+    chess_row_pos1.(pos1_letter_index) in
+  if is_valid_move piece_to_move position1 position2 
+  then
+    let chess_row_pos2 = get_chess_row t position2 in 
+    let pos2_letter_index = 
+      List.assoc position2.letter pos_letter_assoc_list - 1 in
+    let piece_at_loc = chess_row_pos2.(pos2_letter_index) in
+    let _ = check_piece_color piece_to_move piece_at_loc in 
+    chess_row_pos2.(pos2_letter_index) <- piece_to_move;
+    chess_row_pos1.(pos1_letter_index) <- None; 
+  else raise IllegalMoveError
