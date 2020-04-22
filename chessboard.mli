@@ -38,7 +38,7 @@ val initialize_chessboard : t
     Raises [NoPiecePresentError] if there is no piece in [old_pos] 
     Raises [SameColorMoveError] if a piece is moved to a position where a piece of 
     the same color is already on.  *)
-val move_piece : t -> string -> string -> unit
+val move_piece : t -> string -> string -> t
 
 (** [is_valid_move p old_pos new_pos] checks to see if a move from old position
     [old_pos] to new position [new_pos] is a valid chess move *)

@@ -181,4 +181,5 @@ let move_piece t pos1 pos2 =
     let _ = check_piece_color piece_to_move piece_at_loc in 
     chess_row_pos2.(pos2_letter_index) <- piece_to_move;
     chess_row_pos1.(pos1_letter_index) <- None; 
+    List.fold_left (fun lst arr -> (Array.copy arr)::lst) [] t
   else raise IllegalMoveError
