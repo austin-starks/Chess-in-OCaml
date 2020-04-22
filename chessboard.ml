@@ -38,23 +38,31 @@ let initialize_chessboard = [
     King White; Bishop White; Knight White; Rook White|];
 ]
 
+
 let is_valid_move piece pos1 pos2 = 
   match piece with 
-  | Pawn Black-> failwith ""
+  | Pawn Black-> if pos1.letter = pos2.letter && (
+      (pos1.number = pos2.number -1)
+      || (pos1.number = 7 && pos2.number = 5)) then true else false
+  | Pawn White -> if pos1.letter = pos2.letter && (
+      (pos1.number = pos2.number +1)
+      || (pos1.number = 2 && pos2.number = 4)) then true else false
+  | Rook _ -> if pos1.letter = pos2.letter || pos1.number = pos2.number 
+    then true else false
   | _ -> failwith ""
 
 (** [parse_position pos] is a record representing the string pos
-  Requires: pos to be a1, a2, ... a8, b1, ..., h7, or h8  *)
+    Requires: pos to be a1, a2, ... a8, b1, ..., h7, or h8  *)
 let parse_position pos = {
   letter = String.sub pos 0 1;
   number = String.sub pos 1 2 |> int_of_string
 } 
 
 (** [pos_letter_assoc_list] is an association list that maps positions to
-   numbers *)
+    numbers *)
 let pos_letter_assoc_list = 
   [("A", 1);  ("B", 2);  ("C", 3);  ("D", 4);  
-  ("E", 5);  ("F", 6);  ("G", 7);  ("H", 8); ]
+   ("E", 5);  ("F", 6);  ("G", 7);  ("H", 8); ]
 
 let get_piece t pos = 
   let position = parse_position pos in  
