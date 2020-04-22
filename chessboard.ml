@@ -53,6 +53,15 @@ let is_valid_move piece pos1 pos2 =
 
 (** [parse_position pos] is a record representing the string pos
     Requires: pos to be a1, a2, ... a8, b1, ..., h7, or h8  *)
-let parse_position pos = failwith ""
+let parse_position pos = {
+  letter = String.sub pos 0 1;
+  number = String.sub pos 1 2 |> int_of_string
+} 
+
+(** [pos_letter_assoc_list] is an association list that maps positions to
+    numbers *)
+let pos_letter_assoc_list = 
+  [("A", 1);  ("B", 2);  ("C", 3);  ("D", 4);  
+   ("E", 5);  ("F", 6);  ("G", 7);  ("H", 8); ]
 
 let move_piece t pos1 pos2 = failwith "Unimplemented"
