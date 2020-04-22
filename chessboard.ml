@@ -45,7 +45,7 @@ let initialize_chessboard = [
     Requires: pos to be a1, a2, ... a8, b1, ..., h7, or h8  *)
 let parse_position pos = {
   letter = String.sub pos 0 1;
-  number = String.sub pos 1 2 |> int_of_string
+  number = String.sub pos 1 1 |> int_of_string
 } 
 
 (** [pos_letter_assoc_list] is an association list that maps positions to
@@ -65,8 +65,8 @@ let get_chess_row t pos =
     | [], _ -> failwith "Invalid chessboard"
     | h::_, {letter = _; number = 8} -> h  
     | _::t, {letter = x; number = y} -> get_row_helper t 
-                                        {letter = x; number = y+1}  in 
-   get_row_helper t pos 
+                                          {letter = x; number = y+1}  in 
+  get_row_helper t pos 
 
 
 let is_rook_move piece pos1 pos2 =
@@ -127,8 +127,8 @@ let is_valid_move piece pos1 pos2 =
 
 
 (** [check_piece_color piece_to_move piece_at_loc] takes in two pieces
-  and checks to see if there is a piece of the same color at that position. 
-  If there's not, it return a unit. Otherwise, raises SameColorMoveError *)
+    and checks to see if there is a piece of the same color at that position. 
+    If there's not, it return a unit. Otherwise, raises SameColorMoveError *)
 let check_piece_color piece_to_move piece_at_loc = 
   match piece_to_move, piece_at_loc with 
   | None, _ -> raise NotAPiece
