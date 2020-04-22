@@ -40,9 +40,6 @@ let initialize_chessboard =  [
   [|Rook White; Knight White; Bishop White; Queen White; 
     King White; Bishop White; Knight White; Rook White|];
 ]
-
-(** [parse_position pos] is a record representing the string pos
-    Requires: pos to be a1, a2, ... a8, b1, ..., h7, or h8  *)
 let parse_position pos = {
   letter = String.sub pos 0 1;
   number = String.sub pos 1 1 |> int_of_string
@@ -169,7 +166,6 @@ let check_piece_color piece_to_move piece_at_loc =
   | Pawn c1, King c2 -> if c1 = c2 then raise SameColorMoveError
   | Pawn c1, Queen c2 -> if c1 = c2 then raise SameColorMoveError
   | Pawn c1, Pawn c2 -> if c1 = c2 then raise SameColorMoveError
-  | _ -> raise IllegalMoveError
 
 
 let move_piece t pos1 pos2 = 

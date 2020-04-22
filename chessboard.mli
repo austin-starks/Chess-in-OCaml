@@ -51,3 +51,9 @@ val get_piece_from_string : string -> piece
 (** [is_valid_move p old_pos new_pos] checks to see if a move from old position
     [old_pos] to new position [new_pos] is a valid chess move *)
 val is_valid_move : piece -> position -> position -> bool
+
+
+(** [parse_position pos] converts the string [pos] to an internal representation
+    of a position
+    Requires: pos to be a1, a2, ... a8, b1, ..., h7, or h8  *)
+val parse_position: string -> position

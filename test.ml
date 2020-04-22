@@ -15,123 +15,37 @@ let rook_board = [
   [|None; None; None; None; None; None; None; None;|];
 ]
 
-let make_move_piece_test
+let make_is_valid_move_test 
     (name: string)
-    (chessboard: Chessboard.t)
+    (piece: string)
     (original_position: string)
     (new_position: string)
-    (expected_output : Chessboard.t) : test = 
+    (expected_output : bool) : test = 
   name >:: (fun _ -> 
       assert_equal expected_output  
-        (move_piece chessboard original_position new_position))
+        (is_valid_move (piece |> get_piece_from_string) 
+           (original_position |> parse_position) (new_position |> parse_position)))
 
+let move_piece_tests = []
 
-let move_piece_tests = [
-  make_move_piece_test "Move white pawn test" board "E2" "E4" 
-    [
-      [|Rook Black; Knight Black; Bishop Black; Queen Black; 
-        King Black; Bishop Black; Knight Black; Rook Black|];
-      [|Pawn Black; Pawn Black; Pawn Black; Pawn Black; 
-        Pawn Black; Pawn Black; Pawn Black; Pawn Black|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; Pawn White; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|Pawn White; Pawn White; Pawn White; Pawn White; 
-        None; Pawn White; Pawn White; Pawn White|];
-      [|Rook White; Knight White; Bishop White; Queen White; 
-        King White; Bishop White; Knight White; Rook White|];
-    ];
-  make_move_piece_test "Move white pawn once test" board "E2" "E3" 
-    [
-      [|Rook Black; Knight Black; Bishop Black; Queen Black; 
-        King Black; Bishop Black; Knight Black; Rook Black|];
-      [|Pawn Black; Pawn Black; Pawn Black; Pawn Black; 
-        Pawn Black; Pawn Black; Pawn Black; Pawn Black|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; Pawn White; None; None; None;|];
-      [|Pawn White; Pawn White; Pawn White; Pawn White; 
-        None; Pawn White; Pawn White; Pawn White|];
-      [|Rook White; Knight White; Bishop White; Queen White; 
-        King White; Bishop White; Knight White; Rook White|];
-    ];
-  (* make_move_piece_test "Move black pawn once test" board "A7" "A6" 
-     [
-      [|Rook Black; Knight Black; Bishop Black; Queen Black; 
-        King Black; Bishop Black; Knight Black; Rook Black|];
-      [|None; Pawn Black; Pawn Black; Pawn Black; 
-        Pawn Black; Pawn Black; Pawn Black; Pawn Black|];
-      [|Pawn Black; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|Pawn White; Pawn White; Pawn White; Pawn White; 
-        Pawn White; Pawn White; Pawn White; Pawn White|];
-      [|Rook White; Knight White; Bishop White; Queen White; 
-        King White; Bishop White; Knight White; Rook White|];
+let is_valid_move_tests = [
+  make_is_valid_move_test "Testing if white pawn works" "pawn white" 
+    "E2" "E4" true;
+  make_is_valid_move_test "Testing if white pawn works (1 move)" "pawn white" 
+    "A2" "A3" true;
+  make_is_valid_move_test "Testing if white pawn works" "pawn white" 
+    "E2" "E5" false;
+  make_is_valid_move_test "Testing if white pawn works" "pawn white" 
+    "E3" "E5" true;
 
-     ]; *)
-
-  (* make_move_piece_test "Move black pawn twice test" board "B7" "B5" 
-     [
-      [|Rook Black; Knight Black; Bishop Black; Queen Black; 
-        King Black; Bishop Black; Knight Black; Rook Black|];
-      [|Pawn Black; None; Pawn Black; Pawn Black; 
-        Pawn Black; Pawn Black; Pawn Black; Pawn Black|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; Pawn Black; None; None; None; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; Pawn White; None; None; None;|];
-      [|Pawn White; Pawn White; Pawn White; Pawn White; 
-        None; Pawn White; Pawn White; Pawn White|];
-      [|Rook White; Knight White; Bishop White; Queen White; 
-        King White; Bishop White; Knight White; Rook White|];
-     ]; *)
-
-  make_move_piece_test "Move rook vertically up" rook_board "E4" "E7" 
-    [
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; Rook White; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-    ];
-
-  make_move_piece_test "Move rook vertically down" rook_board "E4" "E1" 
-    [
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; Rook White; None; None; None;|];
-    ];
-
-  make_move_piece_test "Move rook horizontally left" rook_board "E4" "A4" 
-    [
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|Rook White; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-      [|None; None; None; None; None; None; None; None;|];
-    ];
 
 
 ]
 
+
 let suite =
   "test suite for final"  >::: List.flatten [
-    move_piece_tests
+    is_valid_move_tests
   ]
 
 let _ = run_test_tt_main suite
