@@ -19,6 +19,9 @@ type t = piece array list
 (** Raised when the player makes a move that is not allowed in chess *)
 exception IllegalMoveError 
 
+(** Raised when a string doesn't represent a piece *)
+exception NotAPiece
+
 (** Raised when the player attempts to move a piece that isn't there (attempts)
     to move a None piece *)
 exception NoPiecePresentError 
@@ -39,6 +42,11 @@ val initialize_chessboard : t
     Raises [SameColorMoveError] if a piece is moved to a position where a piece of 
     the same color is already on.  *)
 val move_piece : t -> string -> string -> t
+
+(** [get_piece_from_string] is the piece that represents a string. For example,
+    typing "Rook Black" returns the piece Rook Black
+    Raises NotAPiece if string doesn't represent a piece *)
+val get_piece_from_string : string -> piece
 
 (** [is_valid_move p old_pos new_pos] checks to see if a move from old position
     [old_pos] to new position [new_pos] is a valid chess move *)
