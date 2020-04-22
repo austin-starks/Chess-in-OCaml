@@ -9,7 +9,7 @@ type piece =
   | Rook of color 
   | None
 
-type t = piece list list
+type t = piece array list
 
 type position = {
   letter : string;
@@ -24,18 +24,18 @@ exception SameColorMoveError
 
 
 let initialize_chessboard = [
-  [Rook Black; Knight Black; Bishop Black; Queen Black; 
-   King Black; Bishop Black; Knight Black; Rook Black];
-  [Pawn Black; Pawn Black; Pawn Black; Pawn Black; 
-   Pawn Black; Pawn Black; Pawn Black; Pawn Black];
-  [None; None; None; None; None; None; None; None;];
-  [None; None; None; None; None; None; None; None;];
-  [None; None; None; None; None; None; None; None;];
-  [None; None; None; None; None; None; None; None;];
-  [Pawn White; Pawn White; Pawn White; Pawn White; 
-   Pawn White; Pawn White; Pawn White; Pawn White];
-  [Rook White; Knight White; Bishop White; Queen White; 
-   King White; Bishop White; Knight White; Rook White];
+  [|Rook Black; Knight Black; Bishop Black; Queen Black; 
+    King Black; Bishop Black; Knight Black; Rook Black|];
+  [|Pawn Black; Pawn Black; Pawn Black; Pawn Black; 
+    Pawn Black; Pawn Black; Pawn Black; Pawn Black|];
+  [|None; None; None; None; None; None; None; None;|];
+  [|None; None; None; None; None; None; None; None;|];
+  [|None; None; None; None; None; None; None; None;|];
+  [|None; None; None; None; None; None; None; None;|];
+  [|Pawn White; Pawn White; Pawn White; Pawn White; 
+    Pawn White; Pawn White; Pawn White; Pawn White|];
+  [|Rook White; Knight White; Bishop White; Queen White; 
+    King White; Bishop White; Knight White; Rook White|];
 ]
 
 (** [parse_position pos] is a record representing the string pos
@@ -50,6 +50,17 @@ let parse_position pos = {
 let pos_letter_assoc_list = 
   [("A", 1);  ("B", 2);  ("C", 3);  ("D", 4);  
    ("E", 5);  ("F", 6);  ("G", 7);  ("H", 8); ]
+
+let get_piece t pos = 
+  let position = parse_position pos in  
+  let rec get_row_helper t position = 
+    match t, position with 
+    | [], _ -> failwith "Invalid chessboard"
+    | h::_, {letter = _; number = 8} -> h  
+    | _::t, {letter = x; number = y} -> get_row_helper t 
+                                        {letter = x; number = y+1}  in 
+  let row = get_row_helper t position in row
+
 
 let move_piece t pos1 pos2 = failwith "Unimplemented"
 
