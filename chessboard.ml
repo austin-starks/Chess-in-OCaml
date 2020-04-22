@@ -73,6 +73,7 @@ let is_rook_move piece pos1 pos2 =
 
 
 let is_bishop_move piece pos1 pos2 = 
+
   let pos_number_differnece = pos2.number - pos1.number in 
   let pos_letter_difference = List.assoc pos2.letter pos_letter_assoc_list -
                               List.assoc pos1.letter pos_letter_assoc_list in
@@ -81,46 +82,47 @@ let is_bishop_move piece pos1 pos2 =
 
 
 let is_valid_move piece pos1 pos2 = 
-  match piece with 
-  | Pawn Black-> if pos1.letter = pos2.letter && (
-      (pos2.number = pos1.number -1)
-      || (pos1.number = 7 && pos2.number = 5)) then true else false
-  | Pawn White -> if pos2.letter = pos1.letter && (
-      (pos2.number = pos1.number +1)
-      || (pos1.number = 2 && pos2.number = 4)) then true else false
-  | Knight _ -> if (pos1.number = pos2.number +2 && 
-                    List.assoc pos1.letter pos_letter_assoc_list  = 
-                    List.assoc pos2.letter pos_letter_assoc_list + 1) ||
-                   (pos1.number = pos2.number +2 && 
-                    List.assoc pos1.letter pos_letter_assoc_list  = 
-                    List.assoc pos2.letter pos_letter_assoc_list - 1) ||
-                   (pos1.number = pos2.number -2 && 
-                    List.assoc pos1.letter pos_letter_assoc_list  = 
-                    List.assoc pos2.letter pos_letter_assoc_list + 1) ||
-                   (pos1.number = pos2.number -2 && 
-                    List.assoc pos1.letter pos_letter_assoc_list  = 
-                    List.assoc pos2.letter pos_letter_assoc_list - 1) ||
-                   (pos1.number = pos2.number +1 && 
-                    List.assoc pos1.letter pos_letter_assoc_list  = 
-                    List.assoc pos2.letter pos_letter_assoc_list + 2) ||
-                   (pos1.number = pos2.number +1 && 
-                    List.assoc pos1.letter pos_letter_assoc_list  = 
-                    List.assoc pos2.letter pos_letter_assoc_list + 2) ||
-                   (pos1.number = pos2.number + 1 && 
-                    List.assoc pos1.letter pos_letter_assoc_list  = 
-                    List.assoc pos2.letter pos_letter_assoc_list + 2) ||
-                   (pos1.number = pos2.number +1 && 
-                    List.assoc pos1.letter pos_letter_assoc_list  = 
-                    List.assoc pos2.letter pos_letter_assoc_list + 2) 
-    then true else false 
-  | Bishop _ ->  is_bishop_move piece pos1 pos2
-  | King _ -> if pos2.number - pos1.number |> Int.abs = 1 || 
-                 List.assoc pos2.letter pos_letter_assoc_list -
-                 List.assoc pos1.letter pos_letter_assoc_list  |> Int.abs = 1 
-    then true else false
-  | Queen _ -> is_bishop_move piece pos1 pos2 || is_rook_move piece pos1 pos2
-  | Rook _ -> is_rook_move piece pos1 pos2
-  | None -> false
+  if pos1.number > 8 || pos1.number < 1 || pos2.number > 8 || pos2.number < 1 
+  then false else match piece with 
+    | Pawn Black-> if pos1.letter = pos2.letter && (
+        (pos2.number = pos1.number -1)
+        || (pos1.number = 7 && pos2.number = 5)) then true else false
+    | Pawn White -> if pos2.letter = pos1.letter && (
+        (pos2.number = pos1.number +1)
+        || (pos1.number = 2 && pos2.number = 4)) then true else false
+    | Knight _ -> if (pos1.number = pos2.number +2 && 
+                      List.assoc pos1.letter pos_letter_assoc_list  = 
+                      List.assoc pos2.letter pos_letter_assoc_list + 1) ||
+                     (pos1.number = pos2.number +2 && 
+                      List.assoc pos1.letter pos_letter_assoc_list  = 
+                      List.assoc pos2.letter pos_letter_assoc_list - 1) ||
+                     (pos1.number = pos2.number -2 && 
+                      List.assoc pos1.letter pos_letter_assoc_list  = 
+                      List.assoc pos2.letter pos_letter_assoc_list + 1) ||
+                     (pos1.number = pos2.number -2 && 
+                      List.assoc pos1.letter pos_letter_assoc_list  = 
+                      List.assoc pos2.letter pos_letter_assoc_list - 1) ||
+                     (pos1.number = pos2.number +1 && 
+                      List.assoc pos1.letter pos_letter_assoc_list  = 
+                      List.assoc pos2.letter pos_letter_assoc_list + 2) ||
+                     (pos1.number = pos2.number +1 && 
+                      List.assoc pos1.letter pos_letter_assoc_list  = 
+                      List.assoc pos2.letter pos_letter_assoc_list + 2) ||
+                     (pos1.number = pos2.number + 1 && 
+                      List.assoc pos1.letter pos_letter_assoc_list  = 
+                      List.assoc pos2.letter pos_letter_assoc_list + 2) ||
+                     (pos1.number = pos2.number +1 && 
+                      List.assoc pos1.letter pos_letter_assoc_list  = 
+                      List.assoc pos2.letter pos_letter_assoc_list + 2) 
+      then true else false 
+    | Bishop _ ->  is_bishop_move piece pos1 pos2
+    | King _ -> if pos2.number - pos1.number |> Int.abs = 1 || 
+                   List.assoc pos2.letter pos_letter_assoc_list -
+                   List.assoc pos1.letter pos_letter_assoc_list  |> Int.abs = 1 
+      then true else false
+    | Queen _ -> is_bishop_move piece pos1 pos2 || is_rook_move piece pos1 pos2
+    | Rook _ -> is_rook_move piece pos1 pos2
+    | None -> false
 
 
 (** [check_piece_color piece_to_move piece_at_loc] takes in two pieces
