@@ -24,7 +24,7 @@ exception NoPiecePresentError
 exception SameColorMoveError
 
 
-let initialize_chessboard = [
+let initialize_chessboard =  [
   [|Rook Black; Knight Black; Bishop Black; Queen Black; 
     King Black; Bishop Black; Knight Black; Rook Black|];
   [|Pawn Black; Pawn Black; Pawn Black; Pawn Black; 
@@ -51,10 +51,10 @@ let parse_position pos = {
 let pos_letter_assoc_list = 
   [
     ("A", 1);  ("B", 2);  ("C", 3);  ("D", 4);  
-   ("E", 5);  ("F", 6);  ("G", 7);  ("H", 8); 
+    ("E", 5);  ("F", 6);  ("G", 7);  ("H", 8); 
     ("a", 1);  ("b", 2);  ("c", 3);  ("d", 4);  
-   ("e", 5);  ("f", 6);  ("g", 7);  ("e", 8); 
-   ]
+    ("e", 5);  ("f", 6);  ("g", 7);  ("e", 8); 
+  ]
 
 
 let get_chess_row t pos = 
@@ -84,10 +84,10 @@ let is_bishop_move piece pos1 pos2 =
 let is_valid_move piece pos1 pos2 = 
   match piece with 
   | Pawn Black-> if pos1.letter = pos2.letter && (
-      (pos1.number = pos2.number -1)
+      (pos2.number = pos1.number -1)
       || (pos1.number = 7 && pos2.number = 5)) then true else false
-  | Pawn White -> if pos1.letter = pos2.letter && (
-      (pos1.number = pos2.number +1)
+  | Pawn White -> if pos2.letter = pos1.letter && (
+      (pos2.number = pos1.number +1)
       || (pos1.number = 2 && pos2.number = 4)) then true else false
   | Knight _ -> if (pos1.number = pos2.number +2 && 
                     List.assoc pos1.letter pos_letter_assoc_list  = 
@@ -185,5 +185,5 @@ let move_piece t pos1 pos2 =
     let _ = check_piece_color piece_to_move piece_at_loc in 
     chess_row_pos2.(pos2_letter_index) <- piece_to_move;
     chess_row_pos1.(pos1_letter_index) <- None; 
-    List.fold_left (fun lst arr -> (Array.copy arr)::lst) [] t
+    List.fold_left (fun lst arr -> (Array.copy arr)::lst) [] t |> List.rev
   else raise IllegalMoveError
