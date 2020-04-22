@@ -21,7 +21,7 @@ let move_piece_tests = [
 
 let suite =
   "test suite for final"  >::: List.flatten [
-
+    move_piece_tests
   ]
 
 let _ = run_test_tt_main suite
