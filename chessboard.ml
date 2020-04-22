@@ -49,8 +49,12 @@ let parse_position pos = {
 (** [pos_letter_assoc_list] is an association list that maps positions to
     numbers *)
 let pos_letter_assoc_list = 
-  [("A", 1);  ("B", 2);  ("C", 3);  ("D", 4);  
-   ("E", 5);  ("F", 6);  ("G", 7);  ("H", 8); ]
+  [
+    ("A", 1);  ("B", 2);  ("C", 3);  ("D", 4);  
+   ("E", 5);  ("F", 6);  ("G", 7);  ("H", 8); 
+    ("a", 1);  ("b", 2);  ("c", 3);  ("d", 4);  
+   ("e", 5);  ("f", 6);  ("g", 7);  ("e", 8); 
+   ]
 
 
 let get_chess_row t pos = 
