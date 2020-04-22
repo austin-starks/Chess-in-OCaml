@@ -1,6 +1,6 @@
 open OUnit2
 open Chessboard
-open State
+(* open State *)
 
 let board = Chessboard.initialize_chessboard
 
@@ -16,7 +16,21 @@ let make_move_piece_test
 
 
 let move_piece_tests = [
-  make_move_piece_test "Move pawn test" board "E2" "E4" board
+  make_move_piece_test "Move pawn test" board "E2" "E4" 
+    [
+      [|Rook Black; Knight Black; Bishop Black; Queen Black; 
+        King Black; Bishop Black; Knight Black; Rook Black|];
+      [|Pawn Black; Pawn Black; Pawn Black; Pawn Black; 
+        Pawn Black; Pawn Black; Pawn Black; Pawn Black|];
+      [|None; None; None; None; None; None; None; None;|];
+      [|None; None; None; None; None; None; None; None;|];
+      [|None; None; None; None; Pawn White; None; None; None;|];
+      [|None; None; None; None; None; None; None; None;|];
+      [|Pawn White; Pawn White; Pawn White; Pawn White; 
+        None; Pawn White; Pawn White; Pawn White|];
+      [|Rook White; Knight White; Bishop White; Queen White; 
+        King White; Bishop White; Knight White; Rook White|];
+    ]
 ]
 
 let suite =
