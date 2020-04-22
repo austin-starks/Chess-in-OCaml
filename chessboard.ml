@@ -127,9 +127,40 @@ let check_piece_color piece_to_move piece_at_loc =
   match piece_to_move, piece_at_loc with 
   | _, None -> () 
   | Rook c1, Rook c2 -> if c1 = c2 then raise SameColorMoveError
+  | Rook c1, Knight c2 -> if c1 = c2 then raise SameColorMoveError
+  | Rook c1, Bishop c2 -> if c1 = c2 then raise SameColorMoveError
+  | Rook c1, King c2 -> if c1 = c2 then raise SameColorMoveError
+  | Rook c1, Queen c2 -> if c1 = c2 then raise SameColorMoveError
+  | Rook c1, Pawn c2 -> if c1 = c2 then raise SameColorMoveError
+  | Knight c1, Rook c2 -> if c1 = c2 then raise SameColorMoveError
+  | Knight c1, Knight c2 -> if c1 = c2 then raise SameColorMoveError
+  | Knight c1, Bishop c2 -> if c1 = c2 then raise SameColorMoveError
+  | Knight c1, King c2 -> if c1 = c2 then raise SameColorMoveError
+  | Knight c1, Queen c2 -> if c1 = c2 then raise SameColorMoveError
+  | Knight c1, Pawn c2 -> if c1 = c2 then raise SameColorMoveError  
+  | Bishop c1, Rook c2 -> if c1 = c2 then raise SameColorMoveError
+  | Bishop c1, Knight c2 -> if c1 = c2 then raise SameColorMoveError
   | Bishop c1, Bishop c2 -> if c1 = c2 then raise SameColorMoveError
+  | Bishop c1, King c2 -> if c1 = c2 then raise SameColorMoveError
+  | Bishop c1, Queen c2 -> if c1 = c2 then raise SameColorMoveError
+  | Bishop c1, Pawn c2 -> if c1 = c2 then raise SameColorMoveError
+  | King c1, Rook c2 -> if c1 = c2 then raise SameColorMoveError
+  | King c1, Knight c2 -> if c1 = c2 then raise SameColorMoveError
+  | King c1, Bishop c2 -> if c1 = c2 then raise SameColorMoveError
   | King c1, King c2 -> if c1 = c2 then raise SameColorMoveError
+  | King c1, Queen c2 -> if c1 = c2 then raise SameColorMoveError
+  | King c1, Pawn c2 -> if c1 = c2 then raise SameColorMoveError  
+  | Queen c1, Rook c2 -> if c1 = c2 then raise SameColorMoveError
+  | Queen c1, Knight c2 -> if c1 = c2 then raise SameColorMoveError
+  | Queen c1, Bishop c2 -> if c1 = c2 then raise SameColorMoveError
+  | Queen c1, King c2 -> if c1 = c2 then raise SameColorMoveError
   | Queen c1, Queen c2 -> if c1 = c2 then raise SameColorMoveError
+  | Queen c1, Pawn c2 -> if c1 = c2 then raise SameColorMoveError
+  | Pawn c1, Rook c2 -> if c1 = c2 then raise SameColorMoveError
+  | Pawn c1, Knight c2 -> if c1 = c2 then raise SameColorMoveError
+  | Pawn c1, Bishop c2 -> if c1 = c2 then raise SameColorMoveError
+  | Pawn c1, King c2 -> if c1 = c2 then raise SameColorMoveError
+  | Pawn c1, Queen c2 -> if c1 = c2 then raise SameColorMoveError
   | Pawn c1, Pawn c2 -> if c1 = c2 then raise SameColorMoveError
   | _ -> raise IllegalMoveError
 
