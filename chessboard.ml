@@ -116,10 +116,10 @@ let is_valid_move piece pos1 pos2 =
                       List.assoc pos2.letter pos_letter_assoc_list + 2) 
       then true else false 
     | Bishop _ ->  is_bishop_move piece pos1 pos2
-    | King _ -> if pos2.number - pos1.number |> Int.abs = 1 || 
-                   List.assoc pos2.letter pos_letter_assoc_list -
-                   List.assoc pos1.letter pos_letter_assoc_list  |> Int.abs = 1 
-      then true else false
+    | King _ -> (is_bishop_move piece pos1 pos2 || is_rook_move piece pos1 pos2)
+                && List.assoc pos1.letter pos_letter_assoc_list  - 
+                   List.assoc pos2.letter pos_letter_assoc_list |> Int.abs <=1
+                && pos1.number - pos2.number |> Int.abs <=1
     | Queen _ -> is_bishop_move piece pos1 pos2 || is_rook_move piece pos1 pos2
     | Rook _ -> is_rook_move piece pos1 pos2
     | None -> false
@@ -201,5 +201,5 @@ let get_piece_from_string str =
   | "queen black" -> Queen Black  
   | "queen white" -> Queen White  
   | "king black" -> King Black 
-  | "king White" -> King White 
+  | "king white" -> King White 
   | _ -> raise NotAPiece

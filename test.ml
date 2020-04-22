@@ -88,7 +88,7 @@ let is_valid_move_tests = [
     "G7" "A7" true;
   make_is_valid_move_test "Testing if queen works 3" "queen black" 
     "H1" "H7" true;
-  make_is_valid_move_test "Testing if queen works 3" "queen black" 
+  make_is_valid_move_test "Testing if queen works 4" "queen black" 
     "B3" "B4" true;
   make_is_valid_move_test "Testing if queen works: diagonal" "queen black" 
     "D1" "C2" true;
@@ -108,6 +108,45 @@ let is_valid_move_tests = [
     "bishop black" "A7" "G1" true;
   make_is_valid_move_test "Testing if bishop: same place" "bishop black" 
     "C2" "C2" false;
+
+  (* king tests *)
+  make_is_valid_move_test "Testing if king works" "king black" 
+    "A8" "A7" true;
+  make_is_valid_move_test "Testing if king works 2" "king white" 
+    "G7" "H7" true;
+  make_is_valid_move_test "Testing if king works 3" "king black" 
+    "A4" "B5" true;
+  make_is_valid_move_test "Testing if king works 4" "king black" 
+    "H3" "G4" true;
+  make_is_valid_move_test "Testing if king works: diagonal" "king black" 
+    "D1" "E1" true;
+  make_is_valid_move_test "Testing if king fails" "king black" "A1" "A3" false;
+  make_is_valid_move_test "Testing if king fails 2" "king black" 
+    "E1" "G2" false;
+  make_is_valid_move_test "Testing if king fails 3" "king white" 
+    "E1" "E3" false;
+  make_is_valid_move_test "Testing if king: same place" "king black" 
+    "C2" "C2" false;
+
+  (* knight tests *)
+  make_is_valid_move_test "Testing if knight works" "knight black" 
+    "A8" "B6" true;
+  make_is_valid_move_test "Testing if knight works 2" "knight white" 
+    "G8" "E7" true;
+  make_is_valid_move_test "Testing if knight works 3" "knight black" 
+    "D4" "E6" true;
+  make_is_valid_move_test "Testing if knight works 4" "knight black" 
+    "H4" "F3" true;
+  make_is_valid_move_test "Testing if knight works: diagonal" "knight black" 
+    "C1" "B3" true;
+  make_is_valid_move_test "Testing if knight fails" "knight black" "A1" "A3" false;
+  make_is_valid_move_test "Testing if knight fails 2" "knight black" 
+    "E1" "G1" false;
+  make_is_valid_move_test "Testing if knight fails 3" "knight white" 
+    "E1" "E3" false;
+  make_is_valid_move_test "Testing if knight: same place" "knight black" 
+    "C2" "C2" false;
+
 
 ]
 
