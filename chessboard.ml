@@ -107,11 +107,11 @@ let is_valid_move piece pos1 pos2 =
                       List.assoc pos2.letter pos_letter_assoc_list + 2) ||
                      (pos1.number = pos2.number +1 && 
                       List.assoc pos1.letter pos_letter_assoc_list  = 
-                      List.assoc pos2.letter pos_letter_assoc_list + 2) ||
-                     (pos1.number = pos2.number + 1 && 
+                      List.assoc pos2.letter pos_letter_assoc_list - 2) ||
+                     (pos1.number = pos2.number - 1 && 
                       List.assoc pos1.letter pos_letter_assoc_list  = 
                       List.assoc pos2.letter pos_letter_assoc_list + 2) ||
-                     (pos1.number = pos2.number +1 && 
+                     (pos1.number = pos2.number -1 && 
                       List.assoc pos1.letter pos_letter_assoc_list  = 
                       List.assoc pos2.letter pos_letter_assoc_list + 2) 
       then true else false 

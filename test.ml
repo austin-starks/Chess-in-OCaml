@@ -121,13 +121,15 @@ let is_valid_move_tests = [
   make_is_valid_move_test "Testing if knight works" "knight black" 
     "A8" "B6" true;
   make_is_valid_move_test "Testing if knight works 2" "knight white" 
-    "G8" "E7" true;
+    "B8" "D7" true;
   make_is_valid_move_test "Testing if knight works 3" "knight black" 
-    "D4" "E6" true;
+    "B8" "A6" true;
   make_is_valid_move_test "Testing if knight works 4" "knight black" 
-    "H4" "F3" true;
-  make_is_valid_move_test "Testing if knight works: diagonal" "knight black" 
+    "D7" "B6" true;
+  make_is_valid_move_test "Testing if knight works 5" "knight black" 
     "C1" "B3" true;
+  make_is_valid_move_test "Testing moving knight to take queen in example" 
+    "knight black" "F6" "H5" true;
   make_is_valid_move_test "Testing if knight fails" "knight black" "A1" "A3" false;
   make_is_valid_move_test "Testing if knight fails 2" "knight black" 
     "E1" "G1" false;
@@ -221,6 +223,75 @@ let () = assert (board = [
       None; Pawn White; Pawn White; Pawn White|];
     [|Rook White; Knight White; Bishop White; None; 
       King White; Bishop White; None; Rook White|];
+  ]  )
+
+let _  = (move_piece board "F6" "H5") 
+
+let () = assert (board = [
+    [|Rook Black; Knight Black; Bishop Black; Queen Black; 
+      King Black; Bishop Black; None; Rook Black|];
+    [|Pawn Black; Pawn Black; Pawn Black; Pawn Black; 
+      None; Pawn Black; Pawn Black; Pawn Black|];
+    [|None; None; None; None; None; None; None; None;|];
+    [|None; None; None; None; Pawn Black; None; None; Knight Black;|];
+    [|None; None; None; None; Pawn White; None; None; None;|];
+    [|None; None; None; None; None; Knight White; None; None;|];
+    [|Pawn White; Pawn White; Pawn White; Pawn White; 
+      None; Pawn White; Pawn White; Pawn White|];
+    [|Rook White; Knight White; Bishop White; None; 
+      King White; Bishop White; None; Rook White|];
+  ]  )
+
+let _  = (move_piece board "F1" "E2") 
+
+let () = assert (board = [
+    [|Rook Black; Knight Black; Bishop Black; Queen Black; 
+      King Black; Bishop Black; None; Rook Black|];
+    [|Pawn Black; Pawn Black; Pawn Black; Pawn Black; 
+      None; Pawn Black; Pawn Black; Pawn Black|];
+    [|None; None; None; None; None; None; None; None;|];
+    [|None; None; None; None; Pawn Black; None; None; Knight Black;|];
+    [|None; None; None; None; Pawn White; None; None; None;|];
+    [|None; None; None; None; None; Knight White; None; None;|];
+    [|Pawn White; Pawn White; Pawn White; Pawn White; 
+      Bishop White; Pawn White; Pawn White; Pawn White|];
+    [|Rook White; Knight White; Bishop White; None; 
+      King White; None; None; Rook White|];
+  ]  )
+
+let _  = (move_piece board "A7" "A6") 
+
+let () = assert (board = [
+    [|Rook Black; Knight Black; Bishop Black; Queen Black; 
+      King Black; Bishop Black; None; Rook Black|];
+    [|None; Pawn Black; Pawn Black; Pawn Black; 
+      None; Pawn Black; Pawn Black; Pawn Black|];
+    [|Pawn Black; None; None; None; None; None; None; None;|];
+    [|None; None; None; None; Pawn Black; None; None; Knight Black;|];
+    [|None; None; None; None; Pawn White; None; None; None;|];
+    [|None; None; None; None; None; Knight White; None; None;|];
+    [|Pawn White; Pawn White; Pawn White; Pawn White; 
+      Bishop White; Pawn White; Pawn White; Pawn White|];
+    [|Rook White; Knight White; Bishop White; None; 
+      King White; None; None; Rook White|];
+  ]  )
+
+
+let _  = (move_piece board "E2" "H5") 
+
+let () = assert (board = [
+    [|Rook Black; Knight Black; Bishop Black; Queen Black; 
+      King Black; Bishop Black; None; Rook Black|];
+    [|None; Pawn Black; Pawn Black; Pawn Black; 
+      None; Pawn Black; Pawn Black; Pawn Black|];
+    [|Pawn Black; None; None; None; None; None; None; None;|];
+    [|None; None; None; None; Pawn Black; None; None; Bishop White;|];
+    [|None; None; None; None; Pawn White; None; None; None;|];
+    [|None; None; None; None; None; Knight White; None; None;|];
+    [|Pawn White; Pawn White; Pawn White; Pawn White; 
+      None; Pawn White; Pawn White; Pawn White|];
+    [|Rook White; Knight White; Bishop White; None; 
+      King White; None; None; Rook White|];
   ]  )
 
 
