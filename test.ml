@@ -23,6 +23,8 @@ let is_valid_move_tests = [
     "E2" "E4" true;
   make_is_valid_move_test "Testing if white pawn works (1 move)" "pawn white" 
     "A2" "A3" true;
+  make_is_valid_move_test "Testing if white pawn not moves diagonal" "pawn white" 
+    "A2" "B3" false;
   make_is_valid_move_test "Testing if white pawn works" "pawn white" 
     "E2" "E5" false;
   make_is_valid_move_test "Testing if white pawn fails correctly" "pawn white" 
@@ -293,6 +295,26 @@ let () = assert (board = [
     [|Rook White; Knight White; Bishop White; None; 
       King White; None; None; Rook White|];
   ]  )
+
+let _  = (move_piece board "B7" "B5") 
+let _  = (move_piece board "C2" "C4") 
+let _  = (move_piece board "B5" "C4") 
+
+let () = assert (board = [
+    [|Rook Black; Knight Black; Bishop Black; Queen Black; 
+      King Black; Bishop Black; None; Rook Black|];
+    [|None; None; Pawn Black; Pawn Black; 
+      None; Pawn Black; Pawn Black; Pawn Black|];
+    [|Pawn Black; None; None; None; None; None; None; None;|];
+    [|None; None; None; None; Pawn Black; None; None; Bishop White;|];
+    [|None; None; Pawn Black; None; Pawn White; None; None; None;|];
+    [|None; None; None; None; None; Knight White; None; None;|];
+    [|Pawn White; Pawn White; None; Pawn White; 
+      None; Pawn White; Pawn White; Pawn White|];
+    [|Rook White; Knight White; Bishop White; None; 
+      King White; None; None; Rook White|];
+  ]  )
+
 
 
 let suite =

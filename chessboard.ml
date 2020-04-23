@@ -210,23 +210,25 @@ let path_is_blocked t start_pos end_pos =
   let piece_to_move = get_piece t start_pos in
   match piece_to_move with 
   | None -> raise NotAPiece
-  | Pawn color ->  if (get_piece t end_pos = None && 
+  | Pawn color ->  false
+  (* if (get_piece t end_pos = None && 
                        abs (end_pos.number - start_pos.number) = 1) ||
                       (abs (end_pos.number - start_pos.number) = 2 &&
                        match color with 
                        | Black -> get_piece t {letter=end_pos.letter; number=6} = None
-                       | White -> get_piece t {letter=end_pos.letter; number=3} = None)
-    then false else true
+                       | White -> get_piece t {letter=end_pos.letter; number=3} = None) 
+     then false else true *)
   | Knight _ -> false
-  | Bishop _ -> bishop_path t start_pos end_pos
-  | Queen _ -> rook_path_blocked t start_pos end_pos || bishop_path t start_pos end_pos
+  | Bishop _ -> false
+  | Queen _ -> false
+  (* rook_path_blocked t start_pos end_pos || bishop_path t start_pos end_pos *)
   | King _ -> false
-  | Rook _ -> rook_path_blocked t start_pos end_pos
+  | Rook _ -> false
 
 
 let is_valid_move t piece pos1 pos2 = 
   if (pos1.number > 8 || pos1.number < 1 || pos2.number > 8 || pos2.number < 1)
-  || path_is_blocked t pos1 pos2 
+  (* || path_is_blocked t pos1 pos2  *)
   then false else match piece with 
     | Pawn Black-> if pos1.letter = pos2.letter && (
         (pos2.number = pos1.number -1)
