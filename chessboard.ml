@@ -139,7 +139,7 @@ let get_piece t position =
   chess_row.(ind)
 
 let rec bishop_path t start_pos end_pos = 
-  if start_pos.number = end_pos.number || start_pos.letter = end_pos.letter 
+  if start_pos.number = end_pos.number && start_pos.letter = end_pos.letter 
   then true 
   else if start_pos.number < end_pos.number && 
           List.assoc start_pos.letter pos_letter_assoc_list < 
@@ -173,7 +173,7 @@ let rec bishop_path t start_pos end_pos =
     let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
     (get_piece t end_pos) = None && 
     bishop_path t {number = start_pos.number - 1; letter = new_letter} end_pos
-  else raise IllegalMoveError
+  else false
 
 let rec rook_path_blocked t start_pos end_pos = 
   if end_pos.number = start_pos.number && end_pos.letter = start_pos.letter 
@@ -210,10 +210,16 @@ let path_is_blocked t start_pos end_pos =
   let piece_to_move = get_piece t start_pos in
   match piece_to_move with 
   | None -> raise NotAPiece
-  | Pawn _ ->  if get_piece t end_pos = None then false else true
+  | Pawn color ->  if (get_piece t end_pos = None && 
+              abs (end_pos.number - start_pos.number) = 1) ||
+             (abs (end_pos.number - start_pos.number) = 2 &&
+              match color with 
+                | Black -> get_piece t {letter=end_pos.letter; number=6} = None
+                | White -> get_piece t {letter=end_pos.letter; number=3} = None)
+                then false else true
   | Knight _ -> false
   | Bishop _ -> bishop_path t start_pos end_pos
-  | Queen _ -> failwith "Unimplemented"
+  | Queen _ -> rook_path t start_pos end_pos || bishop_path t start_pos end_pos
   | King _ -> false
   | Rook _ -> rook_path_blocked t start_pos end_pos
 
