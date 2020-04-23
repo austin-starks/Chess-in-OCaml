@@ -72,13 +72,15 @@ let get_chess_row t pos =
                                           {letter = x; number = y+1}  in 
   get_row_helper t pos 
 
-
+(** [is_rook_move p pos1 pos2] determines if the attempted move of a rook is 
+    legal *)  
 let is_rook_move piece pos1 pos2 =
   if (pos1.letter = pos2.letter && pos1.number <> pos2.number) 
   || (pos1.number = pos2.number && pos1.letter <> pos2.letter) 
   then true else false
 
-
+(** [is_bishop_move p pos1 pos2] determines if the attempted move of a bishop is 
+    legal *) 
 let is_bishop_move piece pos1 pos2 = 
   let pos_number_differnece = pos2.number - pos1.number in 
   let pos_letter_difference = List.assoc pos2.letter pos_letter_assoc_list -
@@ -135,38 +137,42 @@ let get_piece t position =
   let chess_row = get_chess_row t position in 
   let ind = List.assoc position.letter pos_letter_assoc_list - 1 in
   chess_row.(ind)
-    
+
 let rec bishop_path t start_pos end_pos = 
   if start_pos.number = end_pos.number || start_pos.letter = end_pos.letter 
   then true 
   else if start_pos.number < end_pos.number && 
-    List.assoc start_pos.letter pos_letter_assoc_list < 
-    List.assoc end_pos.letter pos_letter_assoc_list
+          List.assoc start_pos.letter pos_letter_assoc_list < 
+          List.assoc end_pos.letter pos_letter_assoc_list
   then 
-  let new_letter = "a" in 
-  (get_piece t end_pos) = None && 
+    let new_letter = "a" in 
+    (get_piece t end_pos) = None && 
     bishop_path t {number = start_pos.number + 1; letter = new_letter} end_pos
   else failwith ""
 
+let rec rook_path t start_pos end_pos = 
+  if end_pos.number = start_pos.number || end_pos.letter = start_pos.letter then true else false
+(* then false else 
+   let is_piece_blocking = get_piece t  *)
+
 (** Checks to see if the path from one position to another is not blocked
- with another piece. If it is not blocked, returns true. Otherwise returns false *)
+    with another piece. If it is blocked, returns true. Otherwise returns false *)
 let path_is_blocked t start_pos end_pos = 
   let piece_to_move = get_piece t start_pos in
-  false
-  (* match piece_to_move with 
+  match piece_to_move with 
   | None -> raise NotAPiece
   | Pawn _ ->  if get_piece t end_pos = None then false else true
   | Knight _ -> false
   | Bishop _ -> bishop_path t start_pos end_pos
   | Queen _ -> failwith "Unimplemented"
-  | King _ -> false
-  | Rook _ -> failwith "Unimplemented" *)
+  | King _ -> rook_path t start_pos end_pos
+  | Rook _ -> false
 
 
 let is_valid_move t piece pos1 pos2 = 
   if (pos1.number > 8 || pos1.number < 1 || pos2.number > 8 || pos2.number < 1)
   || path_is_blocked t pos1 pos2 
-    then false else match piece with 
+  then false else match piece with 
     | Pawn Black-> if pos1.letter = pos2.letter && (
         (pos2.number = pos1.number -1)
         || (pos1.number = 7 && pos2.number = 5)) then true else false
