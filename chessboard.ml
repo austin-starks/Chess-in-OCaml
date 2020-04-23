@@ -186,10 +186,16 @@ let path_is_blocked t start_pos end_pos =
   let piece_to_move = get_piece t start_pos in
   match piece_to_move with 
   | None -> raise NotAPiece
-  | Pawn _ ->  if get_piece t end_pos = None then false else true
+  | Pawn color ->  if (get_piece t end_pos = None && 
+              abs (end_pos.number - start_pos.number) = 1) ||
+             (abs (end_pos.number - start_pos.number) = 2 &&
+              match color with 
+                | Black -> get_piece t {letter=end_pos.letter; number=6} = None
+                | White -> get_piece t {letter=end_pos.letter; number=3} = None)
+                then false else true
   | Knight _ -> false
   | Bishop _ -> bishop_path t start_pos end_pos
-  | Queen _ -> failwith "Unimplemented"
+  | Queen _ -> rook_path t start_pos end_pos || bishop_path t start_pos end_pos
   | King _ -> false
   | Rook _ -> failwith "Unimplemented"
 
