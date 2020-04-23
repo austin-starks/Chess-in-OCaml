@@ -137,7 +137,7 @@ let get_piece t position =
   chess_row.(ind)
     
 let rec bishop_path t start_pos end_pos = 
-  if start_pos.number = end_pos.number || start_pos.letter = end_pos.letter 
+  if start_pos.number = end_pos.number && start_pos.letter = end_pos.letter 
   then true 
   else if start_pos.number < end_pos.number && 
     List.assoc start_pos.letter pos_letter_assoc_list < 
@@ -171,7 +171,7 @@ let rec bishop_path t start_pos end_pos =
   let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
   (get_piece t end_pos) = None && 
     bishop_path t {number = start_pos.number - 1; letter = new_letter} end_pos
-  else raise IllegalMoveError
+  else false
 
 (** Checks to see if the path from one position to another is not blocked
  with another piece. If it is not blocked, returns true. Otherwise returns false *)
