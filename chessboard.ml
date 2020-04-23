@@ -145,10 +145,35 @@ let rec bishop_path t start_pos end_pos =
           List.assoc start_pos.letter pos_letter_assoc_list < 
           List.assoc end_pos.letter pos_letter_assoc_list
   then 
-    let new_letter = "a" in 
+    let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list + 1 in 
+    let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
     (get_piece t end_pos) = None && 
     bishop_path t {number = start_pos.number + 1; letter = new_letter} end_pos
-  else failwith ""
+  else if start_pos.number < end_pos.number && 
+          List.assoc start_pos.letter pos_letter_assoc_list > 
+          List.assoc end_pos.letter pos_letter_assoc_list
+  then 
+    let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
+    let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
+    (get_piece t end_pos) = None && 
+    bishop_path t {number = start_pos.number + 1; letter = new_letter} end_pos
+  else if start_pos.number > end_pos.number && 
+          List.assoc start_pos.letter pos_letter_assoc_list < 
+          List.assoc end_pos.letter pos_letter_assoc_list
+  then 
+    let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list + 1 in 
+    let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
+    (get_piece t end_pos) = None && 
+    bishop_path t {number = start_pos.number - 1; letter = new_letter} end_pos
+  else if start_pos.number > end_pos.number && 
+          List.assoc start_pos.letter pos_letter_assoc_list > 
+          List.assoc end_pos.letter pos_letter_assoc_list
+  then 
+    let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
+    let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
+    (get_piece t end_pos) = None && 
+    bishop_path t {number = start_pos.number - 1; letter = new_letter} end_pos
+  else raise IllegalMoveError
 
 let rec rook_path t start_pos end_pos = 
   if end_pos.number = start_pos.number || end_pos.letter = start_pos.letter then true else false
@@ -165,8 +190,8 @@ let path_is_blocked t start_pos end_pos =
   | Knight _ -> false
   | Bishop _ -> bishop_path t start_pos end_pos
   | Queen _ -> failwith "Unimplemented"
-  | King _ -> rook_path t start_pos end_pos
-  | Rook _ -> false
+  | King _ -> false
+  | Rook _ -> failwith "Unimplemented"
 
 
 let is_valid_move t piece pos1 pos2 = 
