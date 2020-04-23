@@ -183,11 +183,11 @@ let rec rook_path_blocked t start_pos end_pos =
       let intermediate_position = 
         {letter = start_pos.letter; number = start_pos.number+1} in
       if get_piece t intermediate_position <> None then true 
-      else rook_path t intermediate_position end_pos 
+      else rook_path_blocked t intermediate_position end_pos 
     else let intermediate_position = 
            {letter = start_pos.letter; number = start_pos.number-1} in
       if get_piece t intermediate_position <> None then true 
-      else rook_path t intermediate_position end_pos 
+      else rook_path_blocked t intermediate_position end_pos 
   else if start_pos.number = end_pos.number then 
     if List.assoc end_pos.letter pos_letter_assoc_list >
        List.assoc start_pos.letter pos_letter_assoc_list then let 
@@ -195,13 +195,13 @@ let rec rook_path_blocked t start_pos end_pos =
       let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
       let intermediate_position = {letter = new_letter; number = start_pos.number} in
       if get_piece t intermediate_position <> None then true 
-      else rook_path t intermediate_position end_pos 
+      else rook_path_blocked t intermediate_position end_pos 
     else let 
       ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
       let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
       let intermediate_position = {letter = new_letter; number = start_pos.number} in
       if get_piece t intermediate_position <> None then true 
-      else rook_path t intermediate_position end_pos 
+      else rook_path_blocked t intermediate_position end_pos 
   else false
 
 (** Checks to see if the path from one position to another is not blocked
