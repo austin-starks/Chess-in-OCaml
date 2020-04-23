@@ -80,61 +80,12 @@ let is_rook_move piece pos1 pos2 =
 
 
 let is_bishop_move piece pos1 pos2 = 
-
   let pos_number_differnece = pos2.number - pos1.number in 
   let pos_letter_difference = List.assoc pos2.letter pos_letter_assoc_list -
                               List.assoc pos1.letter pos_letter_assoc_list in
   if Int.abs pos_number_differnece = Int.abs pos_letter_difference 
   && pos_number_differnece <> 0 then true else false
 
-
-<<<<<<< HEAD
-=======
-let is_valid_move piece pos1 pos2 = 
-  if pos1.number > 8 || pos1.number < 1 || pos2.number > 8 || pos2.number < 1 
-  then false else match piece with 
-    | Pawn Black-> if pos1.letter = pos2.letter && (
-        (pos2.number = pos1.number -1)
-        || (pos1.number = 7 && pos2.number = 5)) then true else false
-    | Pawn White -> if pos2.letter = pos1.letter && (
-        (pos2.number = pos1.number +1)
-        || (pos1.number = 2 && pos2.number = 4)) then true else false
-    | Knight _ -> if (pos1.number = pos2.number +2 && 
-                      List.assoc pos1.letter pos_letter_assoc_list  = 
-                      List.assoc pos2.letter pos_letter_assoc_list + 1) ||
-                     (pos1.number = pos2.number +2 && 
-                      List.assoc pos1.letter pos_letter_assoc_list  = 
-                      List.assoc pos2.letter pos_letter_assoc_list - 1) ||
-                     (pos1.number = pos2.number -2 && 
-                      List.assoc pos1.letter pos_letter_assoc_list  = 
-                      List.assoc pos2.letter pos_letter_assoc_list + 1) ||
-                     (pos1.number = pos2.number -2 && 
-                      List.assoc pos1.letter pos_letter_assoc_list  = 
-                      List.assoc pos2.letter pos_letter_assoc_list - 1) ||
-                     (pos1.number = pos2.number +1 && 
-                      List.assoc pos1.letter pos_letter_assoc_list  = 
-                      List.assoc pos2.letter pos_letter_assoc_list + 2) ||
-                     (pos1.number = pos2.number +1 && 
-                      List.assoc pos1.letter pos_letter_assoc_list  = 
-                      List.assoc pos2.letter pos_letter_assoc_list - 2) ||
-                     (pos1.number = pos2.number - 1 && 
-                      List.assoc pos1.letter pos_letter_assoc_list  = 
-                      List.assoc pos2.letter pos_letter_assoc_list + 2) ||
-                     (pos1.number = pos2.number -1 && 
-                      List.assoc pos1.letter pos_letter_assoc_list  = 
-                      List.assoc pos2.letter pos_letter_assoc_list + 2) 
-      then true else false 
-    | Bishop _ ->  is_bishop_move piece pos1 pos2
-    | King _ -> (is_bishop_move piece pos1 pos2 || is_rook_move piece pos1 pos2)
-                && List.assoc pos1.letter pos_letter_assoc_list  - 
-                   List.assoc pos2.letter pos_letter_assoc_list |> Int.abs <=1
-                && pos1.number - pos2.number |> Int.abs <=1
-    | Queen _ -> is_bishop_move piece pos1 pos2 || is_rook_move piece pos1 pos2
-    | Rook _ -> is_rook_move piece pos1 pos2
-    | None -> false
-
-
->>>>>>> 42ace9a0aa072105ed81627bca07a9e106d60ba1
 (** [check_piece_color piece_to_move piece_at_loc] takes in two pieces
     and checks to see if there is a piece of the same color at that position. 
     If there's not, it return a unit. Otherwise, raises SameColorMoveError *)
@@ -201,19 +152,21 @@ let rec bishop_path t start_pos end_pos =
  with another piece. If it is not blocked, returns true. Otherwise returns false *)
 let path_is_blocked t start_pos end_pos = 
   let piece_to_move = get_piece t start_pos in
-  match piece_to_move with 
+  false
+  (* match piece_to_move with 
   | None -> raise NotAPiece
   | Pawn _ ->  if get_piece t end_pos = None then false else true
   | Knight _ -> false
   | Bishop _ -> bishop_path t start_pos end_pos
   | Queen _ -> failwith "Unimplemented"
   | King _ -> false
-  | Rook _ -> failwith "Unimplemented"
+  | Rook _ -> failwith "Unimplemented" *)
 
 
-let is_valid_move piece pos1 pos2 = 
+let is_valid_move t piece pos1 pos2 = 
   if (pos1.number > 8 || pos1.number < 1 || pos2.number > 8 || pos2.number < 1)
-  || path_is_blocked t pos1 pos2 then false else match piece with 
+  || path_is_blocked t pos1 pos2 
+    then false else match piece with 
     | Pawn Black-> if pos1.letter = pos2.letter && (
         (pos2.number = pos1.number -1)
         || (pos1.number = 7 && pos2.number = 5)) then true else false
@@ -237,19 +190,19 @@ let is_valid_move piece pos1 pos2 =
                       List.assoc pos2.letter pos_letter_assoc_list + 2) ||
                      (pos1.number = pos2.number +1 && 
                       List.assoc pos1.letter pos_letter_assoc_list  = 
-                      List.assoc pos2.letter pos_letter_assoc_list + 2) ||
-                     (pos1.number = pos2.number + 1 && 
+                      List.assoc pos2.letter pos_letter_assoc_list - 2) ||
+                     (pos1.number = pos2.number - 1 && 
                       List.assoc pos1.letter pos_letter_assoc_list  = 
                       List.assoc pos2.letter pos_letter_assoc_list + 2) ||
-                     (pos1.number = pos2.number +1 && 
+                     (pos1.number = pos2.number -1 && 
                       List.assoc pos1.letter pos_letter_assoc_list  = 
                       List.assoc pos2.letter pos_letter_assoc_list + 2) 
       then true else false 
-    | Bishop _ ->  is_bishop_move piece pos1 pos2
-    | King _ -> if pos2.number - pos1.number |> Int.abs = 1 || 
-                   List.assoc pos2.letter pos_letter_assoc_list -
-                   List.assoc pos1.letter pos_letter_assoc_list  |> Int.abs = 1 
-      then true else false
+    | Bishop _ -> is_bishop_move piece pos1 pos2
+    | King _ -> (is_bishop_move piece pos1 pos2 || is_rook_move piece pos1 pos2)
+                && List.assoc pos1.letter pos_letter_assoc_list  - 
+                   List.assoc pos2.letter pos_letter_assoc_list |> Int.abs <=1
+                && pos1.number - pos2.number |> Int.abs <=1
     | Queen _ -> is_bishop_move piece pos1 pos2 || is_rook_move piece pos1 pos2
     | Rook _ -> is_rook_move piece pos1 pos2
     | None -> false

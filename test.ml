@@ -12,7 +12,7 @@ let make_is_valid_move_test
     (expected_output : bool) : test = 
   name >:: (fun _ -> 
       assert_equal expected_output  
-        (is_valid_move (piece |> get_piece_from_string) 
+        (is_valid_move board (piece |> get_piece_from_string) 
            (original_position |> parse_position) (new_position |> parse_position)))
 
 let move_piece_tests = []
