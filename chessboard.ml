@@ -55,6 +55,13 @@ let pos_letter_assoc_list =
     ("e", 5);  ("f", 6);  ("g", 7);  ("e", 8); 
   ]
 
+(** [number_to_letter_pos_assoc_list] is an association list that maps numbers 
+    to positions *)
+let number_to_letter_pos_assoc_list = 
+  [
+    (1 ,"A");  (2 ,"B");  (3 ,"C");  (4 ,"D");  
+    (5 ,"E");  (6 ,"F");  (7 ,"G");  (8 ,"H"); 
+  ]
 
 let get_chess_row t pos = 
   let rec get_row_helper t position = 
@@ -79,50 +86,6 @@ let is_bishop_move piece pos1 pos2 =
                               List.assoc pos1.letter pos_letter_assoc_list in
   if Int.abs pos_number_differnece = Int.abs pos_letter_difference 
   && pos_number_differnece <> 0 then true else false
-
-
-let is_valid_move piece pos1 pos2 = 
-  if pos1.number > 8 || pos1.number < 1 || pos2.number > 8 || pos2.number < 1 
-  then false else match piece with 
-    | Pawn Black-> if pos1.letter = pos2.letter && (
-        (pos2.number = pos1.number -1)
-        || (pos1.number = 7 && pos2.number = 5)) then true else false
-    | Pawn White -> if pos2.letter = pos1.letter && (
-        (pos2.number = pos1.number +1)
-        || (pos1.number = 2 && pos2.number = 4)) then true else false
-    | Knight _ -> if (pos1.number = pos2.number +2 && 
-                      List.assoc pos1.letter pos_letter_assoc_list  = 
-                      List.assoc pos2.letter pos_letter_assoc_list + 1) ||
-                     (pos1.number = pos2.number +2 && 
-                      List.assoc pos1.letter pos_letter_assoc_list  = 
-                      List.assoc pos2.letter pos_letter_assoc_list - 1) ||
-                     (pos1.number = pos2.number -2 && 
-                      List.assoc pos1.letter pos_letter_assoc_list  = 
-                      List.assoc pos2.letter pos_letter_assoc_list + 1) ||
-                     (pos1.number = pos2.number -2 && 
-                      List.assoc pos1.letter pos_letter_assoc_list  = 
-                      List.assoc pos2.letter pos_letter_assoc_list - 1) ||
-                     (pos1.number = pos2.number +1 && 
-                      List.assoc pos1.letter pos_letter_assoc_list  = 
-                      List.assoc pos2.letter pos_letter_assoc_list + 2) ||
-                     (pos1.number = pos2.number +1 && 
-                      List.assoc pos1.letter pos_letter_assoc_list  = 
-                      List.assoc pos2.letter pos_letter_assoc_list + 2) ||
-                     (pos1.number = pos2.number + 1 && 
-                      List.assoc pos1.letter pos_letter_assoc_list  = 
-                      List.assoc pos2.letter pos_letter_assoc_list + 2) ||
-                     (pos1.number = pos2.number +1 && 
-                      List.assoc pos1.letter pos_letter_assoc_list  = 
-                      List.assoc pos2.letter pos_letter_assoc_list + 2) 
-      then true else false 
-    | Bishop _ ->  is_bishop_move piece pos1 pos2
-    | King _ -> if pos2.number - pos1.number |> Int.abs = 1 || 
-                   List.assoc pos2.letter pos_letter_assoc_list -
-                   List.assoc pos1.letter pos_letter_assoc_list  |> Int.abs = 1 
-      then true else false
-    | Queen _ -> is_bishop_move piece pos1 pos2 || is_rook_move piece pos1 pos2
-    | Rook _ -> is_rook_move piece pos1 pos2
-    | None -> false
 
 
 (** [check_piece_color piece_to_move piece_at_loc] takes in two pieces
@@ -169,16 +132,93 @@ let check_piece_color piece_to_move piece_at_loc =
   | Pawn c1, Queen c2 -> if c1 = c2 then raise SameColorMoveError
   | Pawn c1, Pawn c2 -> if c1 = c2 then raise SameColorMoveError
 
+(** Gets the piece at a given position  *)
+let get_piece t position = 
+  let chess_row = get_chess_row t position in 
+  let ind = List.assoc position.letter pos_letter_assoc_list - 1 in
+  chess_row.(ind)
+    
+let rec bishop_path t start_pos end_pos = 
+  if start_pos.number = end_pos.number || start_pos.letter = end_pos.letter 
+  then true 
+  else if start_pos.number < end_pos.number && 
+    List.assoc start_pos.letter pos_letter_assoc_list < 
+    List.assoc end_pos.letter pos_letter_assoc_list
+  then 
+  let new_letter = "a" in 
+  (get_piece t end_pos) = None && 
+    bishop_path t {number = start_pos.number + 1; letter = new_letter} end_pos
+  else failwith ""
+
+(** Checks to see if the path from one position to another is not blocked
+ with another piece. If it is not blocked, returns true. Otherwise returns false *)
+let path_is_blocked t start_pos end_pos = 
+  let piece_to_move = get_piece t start_pos in
+  match piece_to_move with 
+  | None -> raise NotAPiece
+  | Pawn _ ->  if get_piece t end_pos = None then false else true
+  | Knight _ -> false
+  | Bishop _ -> bishop_path t start_pos end_pos
+  | Queen _ -> failwith "Unimplemented"
+  | King _ -> false
+  | Rook _ -> failwith "Unimplemented"
+
+
+let is_valid_move piece pos1 pos2 = 
+  if (pos1.number > 8 || pos1.number < 1 || pos2.number > 8 || pos2.number < 1)
+  || path_is_blocked t pos1 pos2 then false else match piece with 
+    | Pawn Black-> if pos1.letter = pos2.letter && (
+        (pos2.number = pos1.number -1)
+        || (pos1.number = 7 && pos2.number = 5)) then true else false
+    | Pawn White -> if pos2.letter = pos1.letter && (
+        (pos2.number = pos1.number +1)
+        || (pos1.number = 2 && pos2.number = 4)) then true else false
+    | Knight _ -> if (pos1.number = pos2.number +2 && 
+                      List.assoc pos1.letter pos_letter_assoc_list  = 
+                      List.assoc pos2.letter pos_letter_assoc_list + 1) ||
+                     (pos1.number = pos2.number +2 && 
+                      List.assoc pos1.letter pos_letter_assoc_list  = 
+                      List.assoc pos2.letter pos_letter_assoc_list - 1) ||
+                     (pos1.number = pos2.number -2 && 
+                      List.assoc pos1.letter pos_letter_assoc_list  = 
+                      List.assoc pos2.letter pos_letter_assoc_list + 1) ||
+                     (pos1.number = pos2.number -2 && 
+                      List.assoc pos1.letter pos_letter_assoc_list  = 
+                      List.assoc pos2.letter pos_letter_assoc_list - 1) ||
+                     (pos1.number = pos2.number +1 && 
+                      List.assoc pos1.letter pos_letter_assoc_list  = 
+                      List.assoc pos2.letter pos_letter_assoc_list + 2) ||
+                     (pos1.number = pos2.number +1 && 
+                      List.assoc pos1.letter pos_letter_assoc_list  = 
+                      List.assoc pos2.letter pos_letter_assoc_list + 2) ||
+                     (pos1.number = pos2.number + 1 && 
+                      List.assoc pos1.letter pos_letter_assoc_list  = 
+                      List.assoc pos2.letter pos_letter_assoc_list + 2) ||
+                     (pos1.number = pos2.number +1 && 
+                      List.assoc pos1.letter pos_letter_assoc_list  = 
+                      List.assoc pos2.letter pos_letter_assoc_list + 2) 
+      then true else false 
+    | Bishop _ ->  is_bishop_move piece pos1 pos2
+    | King _ -> if pos2.number - pos1.number |> Int.abs = 1 || 
+                   List.assoc pos2.letter pos_letter_assoc_list -
+                   List.assoc pos1.letter pos_letter_assoc_list  |> Int.abs = 1 
+      then true else false
+    | Queen _ -> is_bishop_move piece pos1 pos2 || is_rook_move piece pos1 pos2
+    | Rook _ -> is_rook_move piece pos1 pos2
+    | None -> false
+
 
 let move_piece t pos1 pos2 = 
   let position1 = parse_position pos1 in  
   let position2 = parse_position pos2 in  
-  let chess_row_pos1 = get_chess_row t position1 in 
-  let pos1_letter_index = List.assoc position1.letter pos_letter_assoc_list - 1 in
   let piece_to_move = 
-    chess_row_pos1.(pos1_letter_index) in
-  if is_valid_move piece_to_move position1 position2 
+    get_piece t position1 in
+  (* TODO - say is_valid_move || is_valid_pawn_move *)
+  if is_valid_move t piece_to_move position1 position2 
   then
+    let pos1_letter_index = 
+      List.assoc position1.letter pos_letter_assoc_list - 1 in
+    let chess_row_pos1 = get_chess_row t position1 in 
     let chess_row_pos2 = get_chess_row t position2 in 
     let pos2_letter_index = 
       List.assoc position2.letter pos_letter_assoc_list - 1 in
@@ -201,5 +241,5 @@ let get_piece_from_string str =
   | "queen black" -> Queen Black  
   | "queen white" -> Queen White  
   | "king black" -> King Black 
-  | "king White" -> King White 
+  | "king white" -> King White 
   | _ -> raise NotAPiece
