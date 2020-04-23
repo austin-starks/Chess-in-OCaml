@@ -143,24 +143,48 @@ let rec bishop_path t start_pos end_pos =
     List.assoc start_pos.letter pos_letter_assoc_list < 
     List.assoc end_pos.letter pos_letter_assoc_list
   then 
-  let new_letter = "a" in 
+  let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list + 1 in 
+  let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
   (get_piece t end_pos) = None && 
     bishop_path t {number = start_pos.number + 1; letter = new_letter} end_pos
-  else failwith ""
+  else if start_pos.number < end_pos.number && 
+    List.assoc start_pos.letter pos_letter_assoc_list > 
+    List.assoc end_pos.letter pos_letter_assoc_list
+  then 
+  let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
+  let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
+  (get_piece t end_pos) = None && 
+    bishop_path t {number = start_pos.number + 1; letter = new_letter} end_pos
+  else if start_pos.number > end_pos.number && 
+    List.assoc start_pos.letter pos_letter_assoc_list < 
+    List.assoc end_pos.letter pos_letter_assoc_list
+  then 
+  let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list + 1 in 
+  let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
+  (get_piece t end_pos) = None && 
+    bishop_path t {number = start_pos.number - 1; letter = new_letter} end_pos
+  else if start_pos.number > end_pos.number && 
+    List.assoc start_pos.letter pos_letter_assoc_list > 
+    List.assoc end_pos.letter pos_letter_assoc_list
+  then 
+  let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
+  let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
+  (get_piece t end_pos) = None && 
+    bishop_path t {number = start_pos.number - 1; letter = new_letter} end_pos
+  else raise IllegalMoveError
 
 (** Checks to see if the path from one position to another is not blocked
  with another piece. If it is not blocked, returns true. Otherwise returns false *)
 let path_is_blocked t start_pos end_pos = 
   let piece_to_move = get_piece t start_pos in
-  false
-  (* match piece_to_move with 
+  match piece_to_move with 
   | None -> raise NotAPiece
   | Pawn _ ->  if get_piece t end_pos = None then false else true
   | Knight _ -> false
   | Bishop _ -> bishop_path t start_pos end_pos
   | Queen _ -> failwith "Unimplemented"
   | King _ -> false
-  | Rook _ -> failwith "Unimplemented" *)
+  | Rook _ -> failwith "Unimplemented"
 
 
 let is_valid_move t piece pos1 pos2 = 
