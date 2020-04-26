@@ -155,45 +155,69 @@ let get_piece t position =
   let ind = List.assoc position.letter pos_letter_assoc_list - 1 in
   chess_row.(ind)
 
+let print_pos name pos = 
+  print_string "\n";
+  print_string "\n";
+  print_string name; 
+  print_string pos.letter;
+  print_int pos.number;
+  ()
+
+
 (* current_pos: d4
 target_position: g7 *)
 let rec bishop_path t start_pos end_pos = 
-  if start_pos.number = end_pos.number && start_pos.letter = end_pos.letter 
+  (* print_pos "start_pos\n" start_pos; *)
+  (* print_pos "end_pos\n" end_pos; *)
+  if start_pos = end_pos 
   then true 
   else if start_pos.number < end_pos.number && 
           List.assoc start_pos.letter pos_letter_assoc_list < 
           List.assoc end_pos.letter pos_letter_assoc_list
   then 
+    (* let () = print_endline "check 1" in *)
     let ind_new_letter = (List.assoc start_pos.letter pos_letter_assoc_list) + 1 in 
     let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
     let new_pos = {number = start_pos.number + 1; letter = new_letter} in 
-    (get_piece t start_pos) = None && 
+    (* print_pos "new_pos\n" new_pos; *)
+    (* if (get_piece t new_pos) = None then print_endline "piece: None" else print_endline "piece: not Nine"; *)
+    ((get_piece t new_pos) <> None && new_pos <> end_pos) || 
     bishop_path t new_pos end_pos
   else if start_pos.number < end_pos.number && 
           List.assoc start_pos.letter pos_letter_assoc_list > 
           List.assoc end_pos.letter pos_letter_assoc_list
   then 
+    (* let () = print_endline "check 2" in *)
     let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
     let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
-    (get_piece t start_pos) = None && 
-    bishop_path t {number = start_pos.number + 1; letter = new_letter} end_pos
+    let new_pos = {number = start_pos.number + 1; letter = new_letter} in
+    (* if (get_piece t new_pos) = None then print_endline "piece: None" else print_endline "piece: not None"; *)
+    (* print_pos "new_pos\n" new_pos; *)
+    ((get_piece t new_pos) <> None && new_pos <> end_pos) || 
+    bishop_path t new_pos end_pos
   else if start_pos.number > end_pos.number && 
           List.assoc start_pos.letter pos_letter_assoc_list < 
           List.assoc end_pos.letter pos_letter_assoc_list
   then 
+    (* let () = print_endline "check 3" in *)
     let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list + 1 in 
     let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
-    (get_piece t start_pos) = None && 
-    bishop_path t {number = start_pos.number - 1; letter = new_letter} end_pos
+    let new_pos = {number = start_pos.number - 1; letter = new_letter} in
+    ((get_piece t new_pos) <> None && new_pos <> end_pos) || 
+    bishop_path t new_pos end_pos
   else if start_pos.number > end_pos.number && 
           List.assoc start_pos.letter pos_letter_assoc_list > 
           List.assoc end_pos.letter pos_letter_assoc_list
   then 
+    (* let () = print_endline "check 4" in *)
     let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
     let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
-    (get_piece t start_pos) = None && 
-    bishop_path t {number = start_pos.number - 1; letter = new_letter} end_pos
-  else false
+    let new_pos = {number = start_pos.number - 1; letter = new_letter} in
+    ((get_piece t new_pos) <> None && new_pos <> end_pos) || 
+    bishop_path t new_pos end_pos
+  else 
+      (* let () = print_endline "check 5" in *)
+  false
 
 let rec rook_path_blocked t start_pos end_pos = 
   if end_pos.number = start_pos.number && end_pos.letter = start_pos.letter 
@@ -241,7 +265,7 @@ let path_is_blocked t piece start_pos end_pos =
                        | White -> get_piece t {letter=end_pos.letter; number=3} = None) 
      then false else true *)
   | Knight _ -> false
-  | Bishop _ -> false
+  | Bishop _ -> bishop_path t start_pos end_pos
   | Queen _ -> false
   (* rook_path_blocked t start_pos end_pos || bishop_path t start_pos end_pos *)
   | King _ -> false
