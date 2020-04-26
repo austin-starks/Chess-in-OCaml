@@ -139,6 +139,8 @@ let is_valid_move_tests = [
     "E1" "E3" false;
   make_is_valid_move_test "Testing if knight: same place" "knight black" 
     "C2" "C2" false;
+  make_is_valid_move_test "Testing if knight: same place" "knight black" 
+    "A2" "J2" false;
 ]
 
 (* Testing move_piece *)

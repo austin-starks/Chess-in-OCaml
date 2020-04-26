@@ -242,8 +242,7 @@ let is_valid_move t piece pos1 pos2 =
                        | Knight White ->true
                        | Bishop White -> true 
                        | Queen White -> true
-                       | _ -> false
-                      )
+                       | _ -> false)
       then true else false
     | Pawn White -> if pos2.letter = pos1.letter && (
         (pos2.number = pos1.number +1) ||
