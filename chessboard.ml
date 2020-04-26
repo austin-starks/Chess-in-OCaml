@@ -213,18 +213,20 @@ let path_is_blocked t start_pos end_pos =
   let piece_to_move = get_piece t start_pos in
   match piece_to_move with 
   | None -> raise NotAPiece
-  | Pawn color ->  if (get_piece t end_pos = None && 
+  | Pawn color ->  false
+  (* if (get_piece t end_pos = None && 
                        abs (end_pos.number - start_pos.number) = 1) ||
                       (abs (end_pos.number - start_pos.number) = 2 &&
                        match color with 
                        | Black -> get_piece t {letter=end_pos.letter; number=6} = None
-                       | White -> get_piece t {letter=end_pos.letter; number=3} = None)
-    then false else true
+                       | White -> get_piece t {letter=end_pos.letter; number=3} = None) 
+     then false else true *)
   | Knight _ -> false
-  | Bishop _ -> bishop_path t start_pos end_pos
-  | Queen _ -> rook_path_blocked t start_pos end_pos || bishop_path t start_pos end_pos
+  | Bishop _ -> false
+  | Queen _ -> false
+  (* rook_path_blocked t start_pos end_pos || bishop_path t start_pos end_pos *)
   | King _ -> false
-  | Rook _ -> rook_path_blocked t start_pos end_pos
+  | Rook _ -> false
 
 
 let is_valid_move t piece pos1 pos2 = 
@@ -233,10 +235,33 @@ let is_valid_move t piece pos1 pos2 =
   then false else match piece with 
     | Pawn Black-> if pos1.letter = pos2.letter && (
         (pos2.number = pos1.number -1)
-        || (pos1.number = 7 && pos2.number = 5)) then true else false
+        || (pos1.number = 7 && pos2.number = 5)) ||
+                      (pos2.number = pos1.number -1 && 
+                       List.assoc pos2.letter pos_letter_assoc_list - 
+                       List.assoc pos1.letter pos_letter_assoc_list |> Int.abs =1 &&
+                       match get_piece t pos2 with 
+                       | Pawn White -> true 
+                       | King White -> true 
+                       | Knight White ->true
+                       | Bishop White -> true 
+                       | Queen White -> true
+                       | _ -> false
+                      )
+      then true else false
     | Pawn White -> if pos2.letter = pos1.letter && (
-        (pos2.number = pos1.number +1)
-        || (pos1.number = 2 && pos2.number = 4)) then true else false
+        (pos2.number = pos1.number +1) ||
+        (pos1.number = 2 && pos2.number = 4)) || 
+                       (pos2.number = pos1.number +1 && 
+                        List.assoc pos2.letter pos_letter_assoc_list - 
+                        List.assoc pos1.letter pos_letter_assoc_list |> Int.abs =1 &&
+                        match get_piece t pos2 with 
+                        | Pawn Black -> true 
+                        | King Black -> true 
+                        | Knight Black ->true
+                        | Bishop Black -> true 
+                        | Queen Black -> true
+                        | _ -> false)
+      then true else false
     | Knight _ -> if (pos1.number = pos2.number +2 && 
                       List.assoc pos1.letter pos_letter_assoc_list  = 
                       List.assoc pos2.letter pos_letter_assoc_list + 1) ||
