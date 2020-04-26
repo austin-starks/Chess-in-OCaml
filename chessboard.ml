@@ -165,7 +165,7 @@ let print_pos name pos =
 
 
 (* current_pos: d4
-target_position: g7 *)
+   target_position: g7 *)
 let rec bishop_path t start_pos end_pos = 
   (* print_pos "start_pos\n" start_pos; *)
   (* print_pos "end_pos\n" end_pos; *)
@@ -226,7 +226,8 @@ let rec rook_path_blocked t start_pos end_pos =
     if end_pos.number > start_pos.number then
       let intermediate_position = 
         {letter = start_pos.letter; number = start_pos.number+1} in
-      if get_piece t intermediate_position <> None then true 
+      if get_piece t intermediate_position <> None  
+      && intermediate_position <> end_pos then true 
       else rook_path_blocked t intermediate_position end_pos 
     else let intermediate_position = 
            {letter = start_pos.letter; number = start_pos.number-1} in
@@ -269,7 +270,7 @@ let path_is_blocked t piece start_pos end_pos =
   | Queen _ -> false
   (* rook_path_blocked t start_pos end_pos || bishop_path t start_pos end_pos *)
   | King _ -> false
-  | Rook _ -> false
+  | Rook _ -> rook_path_blocked t start_pos end_pos
 
 
 let is_valid_move t piece pos1 pos2 = 
@@ -288,8 +289,7 @@ let is_valid_move t piece pos1 pos2 =
                        | Knight White ->true
                        | Bishop White -> true 
                        | Queen White -> true
-                       | _ -> false
-                      )
+                       | _ -> false)
       then true else false
     | Pawn White -> if pos2.letter = pos1.letter && (
         (pos2.number = pos1.number +1) ||
