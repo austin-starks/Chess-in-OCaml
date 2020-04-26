@@ -26,7 +26,7 @@ exception SameColorMoveError
 exception NotAPiece
 
 
-let initialize_chessboard =  [
+let initialize_chessboard () =  [
   [|Rook Black; Knight Black; Bishop Black; Queen Black; 
     King Black; Bishop Black; Knight Black; Rook Black|];
   [|Pawn Black; Pawn Black; Pawn Black; Pawn Black; 
@@ -52,7 +52,7 @@ let pos_letter_assoc_list =
     ("A", 1);  ("B", 2);  ("C", 3);  ("D", 4);  
     ("E", 5);  ("F", 6);  ("G", 7);  ("H", 8); 
     ("a", 1);  ("b", 2);  ("c", 3);  ("d", 4);  
-    ("e", 5);  ("f", 6);  ("g", 7);  ("e", 8); 
+    ("e", 5);  ("f", 6);  ("g", 7);  ("h", 8); 
   ]
 
 (** [number_to_letter_pos_assoc_list] is an association list that maps numbers 
@@ -195,7 +195,10 @@ let rec rook_path_blocked t start_pos end_pos =
       let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
       let intermediate_position = {letter = new_letter; number = start_pos.number} in
       if get_piece t intermediate_position <> None then true 
-      else rook_path_blocked t intermediate_position end_pos 
+      else 
+        let () = print_endline (start_pos.letter ^ ": old letter" )in 
+        let () = print_endline (intermediate_position.letter ^ ": new letter" )in 
+        rook_path_blocked t intermediate_position end_pos 
     else let 
       ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
       let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
@@ -228,7 +231,7 @@ let path_is_blocked t start_pos end_pos =
 
 let is_valid_move t piece pos1 pos2 = 
   if (pos1.number > 8 || pos1.number < 1 || pos2.number > 8 || pos2.number < 1)
-  (* || path_is_blocked t pos1 pos2  *)
+  && path_is_blocked t pos1 pos2 
   then false else match piece with 
     | Pawn Black-> if pos1.letter = pos2.letter && (
         (pos2.number = pos1.number -1)

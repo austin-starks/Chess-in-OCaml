@@ -32,7 +32,7 @@ exception SameColorMoveError
 
 (** [initialize_chessboard] is a chessboard of pieces in the starting 
     arrangement *)
-val initialize_chessboard : t 
+val initialize_chessboard : unit -> t 
 
 (** [move_piece t old_pos new_pos] alters the chessboard with the piece at 
     [old_pos] moved to [new_pos]. 

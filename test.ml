@@ -2,7 +2,7 @@ open OUnit2
 open Chessboard
 (* open State *)
 
-let board = Chessboard.initialize_chessboard
+let board = Chessboard.initialize_chessboard ()
 
 let make_is_valid_move_test 
     (name: string)
@@ -144,7 +144,7 @@ let is_valid_move_tests = [
 ]
 
 (* Testing move_piece *)
-let _  = (move_piece board "E2" "E4") 
+let _  = (move_piece (board )"E2" "E4") 
 
 let () = assert (board = [
     [|Rook Black; Knight Black; Bishop Black; Queen Black; 
