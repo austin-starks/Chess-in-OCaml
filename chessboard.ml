@@ -231,7 +231,7 @@ let path_is_blocked t start_pos end_pos =
 
 let is_valid_move t piece pos1 pos2 = 
   if (pos1.number > 8 || pos1.number < 1 || pos2.number > 8 || pos2.number < 1)
-  && path_is_blocked t pos1 pos2 
+  || path_is_blocked t pos1 pos2 
   then false else match piece with 
     | Pawn Black-> if pos1.letter = pos2.letter && (
         (pos2.number = pos1.number -1)
