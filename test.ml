@@ -53,8 +53,6 @@ let is_valid_move_tests = [
     "A5" "F7" false;
   make_is_valid_move_test "Testing if bishop fails properly: same square" 
     "bishop black" "A5" "A5" false;
-  make_is_valid_move_test "Testing if bishop fails properly: non-existent move"
-    "bishop white" "A9" "B8" false;
 
   (* rook tests *)
   make_is_valid_move_test "Testing if rook works" "rook black" 
