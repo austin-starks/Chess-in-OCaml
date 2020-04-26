@@ -40,6 +40,23 @@ let initialize_chessboard () =  [
   [|Rook White; Knight White; Bishop White; Queen White; 
     King White; Bishop White; Knight White; Rook White|];
 ]
+
+let get_piece_from_string str = 
+  match String.lowercase_ascii str with 
+  | "rook black" -> Rook Black
+  | "rook white" -> Rook White
+  | "pawn black" -> Pawn Black
+  | "pawn white" -> Pawn White
+  | "bishop black" -> Bishop Black 
+  | "bishop white" -> Bishop White
+  | "knight black" -> Knight Black 
+  | "knight white" -> Knight White
+  | "queen black" -> Queen Black  
+  | "queen white" -> Queen White  
+  | "king black" -> King Black 
+  | "king white" -> King White 
+  | _ -> raise NotAPiece
+
 let parse_position pos = {
   letter = String.sub pos 0 1;
   number = String.sub pos 1 1 |> int_of_string
@@ -138,6 +155,8 @@ let get_piece t position =
   let ind = List.assoc position.letter pos_letter_assoc_list - 1 in
   chess_row.(ind)
 
+(* current_pos: d4
+   target_position: g7 *)
 let rec bishop_path t start_pos end_pos = 
   if start_pos.number = end_pos.number && start_pos.letter = end_pos.letter 
   then true 
@@ -145,17 +164,18 @@ let rec bishop_path t start_pos end_pos =
           List.assoc start_pos.letter pos_letter_assoc_list < 
           List.assoc end_pos.letter pos_letter_assoc_list
   then 
-    let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list + 1 in 
+    let ind_new_letter = (List.assoc start_pos.letter pos_letter_assoc_list) + 1 in 
     let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
-    (get_piece t end_pos) = None && 
-    bishop_path t {number = start_pos.number + 1; letter = new_letter} end_pos
+    let new_pos = {number = start_pos.number + 1; letter = new_letter} in 
+    (get_piece t start_pos) = None && 
+    bishop_path t new_pos end_pos
   else if start_pos.number < end_pos.number && 
           List.assoc start_pos.letter pos_letter_assoc_list > 
           List.assoc end_pos.letter pos_letter_assoc_list
   then 
     let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
     let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
-    (get_piece t end_pos) = None && 
+    (get_piece t start_pos) = None && 
     bishop_path t {number = start_pos.number + 1; letter = new_letter} end_pos
   else if start_pos.number > end_pos.number && 
           List.assoc start_pos.letter pos_letter_assoc_list < 
@@ -163,7 +183,7 @@ let rec bishop_path t start_pos end_pos =
   then 
     let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list + 1 in 
     let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
-    (get_piece t end_pos) = None && 
+    (get_piece t start_pos) = None && 
     bishop_path t {number = start_pos.number - 1; letter = new_letter} end_pos
   else if start_pos.number > end_pos.number && 
           List.assoc start_pos.letter pos_letter_assoc_list > 
@@ -171,7 +191,7 @@ let rec bishop_path t start_pos end_pos =
   then 
     let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
     let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
-    (get_piece t end_pos) = None && 
+    (get_piece t start_pos) = None && 
     bishop_path t {number = start_pos.number - 1; letter = new_letter} end_pos
   else false
 
@@ -182,7 +202,8 @@ let rec rook_path_blocked t start_pos end_pos =
     if end_pos.number > start_pos.number then
       let intermediate_position = 
         {letter = start_pos.letter; number = start_pos.number+1} in
-      if get_piece t intermediate_position <> None then true 
+      if get_piece t intermediate_position <> None  
+      && intermediate_position <> end_pos then true 
       else rook_path_blocked t intermediate_position end_pos 
     else let intermediate_position = 
            {letter = start_pos.letter; number = start_pos.number-1} in
@@ -209,10 +230,9 @@ let rec rook_path_blocked t start_pos end_pos =
 
 (** Checks to see if the path from one position to another is not blocked
     with another piece. If it is blocked, returns true. Otherwise returns false *)
-let path_is_blocked t start_pos end_pos = 
-  let piece_to_move = get_piece t start_pos in
-  match piece_to_move with 
-  | None -> raise NotAPiece
+let path_is_blocked t piece start_pos end_pos = 
+  match piece with 
+  | None -> print_endline (start_pos.letter ^ (start_pos.number |> string_of_int)); raise NotAPiece
   | Pawn color ->  false
   (* if (get_piece t end_pos = None && 
                        abs (end_pos.number - start_pos.number) = 1) ||
@@ -226,12 +246,12 @@ let path_is_blocked t start_pos end_pos =
   | Queen _ -> false
   (* rook_path_blocked t start_pos end_pos || bishop_path t start_pos end_pos *)
   | King _ -> false
-  | Rook _ -> false
+  | Rook _ -> rook_path_blocked t start_pos end_pos
 
 
 let is_valid_move t piece pos1 pos2 = 
   if (pos1.number > 8 || pos1.number < 1 || pos2.number > 8 || pos2.number < 1)
-  || path_is_blocked t pos1 pos2 
+  || path_is_blocked t piece pos1 pos2 
   then false else match piece with 
     | Pawn Black-> if pos1.letter = pos2.letter && (
         (pos2.number = pos1.number -1)
@@ -315,19 +335,3 @@ let move_piece t pos1 pos2 =
     chess_row_pos2.(pos2_letter_index) <- piece_to_move;
     chess_row_pos1.(pos1_letter_index) <- None; 
   else raise IllegalMoveError
-
-let get_piece_from_string str = 
-  match String.lowercase_ascii str with 
-  | "rook black" -> Rook Black
-  | "rook white" -> Rook White
-  | "pawn black" -> Pawn Black
-  | "pawn white" -> Pawn White
-  | "bishop black" -> Bishop Black 
-  | "bishop white" -> Bishop White
-  | "knight black" -> Knight Black 
-  | "knight white" -> Knight White
-  | "queen black" -> Queen Black  
-  | "queen white" -> Queen White  
-  | "king black" -> King Black 
-  | "king white" -> King White 
-  | _ -> raise NotAPiece
