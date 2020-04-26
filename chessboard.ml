@@ -170,7 +170,8 @@ let rec bishop_path t start_pos end_pos =
   (* print_pos "start_pos\n" start_pos; *)
   (* print_pos "end_pos\n" end_pos; *)
   if start_pos = end_pos 
-  then true 
+  then false 
+  (* up right: up because number is less, left because letter is less *)
   else if start_pos.number < end_pos.number && 
           List.assoc start_pos.letter pos_letter_assoc_list < 
           List.assoc end_pos.letter pos_letter_assoc_list
@@ -181,8 +182,9 @@ let rec bishop_path t start_pos end_pos =
     let new_pos = {number = start_pos.number + 1; letter = new_letter} in 
     (* print_pos "new_pos\n" new_pos; *)
     (* if (get_piece t new_pos) = None then print_endline "piece: None" else print_endline "piece: not Nine"; *)
-    ((get_piece t new_pos) <> None && new_pos <> end_pos) || 
-    bishop_path t new_pos end_pos
+    if ((get_piece t new_pos) <> None && new_pos <> end_pos) then true else
+      bishop_path t new_pos end_pos
+      (* up left down because number is less, right because letter is greater *)
   else if start_pos.number < end_pos.number && 
           List.assoc start_pos.letter pos_letter_assoc_list > 
           List.assoc end_pos.letter pos_letter_assoc_list
@@ -193,8 +195,10 @@ let rec bishop_path t start_pos end_pos =
     let new_pos = {number = start_pos.number + 1; letter = new_letter} in
     (* if (get_piece t new_pos) = None then print_endline "piece: None" else print_endline "piece: not None"; *)
     (* print_pos "new_pos\n" new_pos; *)
-    ((get_piece t new_pos) <> None && new_pos <> end_pos) || 
-    bishop_path t new_pos end_pos
+    if ((get_piece t new_pos) <> None && new_pos <> end_pos) then true else
+      bishop_path t new_pos end_pos
+
+  (* down right left *)
   else if start_pos.number > end_pos.number && 
           List.assoc start_pos.letter pos_letter_assoc_list < 
           List.assoc end_pos.letter pos_letter_assoc_list
@@ -203,8 +207,11 @@ let rec bishop_path t start_pos end_pos =
     let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list + 1 in 
     let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
     let new_pos = {number = start_pos.number - 1; letter = new_letter} in
-    ((get_piece t new_pos) <> None && new_pos <> end_pos) || 
-    bishop_path t new_pos end_pos
+
+    if ((get_piece t new_pos) <> None && new_pos <> end_pos) then true else
+      bishop_path t new_pos end_pos
+
+  (* down left *)
   else if start_pos.number > end_pos.number && 
           List.assoc start_pos.letter pos_letter_assoc_list > 
           List.assoc end_pos.letter pos_letter_assoc_list
@@ -213,11 +220,11 @@ let rec bishop_path t start_pos end_pos =
     let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
     let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
     let new_pos = {number = start_pos.number - 1; letter = new_letter} in
-    ((get_piece t new_pos) <> None && new_pos <> end_pos) || 
-    bishop_path t new_pos end_pos
+    if ((get_piece t new_pos) <> None && new_pos <> end_pos) then true else
+      bishop_path t new_pos end_pos
   else 
-      (* let () = print_endline "check 5" in *)
-  false
+    (* let () = print_endline "check 5" in *)
+    false
 
 let rec rook_path_blocked t start_pos end_pos = 
   if end_pos.number = start_pos.number && end_pos.letter = start_pos.letter 
@@ -231,7 +238,8 @@ let rec rook_path_blocked t start_pos end_pos =
       else rook_path_blocked t intermediate_position end_pos 
     else let intermediate_position = 
            {letter = start_pos.letter; number = start_pos.number-1} in
-      if get_piece t intermediate_position <> None then true 
+      if get_piece t intermediate_position <> None 
+      && intermediate_position <> end_pos then true 
       else rook_path_blocked t intermediate_position end_pos 
   else if start_pos.number = end_pos.number then 
     if List.assoc end_pos.letter pos_letter_assoc_list >
@@ -239,7 +247,8 @@ let rec rook_path_blocked t start_pos end_pos =
       ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list + 1 in 
       let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
       let intermediate_position = {letter = new_letter; number = start_pos.number} in
-      if get_piece t intermediate_position <> None then true 
+      if get_piece t intermediate_position <> None
+      && intermediate_position <> end_pos then true 
       else 
         let () = print_endline (start_pos.letter ^ ": old letter" )in 
         let () = print_endline (intermediate_position.letter ^ ": new letter" )in 
@@ -248,7 +257,8 @@ let rec rook_path_blocked t start_pos end_pos =
       ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
       let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
       let intermediate_position = {letter = new_letter; number = start_pos.number} in
-      if get_piece t intermediate_position <> None then true 
+      if get_piece t intermediate_position <> None 
+      && intermediate_position <> end_pos then true 
       else rook_path_blocked t intermediate_position end_pos 
   else false
 
