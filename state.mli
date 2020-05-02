@@ -19,8 +19,8 @@ type person = string
     person to be able to make the first move. *)
 val init_state : Chessboard.t -> t
 
-(* [turn s] is the turn of the player who needs to move next in state [s] *)
-val turn : t -> person
+(* [turn_player_name t] is the turn of the player who needs to move next in state [s] *)
+val turn_player_name : t -> person
 
 (* [player_name p] is the name of the player [p] *)
 val player_name: person
