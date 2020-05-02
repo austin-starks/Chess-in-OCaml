@@ -3,7 +3,8 @@ type person = string
 type t = {
   player_turn: person;
   score: person*int list;
-  current_board: Chessboard.t
+  current_board: Chessboard.t;
+  previous_board: Chessboard.t
 }
 
 let init_state t = failwith "Unimplemented"
