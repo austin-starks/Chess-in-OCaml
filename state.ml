@@ -1,6 +1,10 @@
-type t
-
 type person = string
+
+type t = {
+  player_turn: person;
+  score: person*int list;
+  current_board: Chessboard.t
+}
 
 let init_state t = failwith "Unimplemented"
 
