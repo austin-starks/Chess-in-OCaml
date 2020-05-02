@@ -142,6 +142,7 @@ let () = assert (board = [
       King White; None; None; Rook White|];
   ]  )
 
+let _ = (move_piece board "f3" "g1")
 
 let _  = (move_piece board "E2" "H5") 
 
@@ -153,11 +154,11 @@ let () = assert (board = [
     [|Pawn Black; None; None; None; None; None; None; None;|];
     [|None; None; None; None; Pawn Black; None; None; Bishop White;|];
     [|None; None; None; None; Pawn White; None; None; None;|];
-    [|None; None; None; None; None; Knight White; None; None;|];
+    [|None; None; None; None; None; None; None; None;|];
     [|Pawn White; Pawn White; Pawn White; Pawn White; 
       None; Pawn White; Pawn White; Pawn White|];
     [|Rook White; Knight White; Bishop White; None; 
-      King White; None; None; Rook White|];
+      King White; None; Knight White; Rook White|];
   ]  )
 
 let _  = (move_piece board "B7" "B5") 
@@ -172,10 +173,10 @@ let () = assert (board = [
     [|Pawn Black; None; None; None; None; None; None; None;|];
     [|None; None; None; None; Pawn Black; None; None; Bishop White;|];
     [|None; None; Pawn Black; None; Pawn White; None; None; None;|];
-    [|None; None; None; None; None; Knight White; None; None;|];
+    [|None; None; None; None; None; None; None; None;|];
     [|Pawn White; Pawn White; None; Pawn White; 
       None; Pawn White; Pawn White; Pawn White|];
     [|Rook White; Knight White; Bishop White; None; 
-      King White; None; None; Rook White|];
+      King White; None; Knight White; Rook White|];
   ]  )
 
