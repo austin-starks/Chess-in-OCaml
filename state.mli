@@ -14,10 +14,10 @@ type t
 (** The type representing the people playing the game *)  
 type person = string
 
-(** [init_state g] is the initial state of the the chess game [g]. In this 
+(** [init_state p1 p2] is the initial state of the the chess game [g]. In this 
     state, the game is set up as a normal chessboard, with white being the 
     person to be able to make the first move. *)
-val init_state : Chessboard.t -> t
+val init_state : string -> string -> t
 
 (* [turn s] is the turn of the player who needs to move next in state [s] *)
 val turn : t -> person

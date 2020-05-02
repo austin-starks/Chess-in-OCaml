@@ -7,7 +7,7 @@ type t = {
   previous_board: Chessboard.t
 }
 
-let init_state t = failwith "Unimplemented"
+let init_state person1 person2 = failwith "Unimplemented"
 
 let turn t = failwith "Unimplemented" 
 
