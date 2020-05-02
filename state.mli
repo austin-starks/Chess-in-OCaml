@@ -6,13 +6,13 @@
    were taken), properties of the players (such as the score and their names), 
    and functions that cause the state to change. *)
 
+(** The type representing the people playing the game *)  
+type person = string
+
 (** The abstract type of values representing the game state. *)
 open Chessboard
 
-type t
-
-(** The type representing the people playing the game *)  
-type person = string
+type t 
 
 (** [init_state p1 p2] is the initial state of the the chess game [g]. In this 
     state, the game is set up as a normal chessboard, with white being the 
@@ -22,9 +22,9 @@ val init_state : string -> string -> t
 (* [turn_player_name t] is the turn of the player who needs to move next in state [s] *)
 val turn_player_name : t -> person
 
-(* [score p s] is the current score of person [p] in state [s] as calculated by
+(* [score p s] is the current score of both players in state [s] as calculated by
     the chess piece relative value system *)
-val score : t -> person -> int
+val score : t -> string
 
 (* [current_board s] is the current board represented by state [s] *)
 val current_board: t -> Chessboard.t
