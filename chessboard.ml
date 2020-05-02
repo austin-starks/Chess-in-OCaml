@@ -169,8 +169,8 @@ let print_pos name pos =
 let rec bishop_path t start_pos end_pos = 
   (* print_pos "start_pos\n" start_pos; *)
   (* print_pos "end_pos\n" end_pos; *)
-  if start_pos = end_pos 
-  then true 
+  if end_pos.number = start_pos.number && end_pos.letter = start_pos.letter 
+  then false 
   else if start_pos.number < end_pos.number && 
           List.assoc start_pos.letter pos_letter_assoc_list < 
           List.assoc end_pos.letter pos_letter_assoc_list
@@ -180,7 +180,7 @@ let rec bishop_path t start_pos end_pos =
     let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
     let new_pos = {number = start_pos.number + 1; letter = new_letter} in 
     (* print_pos "new_pos\n" new_pos; *)
-    (* if (get_piece t new_pos) = None then print_endline "piece: None" else print_endline "piece: not Nine"; *)
+    (* if (get_piece t new_pos) = None then print_endline "piece: None" else print_endline "piece: not None"; *)
     ((get_piece t new_pos) <> None && new_pos <> end_pos) || 
     bishop_path t new_pos end_pos
   else if start_pos.number < end_pos.number && 
