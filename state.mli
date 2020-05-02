@@ -19,11 +19,8 @@ type person = string
     person to be able to make the first move. *)
 val init_state : string -> string -> t
 
-(* [turn s] is the turn of the player who needs to move next in state [s] *)
-val turn : t -> person
-
-(* [player_name p] is the name of the player [p] *)
-val player_name: person
+(* [turn_player_name t] is the turn of the player who needs to move next in state [s] *)
+val turn_player_name : t -> person
 
 (* [score p s] is the current score of person [p] in state [s] as calculated by
     the chess piece relative value system *)

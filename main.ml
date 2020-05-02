@@ -1,5 +1,5 @@
 let rec play_game state = 
-   print_endline ("It is "^State.turn state^"'s turn.");
+   print_endline ("It is "^State.turn_player_name state^"'s turn.");
    print_endline "You can either check the score with 'score' or 
    move a piece with 'move'.";
    print_endline "What would you like to do?";
