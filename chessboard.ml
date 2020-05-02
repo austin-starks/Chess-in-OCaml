@@ -256,7 +256,7 @@ let rec rook_path_blocked t start_pos end_pos =
     with another piece. If it is blocked, returns true. Otherwise returns false *)
 let path_is_blocked t piece start_pos end_pos = 
   match piece with 
-  | None -> print_endline (start_pos.letter ^ (start_pos.number |> string_of_int)); raise NotAPiece
+  | None -> raise NotAPiece
   | Pawn color ->  false
   (* if (get_piece t end_pos = None && 
                        abs (end_pos.number - start_pos.number) = 1) ||
@@ -267,7 +267,7 @@ let path_is_blocked t piece start_pos end_pos =
      then false else true *)
   | Knight _ -> false
   | Bishop _ -> bishop_path t start_pos end_pos
-  | Queen _ -> bishop_path t start_pos end_pos || rook_path_blocked t start_pos end_pos
+  | Queen _ -> bishop_path t start_pos end_pos && rook_path_blocked t start_pos end_pos
   (* rook_path_blocked t start_pos end_pos || bishop_path t start_pos end_pos *)
   | King _ -> false
   | Rook _ -> rook_path_blocked t start_pos end_pos
