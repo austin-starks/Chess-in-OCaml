@@ -277,7 +277,7 @@ let path_is_blocked t piece start_pos end_pos =
      then false else true *)
   | Knight _ -> false
   | Bishop _ -> bishop_path t start_pos end_pos
-  | Queen _ -> false
+  | Queen _ -> bishop_path t start_pos end_pos || rook_path_blocked t start_pos end_pos
   (* rook_path_blocked t start_pos end_pos || bishop_path t start_pos end_pos *)
   | King _ -> false
   | Rook _ -> rook_path_blocked t start_pos end_pos
