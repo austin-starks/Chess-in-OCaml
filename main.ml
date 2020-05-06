@@ -17,8 +17,8 @@ let main () =
   print_endline "Please enter player one's name.\n";
   print_string  "> ";
   let player_one = read_line () in 
-   print_endline "Please enter player two's name.\n";
-   print_string  "> ";
+  print_endline "Please enter player two's name.\n";
+  print_string  "> ";
   let player_two = read_line () in 
   print_endline "\nInstructions:";
   print_endline "There are two valid commands. The first command is score";

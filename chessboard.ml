@@ -360,4 +360,14 @@ let move_piece t pos1 pos2 =
     chess_row_pos1.(pos1_letter_index) <- None; 
   else raise IllegalMoveError
 
+let piece_to_string piece = 
+  match piece with 
+  | Rook _ -> "Rook"
+  | Bishop _ -> "Bishop"
+  | King _ -> "King"
+  | Queen _ -> "Queen"
+  | Pawn _ -> "Pawn"
+  | Knight _ -> "Knight"
+  | None -> "None"
+
 let print_board () = ()
