@@ -57,3 +57,7 @@ val is_valid_move : t -> piece -> position -> position -> bool
     of a position
     Requires: pos to be a1, a2, ... a8, b1, ..., h7, or h8  *)
 val parse_position: string -> position
+
+
+(** [print_board ()] prints the current chessboard to the terminal *)
+val print_board: unit -> unit

@@ -12,7 +12,19 @@ type t = {
   p1_taken_pieces: (string*int) list;
   p2_taken_pieces: (string*int) list
 }
-let init_state person1 person2 = failwith "Unimplemented"
+
+let init_state person1 person2 = 
+  {
+  player_turn= person1;
+  players= [person1; person2];
+  score= [(person1, 0); (person2, 0)];
+  current_board= Chessboard.initialize_chessboard ();
+  p1_taken_pieces= [];
+  p2_taken_pieces= []
+  }
+
+  
+
 
 let turn_player_name t =
   t.player_turn

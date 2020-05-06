@@ -359,3 +359,5 @@ let move_piece t pos1 pos2 =
     chess_row_pos2.(pos2_letter_index) <- piece_to_move;
     chess_row_pos1.(pos1_letter_index) <- None; 
   else raise IllegalMoveError
+
+let print_board () = ()
