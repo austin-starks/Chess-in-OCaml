@@ -1,9 +1,9 @@
 let rec play_game state = 
-   print_endline ("It is "^State.turn_player_name state^"'s turn.");
-   print_endline "What would you like to do?";
-   match String.lowercase_ascii (read_line ()) with
-   | "score" -> print_endline (State.score state); play_game state
-   | x -> let new_state = State.move_piece state x in play_game new_state
+  print_endline ("It is "^State.turn_player_name state^"'s turn.");
+  print_endline "What would you like to do?";
+  match String.lowercase_ascii (read_line ()) with
+  | "score" -> print_endline (State.score state); play_game state
+  | x -> let new_state = State.move_piece state x in play_game new_state
 
 (* [main] starts the chess game. It asks for the players' names, asks 
    which player is white and which is black, initilizes the board, and allows
@@ -15,8 +15,8 @@ let main () =
   print_endline "Please enter player one's name.\n";
   print_string  "> ";
   let player_one = read_line () in 
-   print_endline "Please enter player two's name.\n";
-   print_string  "> ";
+  print_endline "Please enter player two's name.\n";
+  print_string  "> ";
   let player_two = read_line () in 
   print_endline "There are two valid commands. The first command is score";
   print_endline "and you can use it by typing 'score'. Otherwise you can move";
