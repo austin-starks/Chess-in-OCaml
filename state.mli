@@ -34,3 +34,6 @@ val check : t -> bool
 
 (* [check s] determines whether the current state [s] has a player in checkmate *)
 val checkmate: t -> bool
+
+(* [move_piece t pos] alters the chessboard in the state [t] by the position [pos] *)
+val move_piece: t -> string -> t

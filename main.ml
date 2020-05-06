@@ -1,12 +1,9 @@
 let rec play_game state = 
    print_endline ("It is "^State.turn_player_name state^"'s turn.");
-   print_endline "You can either check the score with 'score' or 
-   move a piece with 'move'.";
    print_endline "What would you like to do?";
-   match read_line () with
-   | "score" -> failwith ""
-   | "move" -> failwith ""
-   | _ -> print_endline "That's not a valid command"; play_game state
+   match String.lowercase_ascii (read_line ()) with
+   | "score" -> print_endline (State.score state); play_game state
+   | x -> let new_state = State.move_piece state x in play_game new_state
 
 (* [main] starts the chess game. It asks for the players' names, asks 
    which player is white and which is black, initilizes the board, and allows
@@ -21,6 +18,13 @@ let main () =
    print_endline "Please enter player two's name.\n";
    print_string  "> ";
   let player_two = read_line () in 
+  print_endline "There are two valid commands. The first command is score";
+  print_endline "and you can use it by typing 'score'. Otherwise you can move";
+  print_endline "your pieces by typing in two positions in the form of 'x# x#'";
+  print_endline "where 'x' is a letter from [A-H] and # is a number from [1-8]"; 
+  print_endline "For example, 'a2 a4' is a command that moves the piece on a2";
+  print_endline "to a4 (if it is a valid move). If it's not a valid move, the";
+  print_endline "engine will ask for another move for that player.";
   let initial_state = State.init_state player_one player_two in 
   play_game initial_state
 
