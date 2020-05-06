@@ -109,7 +109,7 @@ let calculate_score state =
       let p2_miss_pieces = find_missing_pieces state p2 in 
       let p1_score = List.fold_left (fun x y -> x + piece_score y) 0 p1_miss_pieces in 
       let p2_score = List.fold_left (fun x y -> x + piece_score y) 0 p2_miss_pieces in 
-      [(p1, p1_score), (p2, p2_score)]
+      [(p1, p1_score); (p2, p2_score)]
     | _ -> failwith "There should be exactly two players"
 
 
