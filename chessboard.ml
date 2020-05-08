@@ -382,13 +382,14 @@ let piece_color piece =
 
 
 
-  let print_row row =
+  let print_row ind row =
     let print_extra_space piece = 
       let i = ref (String.length piece) in 
       while !i < 6 do 
         print_string " "; i := !i + 1; 
       done in
     let iter = ref 0 in 
+    ANSITerminal.(print_string [red] ((string_of_int ind)^"  ")); 
     while !iter < 8 do 
       let color = piece_color (row.(!iter)) in 
       let string_piece = (row.(!iter) |> piece_to_string) in
@@ -406,6 +407,6 @@ let piece_color piece =
     
 
 let print_board t = 
-  List.iter print_row t;
+  List.iter2 print_row [8;7;6;5;4;3;2;1] t;
   ANSITerminal.(print_string [red]
-                  "  A        B       C      D       E       F       G       H\n\n");
+                  "    A        B       C      D       E       F       G       H\n\n");
