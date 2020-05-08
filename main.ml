@@ -2,6 +2,9 @@
       - check when player is in check or checkmate
       - implement ability for pawn to change to another piece
       - a player should be able to castle
+      - fix queen moving through objects bug
+      - fix biship taking piece bug
+      - implement points
    *)
 
 let rec play_game state = 
