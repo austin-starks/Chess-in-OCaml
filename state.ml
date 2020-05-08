@@ -15,22 +15,16 @@ type t = {
 
 let init_state person1 person2 = 
   {
-  player_turn= person1;
-  players= [person1; person2];
-  score= [(person1, 0); (person2, 0)];
-  current_board= Chessboard.initialize_chessboard ();
-  p1_taken_pieces= [];
-  p2_taken_pieces= []
+    player_turn= person1;
+    players= [person1; person2];
+    score= [(person1, 0); (person2, 0)];
+    current_board= Chessboard.initialize_chessboard ();
+    p1_taken_pieces= [];
+    p2_taken_pieces= []
   }
 
 let turn_player_name t =
   t.player_turn
-
-let score t =
-  match t.score with 
-  | h::t::[] -> (fst h) ^ "'s score is: " ^ string_of_int (snd h) ^ " \n"^
-                (fst t) ^ "'s score is: " ^ string_of_int (snd t) 
-  | _ -> failwith "Something has gone wrong in score"
 
 
 let current_board t = t.current_board
@@ -41,16 +35,16 @@ let checkmate t = failwith "Unimplemented"
 
 let score t = 
   match t.players with 
-    | [] -> failwith "There should be exactly two players"
-    | p1::p2::[] -> 
+  | [] -> failwith "There should be exactly two players"
+  | p1::p2::[] -> 
     let p1_score = t.score 
-      |> List.assoc p1 
-      |> string_of_int in
+                   |> List.assoc p1 
+                   |> string_of_int in
     let p2_score = t.score 
-      |> List.assoc p2
-      |> string_of_int in
+                   |> List.assoc p2
+                   |> string_of_int in
     p1 ^ " has " ^ p1_score ^ " points\n"^ p2 ^ " has " ^ p2_score ^ " points.\n"
-    | _ -> failwith "There should be exactly two players"
+  | _ -> failwith "There should be exactly two players"
 
 
 let assert_valid_positions pos1 pos2  = 
@@ -86,7 +80,7 @@ let find_missing_pieces state player =
   ]  in
   let list_of_differences = 
     List.map2 (fun elt1 elt2 -> (fst elt1, snd elt1 - snd elt2)) 
-    list_of_all_pieces list_of_current_pieces in 
+      list_of_all_pieces list_of_current_pieces in 
   List.filter (fun x -> snd x <> 0) list_of_differences
 
 let piece_score tup = 
@@ -103,14 +97,14 @@ let piece_score tup =
    current board and give a score for each  *)
 let calculate_score state = 
   match state.players with 
-    | [] -> failwith "There should be exactly two players"
-    | p1::p2::[] -> 
-      let p1_miss_pieces = find_missing_pieces state p1 in 
-      let p2_miss_pieces = find_missing_pieces state p2 in 
-      let p1_score = List.fold_left (fun x y -> x + piece_score y) 0 p1_miss_pieces in 
-      let p2_score = List.fold_left (fun x y -> x + piece_score y) 0 p2_miss_pieces in 
-      [(p1, p1_score); (p2, p2_score)]
-    | _ -> failwith "There should be exactly two players"
+  | [] -> failwith "There should be exactly two players"
+  | p1::p2::[] -> 
+    let p1_miss_pieces = find_missing_pieces state p1 in 
+    let p2_miss_pieces = find_missing_pieces state p2 in 
+    let p1_score = List.fold_left (fun x y -> x + piece_score y) 0 p1_miss_pieces in 
+    let p2_score = List.fold_left (fun x y -> x + piece_score y) 0 p2_miss_pieces in 
+    [(p1, p1_score); (p2, p2_score)]
+  | _ -> failwith "There should be exactly two players"
 
 
 let move_piece state pos = 
