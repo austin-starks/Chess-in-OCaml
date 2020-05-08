@@ -216,8 +216,8 @@ let rec bishop_path t start_pos end_pos =
     ((get_piece t new_pos) <> None && new_pos <> end_pos) || 
     bishop_path t new_pos end_pos
   else 
-      (* let () = print_endline "check 5" in *)
-  false
+    (* let () = print_endline "check 5" in *)
+    false
 
 let rec rook_path_blocked t start_pos end_pos = 
   if end_pos.number = start_pos.number && end_pos.letter = start_pos.letter 
@@ -277,33 +277,35 @@ let is_valid_move t piece pos1 pos2 =
   if (pos1.number > 8 || pos1.number < 1 || pos2.number > 8 || pos2.number < 1)
   || path_is_blocked t piece pos1 pos2 
   then false else match piece with 
-    | Pawn Black-> if pos1.letter = pos2.letter && (
-        (pos2.number = pos1.number -1)
-        || (pos1.number = 7 && pos2.number = 5)) ||
-                      (pos2.number = pos1.number -1 && 
-                       List.assoc pos2.letter pos_letter_assoc_list - 
-                       List.assoc pos1.letter pos_letter_assoc_list |> Int.abs =1 &&
-                       match get_piece t pos2 with 
-                       | Pawn White -> true 
-                       | King White -> true 
-                       | Knight White ->true
-                       | Bishop White -> true 
-                       | Queen White -> true
-                       | _ -> false)
+    | Pawn Black-> if 
+      (pos1.letter = pos2.letter && get_piece t pos2 = None &&
+       (pos2.number = pos1.number -1 || pos1.number = 7 && pos2.number = 5)) 
+      ||
+      (pos2.number = pos1.number -1 && 
+       List.assoc pos2.letter pos_letter_assoc_list - 
+       List.assoc pos1.letter pos_letter_assoc_list |> Int.abs =1 &&
+       match get_piece t pos2 with 
+       | Pawn White -> true 
+       | King White -> true 
+       | Knight White ->true
+       | Bishop White -> true 
+       | Queen White -> true
+       | _ -> false)
       then true else false
-    | Pawn White -> if pos2.letter = pos1.letter && (
-        (pos2.number = pos1.number +1) ||
-        (pos1.number = 2 && pos2.number = 4)) || 
-                       (pos2.number = pos1.number +1 && 
-                        List.assoc pos2.letter pos_letter_assoc_list - 
-                        List.assoc pos1.letter pos_letter_assoc_list |> Int.abs =1 &&
-                        match get_piece t pos2 with 
-                        | Pawn Black -> true 
-                        | King Black -> true 
-                        | Knight Black ->true
-                        | Bishop Black -> true 
-                        | Queen Black -> true
-                        | _ -> false)
+    | Pawn White -> if 
+      (pos2.letter = pos1.letter && get_piece t pos2 = None && 
+       (pos2.number = pos1.number +1 || pos1.number = 2 && pos2.number = 4)) 
+      || 
+      (pos2.number = pos1.number +1 && 
+       List.assoc pos2.letter pos_letter_assoc_list - 
+       List.assoc pos1.letter pos_letter_assoc_list |> Int.abs =1 &&
+       match get_piece t pos2 with 
+       | Pawn Black -> true 
+       | King Black -> true 
+       | Knight Black ->true
+       | Bishop Black -> true 
+       | Queen Black -> true
+       | _ -> false)
       then true else false
     | Knight _ -> if (pos1.number = pos2.number +2 && 
                       List.assoc pos1.letter pos_letter_assoc_list  = 
@@ -382,29 +384,29 @@ let piece_color piece =
 
 
 
-  let print_row ind row =
-    let print_extra_space piece = 
-      let i = ref (String.length piece) in 
-      while !i < 6 do 
-        print_string " "; i := !i + 1; 
-      done in
-    let iter = ref 0 in 
-    ANSITerminal.(print_string [red] ((string_of_int ind)^"  ")); 
-    while !iter < 8 do 
-      let color = piece_color (row.(!iter)) in 
-      let string_piece = (row.(!iter) |> piece_to_string) in
-      if color = "white" then 
+let print_row ind row =
+  let print_extra_space piece = 
+    let i = ref (String.length piece) in 
+    while !i < 6 do 
+      print_string " "; i := !i + 1; 
+    done in
+  let iter = ref 0 in 
+  ANSITerminal.(print_string [red] ((string_of_int ind)^"  ")); 
+  while !iter < 8 do 
+    let color = piece_color (row.(!iter)) in 
+    let string_piece = (row.(!iter) |> piece_to_string) in
+    if color = "white" then 
       print_string string_piece;
-      if color = "black" then 
+    if color = "black" then 
       ANSITerminal.(print_string [blue]
-                  string_piece);
-      print_string "  ";
-      print_extra_space string_piece;
-      iter := !iter + 1;
-      if !iter = 8 then print_string "\n"
-    done 
-    
-    
+                      string_piece);
+    print_string "  ";
+    print_extra_space string_piece;
+    iter := !iter + 1;
+    if !iter = 8 then print_string "\n"
+  done 
+
+
 
 let print_board t = 
   List.iter2 print_row [8;7;6;5;4;3;2;1] t;
