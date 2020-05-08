@@ -114,7 +114,7 @@ let calculate_score state =
 
 
 let move_piece state pos = 
-  match String.split_on_char ' ' pos with 
+  match String.split_on_char ' ' pos |> List.filter (fun x -> x <> "") with 
   | [] -> raise InvalidCommand 
   | h::[] -> raise InvalidCommand 
   | h::t::[] -> if assert_valid_positions h t then 

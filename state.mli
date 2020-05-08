@@ -9,10 +9,14 @@
 (** The type representing the people playing the game *)  
 type person = string
 
-(** The abstract type of values representing the game state. *)
 open Chessboard
 
+(** The abstract type of values representing the game state. *)
 type t 
+
+(** An exception thrown when the state processes an invalid command *)
+exception InvalidCommand
+
 
 (** [init_state p1 p2] is the initial state of the the chess game [g]. In this 
     state, the game is set up as a normal chessboard, with white being the 
