@@ -49,7 +49,7 @@ let score t =
     let p2_score = t.score 
       |> List.assoc p2
       |> string_of_int in
-    p1 ^ " has " ^ p1_score ^ " has " ^ p2_score ^ "."
+    p1 ^ " has " ^ p1_score ^ " points\n"^ p2 ^ " has " ^ p2_score ^ " points.\n"
     | _ -> failwith "There should be exactly two players"
 
 

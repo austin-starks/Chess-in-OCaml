@@ -368,6 +368,44 @@ let piece_to_string piece =
   | Queen _ -> "Queen"
   | Pawn _ -> "Pawn"
   | Knight _ -> "Knight"
-  | None -> "None"
+  | None -> ""
 
-let print_board () = ()
+let piece_color piece = 
+  match piece with 
+  | Rook c -> if c = White then "white" else "black"
+  | Bishop c -> if c = White then "white" else "black"
+  | King c -> if c = White then "white" else "black"
+  | Queen c -> if c = White then "white" else "black"
+  | Pawn c -> if c = White then "white" else "black"
+  | Knight c -> if c = White then "white" else "black"
+  | None -> "     "
+
+
+
+  let print_row row =
+    let print_extra_space piece = 
+      let i = ref (String.length piece) in 
+      while !i < 6 do 
+        print_string " "; i := !i + 1; 
+      done in
+    let iter = ref 0 in 
+    while !iter < 8 do 
+      let color = piece_color (row.(!iter)) in 
+      let string_piece = (row.(!iter) |> piece_to_string) in
+      if color = "white" then 
+      print_string string_piece;
+      if color = "black" then 
+      ANSITerminal.(print_string [blue]
+                  string_piece);
+      print_string "  ";
+      print_extra_space string_piece;
+      iter := !iter + 1;
+      if !iter = 8 then print_string "\n"
+    done 
+    
+    
+
+let print_board t = 
+  List.iter print_row t;
+  ANSITerminal.(print_string [red]
+                  "  A        B       C      D       E       F       G       H\n\n");

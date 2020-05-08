@@ -1,6 +1,18 @@
+(* TODO:
+   Thurs: 
+      - handle "NotAPiece" and "IllegalMove" errors 
+   Fri
+      - prevent player one from moving player two pieces 
+      - implement the difference pieces function
+      - check when player is in check or checkmate
+   Sat
+      - implement ability for pawn to change to another piece
+      - a player should be able to castle
+   *)
+
 let rec play_game state = 
    print_endline ("It is "^State.turn_player_name state^"'s turn.");
-   Chessboard.print_board ();
+   Chessboard.print_board (State.current_board state);
    print_endline "What would you like to do?";
    print_string "> ";
    match String.lowercase_ascii (read_line ()) with

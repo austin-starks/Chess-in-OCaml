@@ -60,4 +60,4 @@ val parse_position: string -> position
 
 
 (** [print_board ()] prints the current chessboard to the terminal *)
-val print_board: unit -> unit
+val print_board: t -> unit
