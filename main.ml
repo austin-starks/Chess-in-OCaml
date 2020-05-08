@@ -8,28 +8,28 @@
    *)
 
 let rec play_game state = 
-   print_endline ("It is "^State.turn_player_name state^"'s turn.");
-   Chessboard.print_board (State.current_board state);
-   print_endline "What would you like to do?";
-   print_string "> ";
-   match String.lowercase_ascii (read_line ()) with
-   | "score" -> print_endline (State.score state); play_game state
-   | x -> match State.move_piece state x with 
-      | new_state -> play_game new_state
-      | exception Chessboard.NotAPiece -> 
-          error_handling "There is no piece at that positiion." state; 
-      | exception Chessboard.IllegalMoveError -> 
-          error_handling "That piece can not move in that way." state; 
-      | exception State.InvalidCommand -> 
-          error_handling "That piece can not move in that way." state; 
-      
+  print_endline ("It is "^State.turn_player_name state^"'s turn.");
+  Chessboard.print_board (State.current_board state);
+  print_endline "What would you like to do?";
+  print_string "> ";
+  match String.lowercase_ascii (read_line ()) with
+  | "score" -> print_endline (State.score state); play_game state
+  | x -> match State.move_piece state x with 
+    | new_state -> play_game new_state
+    | exception Chessboard.NotAPiece -> 
+      error_handling "There is no piece at that positiion." state; 
+    | exception Chessboard.IllegalMoveError -> 
+      error_handling "That piece can not move in that way." state; 
+    | exception State.InvalidCommand -> 
+      error_handling "That piece can not move in that way." state; 
+
 and error_handling msg state = 
-      print_endline ("\n"^msg); 
-      print_endline "Please try a different move."; 
-      play_game state
+  print_endline ("\n"^msg); 
+  print_endline "Please try a different move."; 
+  play_game state
 
 
-   
+
 
 (* [main] starts the chess game. It asks for the players' names, asks 
    which player is white and which is black, initilizes the board, and allows
@@ -51,7 +51,9 @@ let main () =
   print_endline "where 'x' is a letter from [A-H] and # is a number from [1-8]"; 
   print_endline "For example, 'a2 a4' is a command that moves the piece on a2";
   print_endline "to a4 (if it is a valid move). If it's not a valid move, the";
-  print_endline "engine will ask for another move for that player.\n";
+  print_endline "engine will ask for another move for that player.\n \n";
+  print_endline (player_one ^ " is white, and is on bottom (corresponding to rows 1-2)");
+  print_endline (player_two ^ " is black, and is on top (corresponding to rows 7-8a4) \n");
   let initial_state = State.init_state player_one player_two in 
   play_game initial_state
 
