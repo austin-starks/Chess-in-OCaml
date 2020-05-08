@@ -17,7 +17,22 @@ let rec play_game state =
   print_string "> ";
   match String.lowercase_ascii (read_line ()) with
   | "score" -> print_endline (State.score state); play_game state
-  | x -> let new_state = State.move_piece state x in play_game new_state
+  | x -> match State.move_piece state x with 
+    | new_state -> play_game new_state
+    | exception Chessboard.NotAPiece -> 
+      error_handling "There is no piece at that positiion." state; 
+    | exception Chessboard.IllegalMoveError -> 
+      error_handling "That piece can not move in that way." state; 
+    | exception State.InvalidCommand -> 
+      error_handling "That piece can not move in that way." state; 
+
+and error_handling msg state = 
+  print_endline ("\n"^msg); 
+  print_endline "Please try a different move."; 
+  play_game state
+
+
+
 
 (* [main] starts the chess game. It asks for the players' names, asks 
    which player is white and which is black, initilizes the board, and allows
