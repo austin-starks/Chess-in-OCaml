@@ -28,6 +28,8 @@ let rec play_game state =
         error_handling "You have a piece at that position." state; 
       | exception State.InvalidCommand -> 
         error_handling "That piece can not move in that way." state; 
+      | exception Failure _ -> 
+        error_handling "That piece can not move in that way." state; 
         (* | exception State.Checkmate -> print_endline "A player has won"; exit 0 *)
 
 and error_handling msg state = 

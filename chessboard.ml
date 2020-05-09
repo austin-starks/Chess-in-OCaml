@@ -164,10 +164,7 @@ let print_pos name pos =
   print_int pos.number;
   ()
 
-
-(* current_pos: d4
-   target_position: g7 *)
-let rec bishop_path t start_pos end_pos = 
+let rec bishop_path_blocked t start_pos end_pos = 
   print_pos "start_pos\n" start_pos;
   print_pos "end_pos\n" end_pos;
   if end_pos.number = start_pos.number  &&  
@@ -185,7 +182,7 @@ let rec bishop_path t start_pos end_pos =
     print_pos "new_pos\n" new_pos;
     print_pos "end_pos\n" end_pos;
     if (get_piece t new_pos) = None then print_endline "\npiece: None" else print_endline "\npiece: not None";
-    if (get_piece t new_pos) = None then bishop_path t new_pos end_pos
+    if (get_piece t new_pos) = None then bishop_path_blocked t new_pos end_pos
     else not (new_pos.number = end_pos.number && 
     (new_pos.letter |> String.lowercase_ascii) = 
     (end_pos.letter |> String.lowercase_ascii))
@@ -199,7 +196,7 @@ let rec bishop_path t start_pos end_pos =
     let new_pos = {number = start_pos.number + 1; letter = new_letter} in
     if (get_piece t new_pos) = None then print_endline "piece: None" else print_endline "piece: not None";
     print_pos "new_pos\n" new_pos;
-    if (get_piece t new_pos) = None then bishop_path t new_pos end_pos
+    if (get_piece t new_pos) = None then bishop_path_blocked t new_pos end_pos
     else not (new_pos.number = end_pos.number && 
     (new_pos.letter |> String.lowercase_ascii) = 
     (end_pos.letter |> String.lowercase_ascii))
@@ -211,7 +208,7 @@ let rec bishop_path t start_pos end_pos =
     let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list + 1 in 
     let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
     let new_pos = {number = start_pos.number - 1; letter = new_letter} in
-    if (get_piece t new_pos) = None then bishop_path t new_pos end_pos
+    if (get_piece t new_pos) = None then bishop_path_blocked t new_pos end_pos
     else not (new_pos.number = end_pos.number && 
     (new_pos.letter |> String.lowercase_ascii) = 
     (end_pos.letter |> String.lowercase_ascii))
@@ -223,7 +220,7 @@ let rec bishop_path t start_pos end_pos =
     let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
     let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
     let new_pos = {number = start_pos.number - 1; letter = new_letter} in
-    if (get_piece t new_pos) = None then bishop_path t new_pos end_pos
+    if (get_piece t new_pos) = None then bishop_path_blocked t new_pos end_pos
     else not (new_pos.number = end_pos.number && 
     (new_pos.letter |> String.lowercase_ascii) = 
     (end_pos.letter |> String.lowercase_ascii))
@@ -280,9 +277,13 @@ let path_is_blocked t piece start_pos end_pos =
                        | White -> get_piece t {letter=end_pos.letter; number=3} = None) 
      then false else true *)
   | Knight _ -> false
-  | Bishop _ -> bishop_path t start_pos end_pos
-  | Queen _ -> bishop_path t start_pos end_pos && rook_path_blocked t start_pos end_pos
-  (* rook_path_blocked t start_pos end_pos || bishop_path t start_pos end_pos *)
+  | Bishop _ -> bishop_path_blocked t start_pos end_pos
+  | Queen _ -> if (start_pos.number = end_pos.number || 
+                start_pos.letter |> String.lowercase_ascii = 
+                (end_pos.letter |> String.lowercase_ascii)) 
+                then rook_path_blocked t start_pos end_pos 
+                else bishop_path_blocked t start_pos end_pos
+  (* rook_path_blocked t start_pos end_pos || bishop_path_blocked t start_pos end_pos *)
   | King _ -> false
   | Rook _ -> rook_path_blocked t start_pos end_pos
 
