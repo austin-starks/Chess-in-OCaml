@@ -249,16 +249,24 @@ let rec rook_path_blocked t start_pos end_pos =
       ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list + 1 in 
       let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
       let intermediate_position = {letter = new_letter; number = start_pos.number} in
-      if get_piece t intermediate_position <> None then let _ = print_endline "This is the second to last if-statement" in true
+      if get_piece t intermediate_position <> None && 
+         end_pos.number <> intermediate_position.number &&
+         String.lowercase_ascii end_pos.letter <> 
+         String.lowercase_ascii intermediate_position.letter 
+      then 
+        true
       else 
-        let _ = print_endline "first loop successful" in
         rook_path_blocked t intermediate_position end_pos 
     else 
       let 
         ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
       let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
       let intermediate_position = {letter = new_letter; number = start_pos.number} in
-      if get_piece t intermediate_position <> None then let _ = print_endline "This is the last end if-statement" in true 
+      if get_piece t intermediate_position <> None && 
+         end_pos.number <> intermediate_position.number &&
+         String.lowercase_ascii end_pos.letter <> 
+         String.lowercase_ascii intermediate_position.letter 
+      then  true 
       else rook_path_blocked t intermediate_position end_pos 
   else false
 
@@ -278,10 +286,10 @@ let path_is_blocked t piece start_pos end_pos =
   | Knight _ -> false
   | Bishop _ -> bishop_path_blocked t start_pos end_pos
   | Queen _ -> if (start_pos.number = end_pos.number || 
-                start_pos.letter |> String.lowercase_ascii = 
-                (end_pos.letter |> String.lowercase_ascii)) 
-                then rook_path_blocked t start_pos end_pos 
-                else bishop_path_blocked t start_pos end_pos
+                   start_pos.letter |> String.lowercase_ascii = 
+                                       (end_pos.letter |> String.lowercase_ascii)) 
+    then rook_path_blocked t start_pos end_pos 
+    else bishop_path_blocked t start_pos end_pos
   (* rook_path_blocked t start_pos end_pos || bishop_path_blocked t start_pos end_pos *)
   | King _ -> false
   | Rook _ -> rook_path_blocked t start_pos end_pos
