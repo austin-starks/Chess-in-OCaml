@@ -1,10 +1,8 @@
-(* TODO:
-   - fix queen moving through objects bug
-   - fix rook taking pieces horizontally bug
-*)
-
+(* [ignore s] takes in any input and returns a unit *)
 let ignore s = ()
 
+(** [play_game state] plays the chessgame by updating the state after each 
+    player's turn. *)
 let rec play_game state = 
   match State.score state |> ignore with 
   | exception State.P1Checkmate person -> 
@@ -33,12 +31,12 @@ let rec play_game state =
       | exception Failure _ -> 
         error_handling "That piece can not move in that way." state; 
 
+(** [error_handling msg state] handles any error that is raised from state or 
+    the chessboard by printing a message and continuing to play a game. *)
 and error_handling msg state = 
   print_endline ("\n"^msg); 
   print_endline "Please try a different move."; 
   play_game state
-
-
 
 
 (* [main] starts the chess game. It asks for the players' names, asks 
