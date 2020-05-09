@@ -333,10 +333,46 @@ let is_valid_move t piece pos1 pos2 =
                       List.assoc pos2.letter pos_letter_assoc_list + 2) 
       then true else false 
     | Bishop _ -> is_bishop_move piece pos1 pos2
-    | King _ -> (is_bishop_move piece pos1 pos2 || is_rook_move piece pos1 pos2)
-                && List.assoc pos1.letter pos_letter_assoc_list  - 
-                   List.assoc pos2.letter pos_letter_assoc_list |> Int.abs <=1
-                && pos1.number - pos2.number |> Int.abs <=1
+    | King color -> ((is_bishop_move piece pos1 pos2 || is_rook_move piece pos1 pos2)
+                     && List.assoc pos1.letter pos_letter_assoc_list  - 
+                        List.assoc pos2.letter pos_letter_assoc_list |> Int.abs <=1
+                     && pos1.number - pos2.number |> Int.abs <=1) 
+                    || 
+                    (get_piece t pos1 = King color && 
+                     get_piece t {letter = "F"; number = 1} = None && 
+                     get_piece t {letter = "G"; number = 1} = None && 
+                     get_piece t {letter = "H"; number = 1} = Rook color &&
+                     List.assoc pos1.letter pos_letter_assoc_list  = 
+                     List.assoc pos2.letter pos_letter_assoc_list - 2
+                    ) 
+                    ||
+                    (get_piece t pos1 = King color && 
+                     get_piece t {letter = "F"; number = 8} = None && 
+                     get_piece t {letter = "G"; number = 8} = None && 
+                     get_piece t {letter = "H"; number = 8} = Rook color &&
+                     List.assoc pos1.letter pos_letter_assoc_list  = 
+                     List.assoc pos2.letter pos_letter_assoc_list - 2
+
+                    ) 
+                    ||
+                    (get_piece t pos1 = King color && 
+                     get_piece t {letter = "D"; number = 1} = None && 
+                     get_piece t {letter = "C"; number = 1} = None && 
+                     get_piece t {letter = "B"; number = 1} = None && 
+                     get_piece t {letter = "A"; number = 1} = Rook color  &&
+                     List.assoc pos1.letter pos_letter_assoc_list  = 
+                     List.assoc pos2.letter pos_letter_assoc_list + 2
+                    ) 
+                    ||
+                    (get_piece t pos1 = King color && 
+                     get_piece t {letter = "D"; number = 8} = None && 
+                     get_piece t {letter = "C"; number = 8} = None && 
+                     get_piece t {letter = "B"; number = 8} = None && 
+                     get_piece t {letter = "A"; number = 8} = Rook color &&
+                     List.assoc pos1.letter pos_letter_assoc_list  = 
+                     List.assoc pos2.letter pos_letter_assoc_list + 2
+                    ) 
+
     | Queen _ -> is_bishop_move piece pos1 pos2 || is_rook_move piece pos1 pos2
     | Rook _ -> is_rook_move piece pos1 pos2
     | None -> false
