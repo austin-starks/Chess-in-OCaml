@@ -35,9 +35,8 @@ let initialize_chessboard () =  [
   [|None; None; None; None; None; None; None; None;|];
   [|None; None; None; None; None; None; None; None;|];
   [|None; None; None; None; None; None; None; None;|];
-  [|None; None; None; None; None; None; None; None;|];
-  (* [|Pawn White; Pawn White; Pawn White; Pawn White; 
-    Pawn White; Pawn White; Pawn White; Pawn White|]; *)
+  [|Pawn White; Pawn White; Pawn White; Pawn White; 
+    Pawn White; Pawn White; Pawn White; Pawn White|];
   [|Rook White; Knight White; Bishop White; Queen White; 
     King White; Bishop White; Knight White; Rook White|];
 ]
@@ -187,8 +186,8 @@ let rec bishop_path t start_pos end_pos =
     if (get_piece t new_pos) = None then print_endline "\npiece: None" else print_endline "\npiece: not None";
     if (get_piece t new_pos) = None then bishop_path t new_pos end_pos
     else not (new_pos.number = end_pos.number && 
-    (new_pos.letter |> String.lowercase_ascii) = 
-    (end_pos.letter |> String.lowercase_ascii))
+              (new_pos.letter |> String.lowercase_ascii) = 
+              (end_pos.letter |> String.lowercase_ascii))
   else if start_pos.number < end_pos.number && 
           List.assoc start_pos.letter pos_letter_assoc_list > 
           List.assoc end_pos.letter pos_letter_assoc_list
@@ -201,8 +200,8 @@ let rec bishop_path t start_pos end_pos =
     print_pos "new_pos\n" new_pos;
     if (get_piece t new_pos) = None then bishop_path t new_pos end_pos
     else not (new_pos.number = end_pos.number && 
-    (new_pos.letter |> String.lowercase_ascii) = 
-    (end_pos.letter |> String.lowercase_ascii))
+              (new_pos.letter |> String.lowercase_ascii) = 
+              (end_pos.letter |> String.lowercase_ascii))
   else if start_pos.number > end_pos.number && 
           List.assoc start_pos.letter pos_letter_assoc_list < 
           List.assoc end_pos.letter pos_letter_assoc_list
@@ -213,11 +212,11 @@ let rec bishop_path t start_pos end_pos =
     let new_pos = {number = start_pos.number - 1; letter = new_letter} in
     if (get_piece t new_pos) = None then bishop_path t new_pos end_pos
     else not (new_pos.number = end_pos.number && 
-    (new_pos.letter |> String.lowercase_ascii) = 
-    (end_pos.letter |> String.lowercase_ascii))
+              (new_pos.letter |> String.lowercase_ascii) = 
+              (end_pos.letter |> String.lowercase_ascii))
   else if not (start_pos.number > end_pos.number && 
-          List.assoc start_pos.letter pos_letter_assoc_list > 
-          List.assoc end_pos.letter pos_letter_assoc_list)
+               List.assoc start_pos.letter pos_letter_assoc_list > 
+               List.assoc end_pos.letter pos_letter_assoc_list)
   then 
     let () = print_endline "\n\ncheck 4" in
     let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
@@ -225,8 +224,8 @@ let rec bishop_path t start_pos end_pos =
     let new_pos = {number = start_pos.number - 1; letter = new_letter} in
     if (get_piece t new_pos) = None then bishop_path t new_pos end_pos
     else not (new_pos.number = end_pos.number && 
-    (new_pos.letter |> String.lowercase_ascii) = 
-    (end_pos.letter |> String.lowercase_ascii))
+              (new_pos.letter |> String.lowercase_ascii) = 
+              (end_pos.letter |> String.lowercase_ascii))
   else 
     let () = print_endline "\n\ncheck 5" in
     false

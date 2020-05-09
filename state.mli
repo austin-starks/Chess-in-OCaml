@@ -18,10 +18,10 @@ type t
 exception InvalidCommand
 
 (** An exception thrown when player 1 takes player 2's king *)  
-exception P1Checkmate
+exception P1Checkmate of person
 
 (** An exception thrown when player 2 takes player 1's king *)  
-exception P2Checkmate
+exception P2Checkmate of person
 
 
 (** [init_state p1 p2] is the initial state of the the chess game [g]. In this 

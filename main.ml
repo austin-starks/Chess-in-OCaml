@@ -7,9 +7,9 @@ let ignore s = ()
 
 let rec play_game state = 
   match State.score state |> ignore with 
-  | exception State.P1Checkmate -> 
-    print_endline "Player 1 has checkmate";
-  | exception State.P2Checkmate -> print_endline "Player 2";
+  | exception State.P1Checkmate person -> 
+    print_endline person;
+  | exception State.P2Checkmate person-> print_endline "Player 2";
   |_ -> ();
     print_endline ("It is "^State.turn_player_name state^"'s turn.");
     Chessboard.print_board (State.current_board state);
