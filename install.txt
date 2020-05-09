@@ -1,0 +1,9 @@
+To play the game, run make play. The instructions are on the screen. In summary:
+
+- Use "stalemate" to draw the game
+
+- Use "score" to calculate the score of each player
+
+- Otherwise, use two positions to indicate which pieces you want to move. For example, 
+if you want to move your pawn above your king, and you are white, you input e2 e4 
+to indicate you want to move the pawn at position E2 to position E4
