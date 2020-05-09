@@ -521,7 +521,7 @@ let print_row ind row =
 
 let print_board t = 
   ANSITerminal.(print_string [red]
-                  "\n     A        B       C       D       E       F       G       H\n\n");
+                  "\n     A        B       C       D       E       F       G       H\n");
   List.iter2 print_row [8;7;6;5;4;3;2;1] t;
   ANSITerminal.(print_string [red]
                   "     A        B       C       D       E       F       G       H\n\n");
