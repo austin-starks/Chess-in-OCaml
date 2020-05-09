@@ -1,6 +1,7 @@
 (* TODO:
    - end the game when the king is taken 
    - fix queen moving through objects bug
+   - fix rook taking pieces horizontally bug
 *)
 let ignore s = ()
 
@@ -23,6 +24,8 @@ let rec play_game state =
         error_handling "There is no piece at that positiion." state; 
       | exception Chessboard.IllegalMoveError -> 
         error_handling "That piece can not move in that way." state; 
+      | exception Chessboard.SameColorMoveError -> 
+        error_handling "You have a piece at that position." state; 
       | exception State.InvalidCommand -> 
         error_handling "That piece can not move in that way." state; 
         (* | exception State.Checkmate -> print_endline "A player has won"; exit 0 *)
