@@ -1,7 +1,6 @@
 (* TODO:
       - end the game when the king is taken or when the command 'stalemate' is ended
       - fix queen moving through objects bug
-      - fix rook infinite loop
       - fix biship taking piece bug
    *)
 
