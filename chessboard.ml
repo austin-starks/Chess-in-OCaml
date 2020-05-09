@@ -11,7 +11,6 @@ type piece =
 
 type t = piece array list
 
-(* Internal representation of a position *)
 type position = {
   letter : string;
   number: int

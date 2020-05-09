@@ -1,6 +1,7 @@
 (** The type representing the color of the piece *)
 type color = Black | White
 
+(* Internal representation of a position *)
 type position
 
 (** The type representing a chess piece on the board *)
