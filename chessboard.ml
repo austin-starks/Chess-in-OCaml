@@ -435,30 +435,9 @@ let piece_color piece =
   | Knight c -> if c = White then "white" else "black"
   | None -> "     "
 
-
-
-let print_row ind row =
-  let print_extra_space piece = 
-    let i = ref (String.length piece) in 
-    while !i < 6 do 
-      print_string " "; i := !i + 1; 
-    done in
-  let iter = ref 0 in 
-  ANSITerminal.(print_string [red] ((string_of_int ind)^"   ")); 
-  while !iter < 8 do 
-    let color = piece_color (row.(!iter)) in 
-    let string_piece = (row.(!iter) |> piece_to_string) in
-    if color = "white" then 
-      ANSITerminal.(print_string [yellow]
-                      string_piece);
-    if color = "black" then 
-      ANSITerminal.(print_string [blue]
-                      string_piece);
-    print_string "  ";
-    iter := !iter + 1;
-    print_extra_space string_piece;
-    if !iter = 8 then ANSITerminal.(print_string [red] ((string_of_int ind)^"  \n")); 
-  done 
+let string_color clr = match clr with 
+  | Black -> "black"
+  | White -> "white"
 
 let count_pieces t color = 
   let rook_count = ref 0 in 
@@ -493,11 +472,60 @@ let count_pieces t color =
     ("Pawn", !pawn_count);
   ]
 
+let rec get_piece_from_console () = 
+  print_string "> ";
+  match read_line () |> String.lowercase_ascii with 
+  | "bishop" -> "bishop"
+  | "queen" -> "queen"
+  | "king" -> "king"
+  | "knight" -> "knight"
+  | "rook" -> "rook"
+  | _ -> print_endline "That is not a valid piece. Please pick another.";
+        get_piece_from_console ()
 
+let exchange_pawns t = 
+  let exchange_pawn_helper row = 
+  for x = 0 to 7 do 
+    match row.(x) with 
+    | Pawn clr -> 
+      print_endline "Your pawn has reached the end of the board.";
+      print_endline "Type in the name of a piece you want to exchange it for.";
+      let piece_str = get_piece_from_console () in 
+      let piece = get_piece_from_string (piece_str ^ " " ^ (string_color clr))  in 
+      row.(x) <- piece
+    | _ -> ()
+  done in
+  let row1 = List.hd t in 
+  let row2 = List.rev t |> List.hd in 
+    exchange_pawn_helper row1;
+    exchange_pawn_helper row2;;
+
+let print_row ind row =
+  let print_extra_space piece = 
+    let i = ref (String.length piece) in 
+    while !i < 6 do 
+      print_string " "; i := !i + 1; 
+    done in
+  let iter = ref 0 in 
+  ANSITerminal.(print_string [red] ((string_of_int ind)^"   ")); 
+  while !iter < 8 do 
+    let color = piece_color (row.(!iter)) in 
+    let string_piece = (row.(!iter) |> piece_to_string) in
+    if color = "white" then 
+      ANSITerminal.(print_string [yellow]
+                      string_piece);
+    if color = "black" then 
+      ANSITerminal.(print_string [blue]
+                      string_piece);
+    print_string "  ";
+    iter := !iter + 1;
+    print_extra_space string_piece;
+    if !iter = 8 then ANSITerminal.(print_string [red] ((string_of_int ind)^"  \n")); 
+  done 
 
 let print_board t = 
   ANSITerminal.(print_string [red]
-                  "\n     A        B       C       D       E       F       G       H\n");
+                  "\n     A        B       C       D       E       F       G       H\n\n");
   List.iter2 print_row [8;7;6;5;4;3;2;1] t;
   ANSITerminal.(print_string [red]
                   "     A        B       C       D       E       F       G       H\n\n");

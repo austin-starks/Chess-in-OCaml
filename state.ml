@@ -96,12 +96,16 @@ let calculate_score state =
   | _ -> failwith "There should be exactly two players"
 
 
+let exchange_pawns chessboard = 
+  Chessboard.exchange_pawns chessboard
+
 let move_piece state pos = 
   match String.split_on_char ' ' pos |> List.filter (fun x -> x <> "") with 
   | [] -> raise InvalidCommand 
   | h::[] -> raise InvalidCommand 
   | h::t::[] -> if assert_valid_positions h t then 
       let () =  Chessboard.move_piece state.current_board h t in 
+      let () = exchange_pawns state.current_board in 
       let new_score = calculate_score state in 
       {
         player_turn= 
