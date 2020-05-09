@@ -383,7 +383,6 @@ let move_piece t pos1 pos2 =
   let position2 = parse_position pos2 in  
   let piece_to_move = 
     get_piece t position1 in
-  (* TODO - say is_valid_move || is_valid_pawn_move *)
   if is_valid_move t piece_to_move position1 position2 
   then
     let pos1_letter_index = 
@@ -396,6 +395,20 @@ let move_piece t pos1 pos2 =
     let _ = check_piece_color piece_to_move piece_at_loc in 
     chess_row_pos2.(pos2_letter_index) <- piece_to_move;
     chess_row_pos1.(pos1_letter_index) <- None; 
+    match piece_to_move with 
+    | King color ->  if 
+      List.assoc position1.letter pos_letter_assoc_list - 
+      List.assoc position2.letter pos_letter_assoc_list = 2
+      then 
+        let _ = chess_row_pos1.(0) <- None in 
+        chess_row_pos1.(3) <- Rook color
+      else if 
+        List.assoc position1.letter pos_letter_assoc_list - 
+        List.assoc position2.letter pos_letter_assoc_list = -2
+      then 
+        let _ = chess_row_pos1.(7) <- None in 
+        chess_row_pos1.(5) <- Rook color
+    | _ -> ()
   else raise IllegalMoveError
 
 let piece_to_string piece = 
