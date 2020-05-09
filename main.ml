@@ -1,8 +1,8 @@
 (* TODO:
-   - end the game when the king is taken 
    - fix queen moving through objects bug
    - fix rook taking pieces horizontally bug
 *)
+
 let ignore s = ()
 
 let rec play_game state = 
@@ -32,7 +32,6 @@ let rec play_game state =
         error_handling "That piece can not move in that way." state; 
       | exception Failure _ -> 
         error_handling "That piece can not move in that way." state; 
-        (* | exception State.Checkmate -> print_endline "A player has won"; exit 0 *)
 
 and error_handling msg state = 
   print_endline ("\n"^msg); 
