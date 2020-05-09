@@ -257,7 +257,7 @@ let rec rook_path_blocked t start_pos end_pos =
 let path_is_blocked t piece start_pos end_pos = 
   match piece with 
   | None -> raise NotAPiece
-  | Pawn color ->  false
+  | Pawn color ->  if (start_pos.letter = end_pos.letter && get_piece t end_pos <> None) then true else false
   (* if (get_piece t end_pos = None && 
                        abs (end_pos.number - start_pos.number) = 1) ||
                       (abs (end_pos.number - start_pos.number) = 2 &&
@@ -278,8 +278,8 @@ let is_valid_move t piece pos1 pos2 =
   || path_is_blocked t piece pos1 pos2 
   then false else match piece with 
     | Pawn Black-> if 
-      (pos1.letter = pos2.letter && get_piece t pos2 = None &&
-       (pos2.number = pos1.number -1 || pos1.number = 7 && pos2.number = 5)) 
+      (
+        (pos2.number = pos1.number -1 || pos1.number = 7 && pos2.number = 5)) 
       ||
       (pos2.number = pos1.number -1 && 
        List.assoc pos2.letter pos_letter_assoc_list - 
@@ -293,8 +293,8 @@ let is_valid_move t piece pos1 pos2 =
        | _ -> false)
       then true else false
     | Pawn White -> if 
-      (pos2.letter = pos1.letter && get_piece t pos2 = None && 
-       (pos2.number = pos1.number +1 || pos1.number = 2 && pos2.number = 4)) 
+      (
+        (pos2.number = pos1.number +1 || pos1.number = 2 && pos2.number = 4)) 
       || 
       (pos2.number = pos1.number +1 && 
        List.assoc pos2.letter pos_letter_assoc_list - 
@@ -465,21 +465,21 @@ let count_pieces t color =
   let knight_count = ref 0 in 
   List.iter (
     fun row -> Array.iter (fun piece -> match piece with 
-      | Rook clr ->
-         if piece_color piece = color then rook_count := !rook_count + 1
-      | Pawn clr ->
-         if piece_color piece = color then pawn_count := !pawn_count +  1
-      | Bishop clr ->
-         if piece_color piece = color then bishop_count := !bishop_count +  1
-      | Knight clr ->
-         if piece_color piece = color then knight_count := !knight_count +  1
-      | King clr ->
-         if piece_color piece = color then king_count := !king_count +  1
-      | Queen clr ->
-         if piece_color piece = color then queen_count := !queen_count +  1
-      | None ->
-         ()
-  ) row) t;
+        | Rook clr ->
+          if piece_color piece = color then rook_count := !rook_count + 1
+        | Pawn clr ->
+          if piece_color piece = color then pawn_count := !pawn_count +  1
+        | Bishop clr ->
+          if piece_color piece = color then bishop_count := !bishop_count +  1
+        | Knight clr ->
+          if piece_color piece = color then knight_count := !knight_count +  1
+        | King clr ->
+          if piece_color piece = color then king_count := !king_count +  1
+        | Queen clr ->
+          if piece_color piece = color then queen_count := !queen_count +  1
+        | None ->
+          ()
+      ) row) t;
   [
     ("King", !king_count);
     ("Queen", !queen_count);
