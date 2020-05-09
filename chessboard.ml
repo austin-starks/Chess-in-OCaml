@@ -169,7 +169,9 @@ let print_pos name pos =
 let rec bishop_path t start_pos end_pos = 
   (* print_pos "start_pos\n" start_pos; *)
   (* print_pos "end_pos\n" end_pos; *)
-  if end_pos.number = start_pos.number && end_pos.letter = start_pos.letter 
+  if end_pos.number = start_pos.number  &&  
+     (end_pos.letter |> String.lowercase_ascii) = 
+     (start_pos.letter |> String.lowercase_ascii)
   then false 
   else if start_pos.number < end_pos.number && 
           List.assoc start_pos.letter pos_letter_assoc_list < 
@@ -220,7 +222,9 @@ let rec bishop_path t start_pos end_pos =
     false
 
 let rec rook_path_blocked t start_pos end_pos = 
-  if end_pos.number = start_pos.number && end_pos.letter = start_pos.letter 
+  if end_pos.number = start_pos.number && 
+     (end_pos.letter |> String.lowercase_ascii) = 
+     (start_pos.letter |> String.lowercase_ascii)
   then false else 
   if start_pos.letter = end_pos.letter then 
     if end_pos.number > start_pos.number then
@@ -239,16 +243,16 @@ let rec rook_path_blocked t start_pos end_pos =
       ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list + 1 in 
       let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
       let intermediate_position = {letter = new_letter; number = start_pos.number} in
-      if get_piece t intermediate_position <> None then true 
+      if get_piece t intermediate_position <> None then let _ = print_endline "This is the second to last if-statement" in true
       else 
-        let () = print_endline (start_pos.letter ^ ": old letter" )in 
-        let () = print_endline (intermediate_position.letter ^ ": new letter" )in 
+        let _ = print_endline "first loop successful" in
         rook_path_blocked t intermediate_position end_pos 
-    else let 
-      ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
+    else 
+      let 
+        ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
       let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
       let intermediate_position = {letter = new_letter; number = start_pos.number} in
-      if get_piece t intermediate_position <> None then true 
+      if get_piece t intermediate_position <> None then let _ = print_endline "This is the last end if-statement" in true 
       else rook_path_blocked t intermediate_position end_pos 
   else false
 
