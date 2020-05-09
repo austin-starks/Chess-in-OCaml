@@ -19,8 +19,6 @@ type position = {
 
 exception IllegalMoveError 
 
-exception NoPiecePresentError 
-
 exception SameColorMoveError
 
 exception NotAPiece
@@ -80,6 +78,8 @@ let number_to_letter_pos_assoc_list =
     (5 ,"E");  (6 ,"F");  (7 ,"G");  (8 ,"H"); 
   ]
 
+(** [get_chess_row t pos] is the row of the chessboard associated with position
+    [pos] *)
 let get_chess_row t pos = 
   let rec get_row_helper t position = 
     match t, position with 
@@ -88,22 +88,6 @@ let get_chess_row t pos =
     | _::t, {letter = x; number = y} -> get_row_helper t 
                                           {letter = x; number = y+1}  in 
   get_row_helper t pos 
-
-(** [is_rook_move p pos1 pos2] determines if the attempted move of a rook is 
-    legal *)  
-let is_rook_move piece pos1 pos2 =
-  if (pos1.letter = pos2.letter && pos1.number <> pos2.number) 
-  || (pos1.number = pos2.number && pos1.letter <> pos2.letter) 
-  then true else false
-
-(** [is_bishop_move p pos1 pos2] determines if the attempted move of a bishop is 
-    legal *) 
-let is_bishop_move piece pos1 pos2 = 
-  let pos_number_differnece = pos2.number - pos1.number in 
-  let pos_letter_difference = List.assoc pos2.letter pos_letter_assoc_list -
-                              List.assoc pos1.letter pos_letter_assoc_list in
-  if Int.abs pos_number_differnece = Int.abs pos_letter_difference 
-  && pos_number_differnece <> 0 then true else false
 
 (** [check_piece_color piece_to_move piece_at_loc] takes in two pieces
     and checks to see if there is a piece of the same color at that position. 
@@ -149,12 +133,13 @@ let check_piece_color piece_to_move piece_at_loc =
   | Pawn c1, Queen c2 -> if c1 = c2 then raise SameColorMoveError
   | Pawn c1, Pawn c2 -> if c1 = c2 then raise SameColorMoveError
 
-(** Gets the piece at a given position  *)
 let get_piece t position = 
   let chess_row = get_chess_row t position in 
   let ind = List.assoc position.letter pos_letter_assoc_list - 1 in
   chess_row.(ind)
 
+(** [print_pos name pos] is a helper method used for debugging that prints 
+    position [pos] *)
 let print_pos name pos = 
   print_string "\n";
   print_string "\n";
@@ -163,6 +148,9 @@ let print_pos name pos =
   print_int pos.number;
   ()
 
+(** [bishop_path_blocked t start_pos end_pos] is a helper function for 
+    [path_is_blocked] for bishops that checks to see if the path from start_pos 
+    to end_pos is blocked with another piece. *)
 let rec bishop_path_blocked t start_pos end_pos = 
   print_pos "start_pos\n" start_pos;
   print_pos "end_pos\n" end_pos;
@@ -227,6 +215,9 @@ let rec bishop_path_blocked t start_pos end_pos =
     let () = print_endline "\n\ncheck 5" in
     false
 
+(** [rook_path_blocked t start_pos end_pos] is a helper function for 
+    [path_is_blocked] for rooks that checks to see if the path from start_pos to 
+    end_pos is blocked with another piece. *)
 let rec rook_path_blocked t start_pos end_pos = 
   if end_pos.number = start_pos.number && 
      (end_pos.letter |> String.lowercase_ascii) = 
@@ -270,8 +261,9 @@ let rec rook_path_blocked t start_pos end_pos =
       else rook_path_blocked t intermediate_position end_pos 
   else false
 
-(** Checks to see if the path from one position to another is not blocked
-    with another piece. If it is blocked, returns true. Otherwise returns false *)
+(** [path_is_blocked t piece start_pos end_pos] checks to see if the path from 
+    one position to another is not blocked with another piece. If it is blocked, 
+    returns true. Otherwise returns false *)
 let path_is_blocked t piece start_pos end_pos = 
   match piece with 
   | None -> raise NotAPiece
@@ -293,6 +285,22 @@ let path_is_blocked t piece start_pos end_pos =
   (* rook_path_blocked t start_pos end_pos || bishop_path_blocked t start_pos end_pos *)
   | King _ -> false
   | Rook _ -> rook_path_blocked t start_pos end_pos
+
+(** [is_rook_move p pos1 pos2] determines if the attempted move of a rook is 
+    legal *)  
+let is_rook_move piece pos1 pos2 =
+  if (pos1.letter = pos2.letter && pos1.number <> pos2.number) 
+  || (pos1.number = pos2.number && pos1.letter <> pos2.letter) 
+  then true else false
+
+(** [is_bishop_move p pos1 pos2] determines if the attempted move of a bishop is 
+    legal *) 
+let is_bishop_move piece pos1 pos2 = 
+  let pos_number_differnece = pos2.number - pos1.number in 
+  let pos_letter_difference = List.assoc pos2.letter pos_letter_assoc_list -
+                              List.assoc pos1.letter pos_letter_assoc_list in
+  if Int.abs pos_number_differnece = Int.abs pos_letter_difference 
+  && pos_number_differnece <> 0 then true else false
 
 
 let is_valid_move t piece pos1 pos2 = 
@@ -433,6 +441,7 @@ let move_piece t pos1 pos2 =
     | _ -> ()
   else raise IllegalMoveError
 
+(** [piece_to_string piece] is the string representation of piece [piece] *)
 let piece_to_string piece = 
   match piece with 
   | Rook _ -> "Rook"
@@ -443,6 +452,7 @@ let piece_to_string piece =
   | Knight _ -> "Knight"
   | None -> ""
 
+(** [piece_color piece] is the color of the piece [piece] (as a string). *)
 let piece_color piece = 
   match piece with 
   | Rook c -> if c = White then "white" else "black"
@@ -453,6 +463,7 @@ let piece_color piece =
   | Knight c -> if c = White then "white" else "black"
   | None -> "     "
 
+(** [string_color clr] is the string representation of a Color [clr] *)
 let string_color clr = match clr with 
   | Black -> "black"
   | White -> "white"
@@ -490,6 +501,8 @@ let count_pieces t color =
     ("Pawn", !pawn_count);
   ]
 
+(** [get_piece_from_console ()] takes in input from the console and returns the
+    piece it represents (as a string) *)
 let rec get_piece_from_console () = 
   print_string "> ";
   match read_line () |> String.lowercase_ascii with 
@@ -518,6 +531,9 @@ let exchange_pawns t =
   exchange_pawn_helper row1;
   exchange_pawn_helper row2;;
 
+(* [print_row ind row] prints the index of the row [ind] and all of the pieces 
+    on the row. Black pieces are printed as blue. This is to ensure capatibility
+    with consoles with a white/black background. *)
 let print_row ind row =
   let print_extra_space piece = 
     let i = ref (String.length piece) in 
