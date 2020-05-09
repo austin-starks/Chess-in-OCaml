@@ -301,7 +301,9 @@ let is_valid_move t piece pos1 pos2 =
   then false else match piece with 
     | Pawn Black-> if 
       (
-        (pos2.number = pos1.number -1 || pos1.number = 7 && pos2.number = 5)) 
+        (pos2.number = pos1.number -1 || pos1.number = 7 && pos2.number = 5) &&
+        (pos2.letter = pos1.letter)
+      ) 
       ||
       (pos2.number = pos1.number -1 && 
        List.assoc pos2.letter pos_letter_assoc_list - 
@@ -316,8 +318,9 @@ let is_valid_move t piece pos1 pos2 =
       then true else false
     | Pawn White -> if 
       (
-        (pos2.number = pos1.number +1 || pos1.number = 2 && pos2.number = 4)) 
-      || 
+        (pos2.number = pos1.number +1 || pos1.number = 2 && pos2.number = 4)  && 
+        (pos2.letter = pos1.letter)
+      ) || 
       (pos2.number = pos1.number +1 && 
        List.assoc pos2.letter pos_letter_assoc_list - 
        List.assoc pos1.letter pos_letter_assoc_list |> Int.abs =1 &&
