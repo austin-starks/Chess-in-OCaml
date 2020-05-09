@@ -491,24 +491,24 @@ let rec get_piece_from_console () =
   | "knight" -> "knight"
   | "rook" -> "rook"
   | _ -> print_endline "That is not a valid piece. Please pick another.";
-        get_piece_from_console ()
+    get_piece_from_console ()
 
 let exchange_pawns t = 
   let exchange_pawn_helper row = 
-  for x = 0 to 7 do 
-    match row.(x) with 
-    | Pawn clr -> 
-      print_endline "Your pawn has reached the end of the board.";
-      print_endline "Type in the name of a piece you want to exchange it for.";
-      let piece_str = get_piece_from_console () in 
-      let piece = get_piece_from_string (piece_str ^ " " ^ (string_color clr))  in 
-      row.(x) <- piece
-    | _ -> ()
-  done in
+    for x = 0 to 7 do 
+      match row.(x) with 
+      | Pawn clr -> 
+        print_endline "Your pawn has reached the end of the board.";
+        print_endline "Type in the name of a piece you want to exchange it for.";
+        let piece_str = get_piece_from_console () in 
+        let piece = get_piece_from_string (piece_str ^ " " ^ (string_color clr))  in 
+        row.(x) <- piece
+      | _ -> ()
+    done in
   let row1 = List.hd t in 
   let row2 = List.rev t |> List.hd in 
-    exchange_pawn_helper row1;
-    exchange_pawn_helper row2;;
+  exchange_pawn_helper row1;
+  exchange_pawn_helper row2;;
 
 let print_row ind row =
   let print_extra_space piece = 
