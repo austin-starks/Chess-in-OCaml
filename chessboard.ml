@@ -519,47 +519,9 @@ let print_row ind row =
     if !iter = 8 then ANSITerminal.(print_string [red] ((string_of_int ind)^"  \n")); 
   done 
 
-<<<<<<< HEAD
-=======
-let count_pieces t color = 
-  let rook_count = ref 0 in 
-  let pawn_count = ref 0 in 
-  let bishop_count = ref 0 in 
-  let queen_count = ref 0 in 
-  let king_count = ref 0 in 
-  let knight_count = ref 0 in 
-  List.iter (
-    fun row -> Array.iter (fun piece -> match piece with 
-        | Rook clr ->
-          if piece_color piece = color then rook_count := !rook_count + 1
-        | Pawn clr ->
-          if piece_color piece = color then pawn_count := !pawn_count +  1
-        | Bishop clr ->
-          if piece_color piece = color then bishop_count := !bishop_count +  1
-        | Knight clr ->
-          if piece_color piece = color then knight_count := !knight_count +  1
-        | King clr ->
-          if piece_color piece = color then king_count := !king_count +  1
-        | Queen clr ->
-          if piece_color piece = color then queen_count := !queen_count +  1
-        | None ->
-          ()
-      ) row) t;
-  [
-    ("King", !king_count);
-    ("Queen", !queen_count);
-    ("Rook", !rook_count);
-    ("Bishop", !bishop_count);
-    ("Knight", !knight_count);
-    ("Pawn", !pawn_count);
-  ]
-
-
->>>>>>> 6db9146da25a9f50abb80095dbeaf47e4e5c0627
-
 let print_board t = 
   ANSITerminal.(print_string [red]
-                  "\n     A        B       C       D       E       F       G       H\n");
+                  "\n     A        B       C       D       E       F       G       H\n\n");
   List.iter2 print_row [8;7;6;5;4;3;2;1] t;
   ANSITerminal.(print_string [red]
                   "     A        B       C       D       E       F       G       H\n\n");
