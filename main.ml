@@ -7,7 +7,8 @@ let ignore s = ()
 
 let rec play_game state = 
   match State.score state |> ignore with 
-  | exception State.P1Checkmate -> print_endline "Player 1 has checkmate";
+  | exception State.P1Checkmate -> 
+    print_endline "Player 1 has checkmate";
   | exception State.P2Checkmate -> print_endline "Player 2";
   |_ -> ();
     print_endline ("It is "^State.turn_player_name state^"'s turn.");
@@ -26,7 +27,6 @@ let rec play_game state =
         error_handling "That piece can not move in that way." state; 
       | exception State.InvalidCommand -> 
         error_handling "That piece can not move in that way." state; 
-        (* | exception State.Checkmate -> print_endline "A player has won"; exit 0 *)
 
 and error_handling msg state = 
   print_endline ("\n"^msg); 

@@ -3,8 +3,8 @@ type piece = string
 type num_piece = int
 
 exception InvalidCommand
-exception P1Checkmate
-exception P2Checkmate
+exception P1Checkmate of person
+exception P2Checkmate of person
 
 type t = {
   player_turn: person;
@@ -37,8 +37,8 @@ let score t =
     let p2_score = t.score 
                    |> List.assoc p2
                    |> string_of_int in
-    if int_of_string p1_score > 1000000000 then raise P1Checkmate;
-    if int_of_string p2_score > 1000000000 then raise P2Checkmate;
+    if int_of_string p1_score > 1000000000 then raise (P1Checkmate p1);
+    if int_of_string p2_score > 1000000000 then raise (P2Checkmate p2);
 
     p1 ^ " has " ^ p1_score ^ " points\n"^ p2 ^ " has " ^ p2_score ^ " points.\n";
   | _ -> failwith "There should be exactly two players"
