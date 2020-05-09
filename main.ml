@@ -1,7 +1,7 @@
 (* TODO:
    - end the game when the king is taken 
    - fix queen moving through objects bug
-   - fix biship taking piece bug
+   - fix rook taking pieces horizontally bug
 *)
 let ignore s = ()
 
@@ -25,6 +25,8 @@ let rec play_game state =
         error_handling "There is no piece at that positiion." state; 
       | exception Chessboard.IllegalMoveError -> 
         error_handling "That piece can not move in that way." state; 
+      | exception Chessboard.SameColorMoveError -> 
+        error_handling "You have a piece at that position." state; 
       | exception State.InvalidCommand -> 
         error_handling "That piece can not move in that way." state; 
 
@@ -61,7 +63,7 @@ let main () =
   print_endline "to a4 (if it is a valid move). If it's not a valid move, the";
   print_endline "engine will ask for another move for that player.\n \n";
   print_endline (player_one ^ " is white/yellow, and is on bottom (corresponding to rows 1-2)");
-  print_endline (player_two ^ " is black/blue, and is on top (corresponding to rows 7-8a4) \n");
+  print_endline (player_two ^ " is black/blue, and is on top (corresponding to rows 7-8) \n");
   let initial_state = State.init_state player_one player_two in 
   play_game initial_state
 
