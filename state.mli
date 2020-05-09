@@ -1,5 +1,5 @@
 (** 
-   Representation of state of chess game.
+   Representation of the state of a chess game.
 
    This module represents the state of a chess game that is being played from 
    game. It includes who's turn it is, what pieces are on the board (and which

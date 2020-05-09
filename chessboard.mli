@@ -1,3 +1,10 @@
+(** 
+    Representation of a chessboard. 
+
+    This module represents a chessboard and the pieces on the board. it includes
+    functionality to create a chessboard, move pieces, and print the chessboard.
+*)
+
 (** The type representing the color of the piece *)
 type color = Black | White
 
@@ -27,7 +34,7 @@ exception NotAPiece
     with that same color *)
 exception SameColorMoveError
 
-(** [initialize_chessboard] is a chessboard of pieces in the starting 
+(** [initialize_chessboard ()] is a chessboard of pieces in the starting 
     arrangement *)
 val initialize_chessboard : unit -> t 
 
