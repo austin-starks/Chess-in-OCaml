@@ -17,6 +17,12 @@ type t
 (** An exception thrown when the state processes an invalid command *)
 exception InvalidCommand
 
+(** An exception thrown when player 1 takes player 2's king *)  
+exception P1Checkmate
+
+(** An exception thrown when player 2 takes player 1's king *)  
+exception P2Checkmate
+
 
 (** [init_state p1 p2] is the initial state of the the chess game [g]. In this 
     state, the game is set up as a normal chessboard, with white being the 
@@ -32,12 +38,6 @@ val score : t -> string
 
 (* [current_board s] is the current board represented by state [s] *)
 val current_board: t -> Chessboard.t
-
-(* [check s] determines whether the current state [s] has a player in check *)
-val check : t -> bool
-
-(* [check s] determines whether the current state [s] has a player in checkmate *)
-val checkmate: t -> bool
 
 (* [move_piece t pos] alters the chessboard in the state [t] by the position [pos] *)
 val move_piece: t -> string -> t

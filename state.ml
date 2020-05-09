@@ -3,6 +3,8 @@ type piece = string
 type num_piece = int
 
 exception InvalidCommand
+exception P1Checkmate
+exception P2Checkmate
 
 type t = {
   player_turn: person;
@@ -25,10 +27,6 @@ let turn_player_name t =
 
 let current_board t = t.current_board
 
-let check t = failwith "Unimplemented" 
-
-let checkmate t = failwith "Unimplemented"
-
 let score t = 
   match t.players with 
   | [] -> failwith "There should be exactly two players"
@@ -39,7 +37,10 @@ let score t =
     let p2_score = t.score 
                    |> List.assoc p2
                    |> string_of_int in
-    p1 ^ " has " ^ p1_score ^ " points\n"^ p2 ^ " has " ^ p2_score ^ " points.\n"
+    if int_of_string p1_score > 1000000000 then raise P1Checkmate;
+    if int_of_string p2_score > 1000000000 then raise P2Checkmate;
+
+    p1 ^ " has " ^ p1_score ^ " points\n"^ p2 ^ " has " ^ p2_score ^ " points.\n";
   | _ -> failwith "There should be exactly two players"
 
 
@@ -98,6 +99,8 @@ let calculate_score state =
 
 let exchange_pawns chessboard = 
   Chessboard.exchange_pawns chessboard
+
+
 
 let move_piece state pos = 
   match String.split_on_char ' ' pos |> List.filter (fun x -> x <> "") with 
