@@ -58,6 +58,8 @@ val is_valid_move : t -> piece -> position -> position -> bool
     Requires: pos to be a1, a2, ... a8, b1, ..., h7, or h8  *)
 val parse_position: string -> position
 
+(** [count_pieces t] counts the pieces on the board for a particular color *)
+val count_pieces: t -> string -> (string*int) list
 
 (** [print_board ()] prints the current chessboard to the terminal *)
 val print_board: t -> unit

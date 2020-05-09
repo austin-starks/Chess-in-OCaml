@@ -9,8 +9,6 @@ type t = {
   players: person list;
   score: (person*int) list;
   current_board: Chessboard.t;
-  p1_taken_pieces: (string*int) list;
-  p2_taken_pieces: (string*int) list
 }
 
 let init_state person1 person2 = 
@@ -19,8 +17,6 @@ let init_state person1 person2 =
     players= [person1; person2];
     score= [(person1, 0); (person2, 0)];
     current_board= Chessboard.initialize_chessboard ();
-    p1_taken_pieces= [];
-    p2_taken_pieces= []
   }
 
 let turn_player_name t =
@@ -61,7 +57,7 @@ let assert_valid_positions pos1 pos2  =
     n1 > 0 && n2 > 0 && n1 < 9 && n2 < 9 else false
 
 (* Find all of the missing pieces on the board for a player number (1 or 2) *)
-let find_missing_pieces state player = 
+let find_missing_pieces state color = 
   let list_of_all_pieces =  [
     ("King", 1);
     ("Queen", 1);
@@ -70,14 +66,7 @@ let find_missing_pieces state player =
     ("Knight", 2);
     ("Pawn", 8);
   ] in 
-  let list_of_current_pieces = [
-    ("King", 1);
-    ("Queen", 1);
-    ("Rook", 2);
-    ("Bishop", 2);
-    ("Knight", 2);
-    ("Pawn", 8);
-  ]  in
+  let list_of_current_pieces = Chessboard.count_pieces state.current_board color in
   let list_of_differences = 
     List.map2 (fun elt1 elt2 -> (fst elt1, snd elt1 - snd elt2)) 
       list_of_all_pieces list_of_current_pieces in 
@@ -99,8 +88,8 @@ let calculate_score state =
   match state.players with 
   | [] -> failwith "There should be exactly two players"
   | p1::p2::[] -> 
-    let p1_miss_pieces = find_missing_pieces state p1 in 
-    let p2_miss_pieces = find_missing_pieces state p2 in 
+    let p1_miss_pieces = find_missing_pieces state "black" in 
+    let p2_miss_pieces = find_missing_pieces state "white" in 
     let p1_score = List.fold_left (fun x y -> x + piece_score y) 0 p1_miss_pieces in 
     let p2_score = List.fold_left (fun x y -> x + piece_score y) 0 p2_miss_pieces in 
     [(p1, p1_score); (p2, p2_score)]
@@ -114,16 +103,12 @@ let move_piece state pos =
   | h::t::[] -> if assert_valid_positions h t then 
       let () =  Chessboard.move_piece state.current_board h t in 
       let new_score = calculate_score state in 
-      let p1_pieces = find_missing_pieces state 1 in 
-      let p2_pieces = find_missing_pieces state 2 in 
       {
         player_turn= 
           List.filter (fun x -> x <> state.player_turn) state.players |> List.hd;
         players = state.players;
         score = new_score;
         current_board = state.current_board;
-        p1_taken_pieces = p1_pieces;
-        p2_taken_pieces = p2_pieces;
       }
     else raise InvalidCommand
   | _ -> raise InvalidCommand
