@@ -59,9 +59,9 @@ val parse_position: string -> position
 (** [count_pieces t] counts the pieces on the board for a particular color *)
 val count_pieces: t -> string -> (string*int) list
 
-(** [print_board ()] prints the current chessboard to the terminal *)
+(** [print_board t] prints the current chessboard to the terminal *)
 val print_board: t -> unit
 
-(** [exchange_pawns ()] exchanges all pawns in the first and last row with 
+(** [exchange_pawns t] exchanges all pawns in the first and last row with 
     a piece of the player's choice *)
 val exchange_pawns: t -> unit
