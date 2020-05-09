@@ -37,13 +37,16 @@ let score t =
     let p2_score = t.score 
                    |> List.assoc p2
                    |> string_of_int in
-    if int_of_string p1_score > 1000000000 then raise (P1Checkmate p1);
-    if int_of_string p2_score > 1000000000 then raise (P2Checkmate p2);
+    if int_of_string p1_score > 100000000 then raise (P1Checkmate p1);
+    if int_of_string p2_score > 100000000 then raise (P2Checkmate p2);
 
     p1 ^ " has " ^ p1_score ^ " points\n"^ p2 ^ " has " ^ p2_score ^ " points.\n";
   | _ -> failwith "There should be exactly two players"
 
 
+(** [assert_valid_positions pos1 pos2] ensures that pos1 and pos2 are valid 
+    positions in the form of x#, where x is a letter from [A-H] and # is 
+    a number from [1-8]. *)
 let assert_valid_positions pos1 pos2  = 
   if String.length pos1 = 2 && String.length pos2 = 2 
   then 
@@ -57,7 +60,8 @@ let assert_valid_positions pos1 pos2  =
       ["A"; "B"; "C"; "D"; "E"; "F"; "G"; "H"; "a"; "b"; "c"; "d"; "e";"f"; "g"; "h"] &&
     n1 > 0 && n2 > 0 && n1 < 9 && n2 < 9 else false
 
-(* Find all of the missing pieces on the board for a player number (1 or 2) *)
+(* [find_missing_pieces state color] is an association list of all of the pieces 
+    that were captured for a particular color. *)
 let find_missing_pieces state color = 
   let list_of_all_pieces =  [
     ("King", 1);
@@ -73,18 +77,18 @@ let find_missing_pieces state color =
       list_of_all_pieces list_of_current_pieces in 
   List.filter (fun x -> snd x <> 0) list_of_differences
 
+(** [piece_score tup] is the score associated with a piece. The input [tup]  *)
 let piece_score tup = 
-  match fst tup with 
-  | "King" -> 1000000000
-  | "Pawn" -> 1 
-  | "Knight" -> 3 
-  | "Bishop" -> 3 
-  | "Rook" -> 5 
-  | "Queen" -> 9
+  match fst tup, snd tup with 
+  | "King", n -> 1000000000 * n
+  | "Pawn", n -> 1  * n
+  | "Knight", n -> 3  * n
+  | "Bishop", n -> 3  * n
+  | "Rook", n -> 5  * n
+  | "Queen", n -> 9 * n
   | _ -> failwith "Not a piece"
 
-(* Implement calculate score to find the pieces that are missing from the 
-   current board and give a score for each  *)
+(* [calculate_score state] is the score associated with the state [state]  *)
 let calculate_score state = 
   match state.players with 
   | [] -> failwith "There should be exactly two players"
@@ -96,11 +100,11 @@ let calculate_score state =
     [(p1, p1_score); (p2, p2_score)]
   | _ -> failwith "There should be exactly two players"
 
-
+(** [exchange_pawns chessboard] calls the function exchange_pawns in 
+    Chessboard.ml which allows a player to exchange their pawn when it reaches
+    the end of the board *)
 let exchange_pawns chessboard = 
   Chessboard.exchange_pawns chessboard
-
-
 
 let move_piece state pos = 
   match String.split_on_char ' ' pos |> List.filter (fun x -> x <> "") with 
