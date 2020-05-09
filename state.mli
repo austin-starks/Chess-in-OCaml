@@ -6,10 +6,10 @@
    were taken), properties of the players (such as the score and their names), 
    and functions that cause the state to change. *)
 
+open Chessboard
+
 (** The type representing the people playing the game *)  
 type person = string
-
-open Chessboard
 
 (** The abstract type of values representing the game state. *)
 type t 
@@ -39,5 +39,6 @@ val score : t -> string
 (* [current_board s] is the current board represented by state [s] *)
 val current_board: t -> Chessboard.t
 
-(* [move_piece t pos] alters the chessboard in the state [t] by the position [pos] *)
+(* [move_piece t pos] alters the chessboard in the state [t] by the position 
+change [pos] *)
 val move_piece: t -> string -> t
