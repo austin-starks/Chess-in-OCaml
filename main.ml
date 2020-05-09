@@ -1,7 +1,7 @@
 (* TODO:
       - end the game when the king is taken or when the command 'stalemate' is ended
       - fix queen moving through objects bug
-      - fix biship taking piece bug
+      - fix pawn diagnoal error
    *)
 
 let rec play_game state = 
@@ -18,6 +18,8 @@ let rec play_game state =
     | exception Chessboard.IllegalMoveError -> 
       error_handling "That piece can not move in that way." state; 
     | exception State.InvalidCommand -> 
+      error_handling "That piece can not move in that way." state; 
+    | exception Failure _ -> 
       error_handling "That piece can not move in that way." state; 
 
 and error_handling msg state = 
@@ -50,7 +52,7 @@ let main () =
   print_endline "to a4 (if it is a valid move). If it's not a valid move, the";
   print_endline "engine will ask for another move for that player.\n \n";
   print_endline (player_one ^ " is white/yellow, and is on bottom (corresponding to rows 1-2)");
-  print_endline (player_two ^ " is black/blue, and is on top (corresponding to rows 7-8a4) \n");
+  print_endline (player_two ^ " is black/blue, and is on top (corresponding to rows 7-8) \n");
   let initial_state = State.init_state player_one player_two in 
   play_game initial_state
 

@@ -35,8 +35,9 @@ let initialize_chessboard () =  [
   [|None; None; None; None; None; None; None; None;|];
   [|None; None; None; None; None; None; None; None;|];
   [|None; None; None; None; None; None; None; None;|];
-  [|Pawn White; Pawn White; Pawn White; Pawn White; 
-    Pawn White; Pawn White; Pawn White; Pawn White|];
+  [|None; None; None; None; None; None; None; None;|];
+  (* [|Pawn White; Pawn White; Pawn White; Pawn White; 
+    Pawn White; Pawn White; Pawn White; Pawn White|]; *)
   [|Rook White; Knight White; Bishop White; Queen White; 
     King White; Bishop White; Knight White; Rook White|];
 ]
@@ -167,8 +168,8 @@ let print_pos name pos =
 (* current_pos: d4
    target_position: g7 *)
 let rec bishop_path t start_pos end_pos = 
-  (* print_pos "start_pos\n" start_pos; *)
-  (* print_pos "end_pos\n" end_pos; *)
+  print_pos "start_pos\n" start_pos;
+  print_pos "end_pos\n" end_pos;
   if end_pos.number = start_pos.number  &&  
      (end_pos.letter |> String.lowercase_ascii) = 
      (start_pos.letter |> String.lowercase_ascii)
@@ -177,48 +178,57 @@ let rec bishop_path t start_pos end_pos =
           List.assoc start_pos.letter pos_letter_assoc_list < 
           List.assoc end_pos.letter pos_letter_assoc_list
   then 
-    (* let () = print_endline "check 1" in *)
+    let () = print_endline "\n\ncheck 1" in
     let ind_new_letter = (List.assoc start_pos.letter pos_letter_assoc_list) + 1 in 
     let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
     let new_pos = {number = start_pos.number + 1; letter = new_letter} in 
-    (* print_pos "new_pos\n" new_pos; *)
-    (* if (get_piece t new_pos) = None then print_endline "piece: None" else print_endline "piece: not None"; *)
-    ((get_piece t new_pos) <> None && new_pos <> end_pos) || 
-    bishop_path t new_pos end_pos
+    print_pos "new_pos\n" new_pos;
+    print_pos "end_pos\n" end_pos;
+    if (get_piece t new_pos) = None then print_endline "\npiece: None" else print_endline "\npiece: not None";
+    if (get_piece t new_pos) = None then bishop_path t new_pos end_pos
+    else not (new_pos.number = end_pos.number && 
+    (new_pos.letter |> String.lowercase_ascii) = 
+    (end_pos.letter |> String.lowercase_ascii))
   else if start_pos.number < end_pos.number && 
           List.assoc start_pos.letter pos_letter_assoc_list > 
           List.assoc end_pos.letter pos_letter_assoc_list
   then 
-    (* let () = print_endline "check 2" in *)
+    let () = print_endline "\n\ncheck 2" in
     let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
     let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
     let new_pos = {number = start_pos.number + 1; letter = new_letter} in
-    (* if (get_piece t new_pos) = None then print_endline "piece: None" else print_endline "piece: not None"; *)
-    (* print_pos "new_pos\n" new_pos; *)
-    ((get_piece t new_pos) <> None && new_pos <> end_pos) || 
-    bishop_path t new_pos end_pos
+    if (get_piece t new_pos) = None then print_endline "piece: None" else print_endline "piece: not None";
+    print_pos "new_pos\n" new_pos;
+    if (get_piece t new_pos) = None then bishop_path t new_pos end_pos
+    else not (new_pos.number = end_pos.number && 
+    (new_pos.letter |> String.lowercase_ascii) = 
+    (end_pos.letter |> String.lowercase_ascii))
   else if start_pos.number > end_pos.number && 
           List.assoc start_pos.letter pos_letter_assoc_list < 
           List.assoc end_pos.letter pos_letter_assoc_list
   then 
-    (* let () = print_endline "check 3" in *)
+    let () = print_endline "\n\ncheck 3" in
     let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list + 1 in 
     let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
     let new_pos = {number = start_pos.number - 1; letter = new_letter} in
-    ((get_piece t new_pos) <> None && new_pos <> end_pos) || 
-    bishop_path t new_pos end_pos
-  else if start_pos.number > end_pos.number && 
+    if (get_piece t new_pos) = None then bishop_path t new_pos end_pos
+    else not (new_pos.number = end_pos.number && 
+    (new_pos.letter |> String.lowercase_ascii) = 
+    (end_pos.letter |> String.lowercase_ascii))
+  else if not (start_pos.number > end_pos.number && 
           List.assoc start_pos.letter pos_letter_assoc_list > 
-          List.assoc end_pos.letter pos_letter_assoc_list
+          List.assoc end_pos.letter pos_letter_assoc_list)
   then 
-    (* let () = print_endline "check 4" in *)
+    let () = print_endline "\n\ncheck 4" in
     let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
     let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
     let new_pos = {number = start_pos.number - 1; letter = new_letter} in
-    ((get_piece t new_pos) <> None && new_pos <> end_pos) || 
-    bishop_path t new_pos end_pos
+    if (get_piece t new_pos) = None then bishop_path t new_pos end_pos
+    else not (new_pos.number = end_pos.number && 
+    (new_pos.letter |> String.lowercase_ascii) = 
+    (end_pos.letter |> String.lowercase_ascii))
   else 
-    (* let () = print_endline "check 5" in *)
+    let () = print_endline "\n\ncheck 5" in
     false
 
 let rec rook_path_blocked t start_pos end_pos = 
