@@ -1,6 +1,7 @@
 (** The type representing the color of the piece *)
 type color = Black | White
 
+(* Internal representation of a position *)
 type position
 
 (** The type representing a chess piece on the board *)
@@ -22,10 +23,6 @@ exception IllegalMoveError
 (** Raised when a string doesn't represent a piece *)
 exception NotAPiece
 
-(** Raised when the player attempts to move a piece that isn't there (attempts)
-    to move a None piece *)
-exception NoPiecePresentError 
-
 (** Raised when a piece is trying to move to a board space containing a d piece 
     with that same color *)
 exception SameColorMoveError
@@ -38,9 +35,8 @@ val initialize_chessboard : unit -> t
     [old_pos] moved to [new_pos]. 
 
     Raises [IllegalMoveError] if that piece cannot move from [old_pos] to [new_pos].
-    Raises [NoPiecePresentError] if there is no piece in [old_pos] 
     Raises [SameColorMoveError] if a piece is moved to a position where a piece of 
-    the same color is already on.  *)
+    the same color is already at the position.  *)
 val move_piece : t -> string -> string -> unit
 
 (** [get_piece_from_string] is the piece that represents a string. For example,
@@ -54,7 +50,6 @@ val is_valid_move : t -> piece -> position -> position -> bool
 
 (** [get_piece t pos] gets the chess piece in state [t] at position [pos] *)  
 val get_piece : t -> position -> piece
-
 
 (** [parse_position pos] converts the string [pos] to an internal representation
     of a position
