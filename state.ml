@@ -40,7 +40,8 @@ let score t =
     if int_of_string p1_score > 100000000 then raise (P1Checkmate p1);
     if int_of_string p2_score > 100000000 then raise (P2Checkmate p2);
 
-    p1 ^ " has " ^ p1_score ^ " points.\n"^ p2 ^ " has " ^ p2_score ^ " points.\n";
+    p1 ^ " has " ^ p1_score ^ " points.\n"^ 
+    p2 ^ " has " ^ p2_score ^ " points.\n";
   | _ -> failwith "There should be exactly two players"
 
 
@@ -55,9 +56,11 @@ let assert_valid_positions pos1 pos2  =
     let l2 = String.sub pos2 0 1 in 
     let n2 = String.sub pos2 1 1 |> int_of_string in 
     List.mem l1 
-      ["A"; "B"; "C"; "D"; "E"; "F"; "G"; "H"; "a"; "b"; "c"; "d"; "e";"f"; "g"; "h"] &&
+      ["A"; "B"; "C"; "D"; "E"; "F"; "G"; "H"; 
+       "a"; "b"; "c"; "d"; "e";"f"; "g"; "h"] &&
     List.mem l2
-      ["A"; "B"; "C"; "D"; "E"; "F"; "G"; "H"; "a"; "b"; "c"; "d"; "e";"f"; "g"; "h"] &&
+      ["A"; "B"; "C"; "D"; "E"; "F"; "G"; "H";
+       "a"; "b"; "c"; "d"; "e";"f"; "g"; "h"] &&
     n1 > 0 && n2 > 0 && n1 < 9 && n2 < 9 else false
 
 (* [find_missing_pieces state color] is an association list of all of the pieces 
@@ -71,7 +74,8 @@ let find_missing_pieces state color =
     ("Knight", 2);
     ("Pawn", 8);
   ] in 
-  let list_of_current_pieces = Chessboard.count_pieces state.current_board color in
+  let list_of_current_pieces = 
+    Chessboard.count_pieces state.current_board color in
   let list_of_differences = 
     List.map2 (fun elt1 elt2 -> (fst elt1, snd elt1 - snd elt2)) 
       list_of_all_pieces list_of_current_pieces in 
@@ -95,8 +99,10 @@ let calculate_score state =
   | p1::p2::[] -> 
     let p1_miss_pieces = find_missing_pieces state "black" in 
     let p2_miss_pieces = find_missing_pieces state "white" in 
-    let p1_score = List.fold_left (fun x y -> x + piece_score y) 0 p1_miss_pieces in 
-    let p2_score = List.fold_left (fun x y -> x + piece_score y) 0 p2_miss_pieces in 
+    let p1_score = 
+      List.fold_left (fun x y -> x + piece_score y) 0 p1_miss_pieces in 
+    let p2_score = 
+      List.fold_left (fun x y -> x + piece_score y) 0 p2_miss_pieces in 
     [(p1, p1_score); (p2, p2_score)]
   | _ -> failwith "There should be exactly two players"
 
