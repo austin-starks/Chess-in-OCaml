@@ -34,11 +34,25 @@
 
    Also, we are testing to ensure that pieces cannot move inappropiately; they 
    can only move in spaces that are legal in the game of chess. For example, a 
-   rook cannot move horizontally, and a knight can't move vertically. In 
-   addition,
+   rook cannot move horizontally, and a knight can't move vertically. 
 
-   Lastly, we are also testing the functiality of State to make sure it works 
-   as intended. 
+   Lastly, we are also testing the functionality of State to make sure it works 
+   as intended. Main.ml was tested by hand and by playing the game of chess.
+
+   We could not figure out how to make a traditional OUnit test suite with 
+   this project. Because we are using an array for the chessboard and are 
+   mutating the array, it didn't seem possible to write tests like we did 
+   throughout the semester. Thus, instead we chose to do an A1-style approach to
+   testing by writing assert statements and passing those tests. 
+
+   These tests prove our system is correct. Even though most of these tests are 
+   glass-box tests (as we know how the functions are implemented and how a 
+   chessboard is represented), the tests are still robust. We test the 
+   functionality of the chessboard piece-by-piece. This includes edge cases such
+   as the ability of pawns to move two spaces as their first move, but only one
+   space in every subsequent move and the ability for pawns to move diagonally 
+   (but only if it can take a piece). Moreover, we test the state to make sure 
+   it works as intended, and have play-tested a full game with this system.
 *)
 
 
@@ -210,7 +224,7 @@ let () = assert (board = [
       King White; Knight White; None; Rook White|];
   ])
 
-(* Testing can move bishops diagnally up right *)
+(* Testing can move bishops diagonally up right *)
 let _  = (Chessboard.move_piece board "c1" "e3") 
 let () = assert (board = [
     [|Rook Black; Knight Black; Bishop Black; None; 
@@ -227,7 +241,7 @@ let () = assert (board = [
       King White; Knight White; None; Rook White|];
   ])
 
-(* Testing can move bishops diagnally up left *)
+(* Testing can move bishops diagonally up left *)
 let _  = (Chessboard.move_piece board "e3" "c5") 
 let () = assert (board = [
     [|Rook Black; Knight Black; Bishop Black; None; 
@@ -244,7 +258,7 @@ let () = assert (board = [
       King White; Knight White; None; Rook White|];
   ])
 
-(* Testing can move bishops diagnally down left *)
+(* Testing can move bishops diagonally down left *)
 let _  = (Chessboard.move_piece board "c5" "a3") 
 let () = assert (board = [
     [|Rook Black; Knight Black; Bishop Black; None; 
@@ -315,7 +329,7 @@ let () = assert (board = [
       None; Rook White; None; None|];
   ])
 
-(* Testing king diagnally *)
+(* Testing king diagonally *)
 let _  = (Chessboard.move_piece board "h2" "g1") 
 let () = assert (board = [
     [|Rook Black; Knight Black; Bishop Black; None; 
