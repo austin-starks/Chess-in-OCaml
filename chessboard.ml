@@ -159,8 +159,10 @@ let rec bishop_path_blocked t start_pos end_pos =
           List.assoc start_pos.letter pos_letter_assoc_list < 
           List.assoc end_pos.letter pos_letter_assoc_list
   then 
-    let ind_new_letter = (List.assoc start_pos.letter pos_letter_assoc_list) + 1 in 
-    let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
+    let ind_new_letter = 
+      (List.assoc start_pos.letter pos_letter_assoc_list) + 1 in 
+    let new_letter = 
+      List.assoc ind_new_letter number_to_letter_pos_assoc_list in
     let new_pos = {number = start_pos.number + 1; letter = new_letter} in 
     if (get_piece t new_pos) = None then bishop_path_blocked t new_pos end_pos
     else not (new_pos.number = end_pos.number && 
@@ -170,8 +172,10 @@ let rec bishop_path_blocked t start_pos end_pos =
           List.assoc start_pos.letter pos_letter_assoc_list > 
           List.assoc end_pos.letter pos_letter_assoc_list
   then 
-    let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
-    let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
+    let ind_new_letter = 
+      List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
+    let new_letter = 
+      List.assoc ind_new_letter number_to_letter_pos_assoc_list in
     let new_pos = {number = start_pos.number + 1; letter = new_letter} in
     if (get_piece t new_pos) = None then bishop_path_blocked t new_pos end_pos
     else not (new_pos.number = end_pos.number && 
@@ -181,8 +185,10 @@ let rec bishop_path_blocked t start_pos end_pos =
           List.assoc start_pos.letter pos_letter_assoc_list < 
           List.assoc end_pos.letter pos_letter_assoc_list
   then 
-    let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list + 1 in 
-    let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
+    let ind_new_letter = 
+      List.assoc start_pos.letter pos_letter_assoc_list + 1 in 
+    let new_letter = 
+      List.assoc ind_new_letter number_to_letter_pos_assoc_list in
     let new_pos = {number = start_pos.number - 1; letter = new_letter} in
     if (get_piece t new_pos) = None then bishop_path_blocked t new_pos end_pos
     else not (new_pos.number = end_pos.number && 
@@ -192,8 +198,10 @@ let rec bishop_path_blocked t start_pos end_pos =
                List.assoc start_pos.letter pos_letter_assoc_list > 
                List.assoc end_pos.letter pos_letter_assoc_list)
   then 
-    let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
-    let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
+    let ind_new_letter = 
+      List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
+    let new_letter = 
+      List.assoc ind_new_letter number_to_letter_pos_assoc_list in
     let new_pos = {number = start_pos.number - 1; letter = new_letter} in
     if (get_piece t new_pos) = None then bishop_path_blocked t new_pos end_pos
     else not (new_pos.number = end_pos.number && 
@@ -225,8 +233,10 @@ let rec rook_path_blocked t start_pos end_pos =
     if List.assoc end_pos.letter pos_letter_assoc_list >
        List.assoc start_pos.letter pos_letter_assoc_list then let 
       ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list + 1 in 
-      let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
-      let intermediate_position = {letter = new_letter; number = start_pos.number} in
+      let new_letter = 
+        List.assoc ind_new_letter number_to_letter_pos_assoc_list in
+      let intermediate_position = 
+        {letter = new_letter; number = start_pos.number} in
       if get_piece t intermediate_position <> None && 
          end_pos.number <> intermediate_position.number &&
          String.lowercase_ascii end_pos.letter <> 
@@ -236,10 +246,12 @@ let rec rook_path_blocked t start_pos end_pos =
       else 
         rook_path_blocked t intermediate_position end_pos 
     else 
-      let 
-        ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
-      let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
-      let intermediate_position = {letter = new_letter; number = start_pos.number} in
+      let ind_new_letter = 
+        List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
+      let new_letter = 
+        List.assoc ind_new_letter number_to_letter_pos_assoc_list in
+      let intermediate_position = 
+        {letter = new_letter; number = start_pos.number} in
       if get_piece t intermediate_position <> None && 
          end_pos.number <> intermediate_position.number &&
          String.lowercase_ascii end_pos.letter <> 
@@ -254,13 +266,15 @@ let rec rook_path_blocked t start_pos end_pos =
 let path_is_blocked t piece start_pos end_pos = 
   match piece with 
   | None -> raise NotAPiece
-  | Pawn color ->  if (start_pos.letter = end_pos.letter && get_piece t end_pos <> None) then true else false
-
+  | Pawn color ->  if 
+    (start_pos.letter = end_pos.letter && get_piece t end_pos <> None) 
+    then true else false
   | Knight _ -> false
   | Bishop _ -> bishop_path_blocked t start_pos end_pos
-  | Queen _ -> if (start_pos.number = end_pos.number || 
-                   start_pos.letter |> String.lowercase_ascii = 
-                                       (end_pos.letter |> String.lowercase_ascii)) 
+  | Queen _ -> 
+    if (start_pos.number = end_pos.number
+        || start_pos.letter |> String.lowercase_ascii = 
+                               (end_pos.letter |> String.lowercase_ascii)) 
     then rook_path_blocked t start_pos end_pos 
     else bishop_path_blocked t start_pos end_pos
   | King _ -> false
@@ -345,9 +359,11 @@ let is_valid_move t piece pos1 pos2 =
                       List.assoc pos2.letter pos_letter_assoc_list + 2) 
       then true else false 
     | Bishop _ -> is_bishop_move piece pos1 pos2
-    | King color -> ((is_bishop_move piece pos1 pos2 || is_rook_move piece pos1 pos2)
+    | King color -> ((is_bishop_move piece pos1 pos2 || 
+                      is_rook_move piece pos1 pos2)
                      && List.assoc pos1.letter pos_letter_assoc_list  - 
-                        List.assoc pos2.letter pos_letter_assoc_list |> Int.abs <=1
+                        List.assoc pos2.letter pos_letter_assoc_list 
+                        |> Int.abs <=1
                      && pos1.number - pos2.number |> Int.abs <=1) 
                     || 
                     (get_piece t pos1 = King color && 
@@ -387,7 +403,7 @@ let is_valid_move t piece pos1 pos2 =
 
     | Queen _ -> is_bishop_move piece pos1 pos2 || is_rook_move piece pos1 pos2
     | Rook _ -> is_rook_move piece pos1 pos2
-    | None -> false
+    | None -> raise NotAPiece
 
 
 let move_piece t pos1 pos2 = 
@@ -505,8 +521,8 @@ let exchange_pawns t =
         print_endline "Your pawn has reached the end of the board.";
         print_endline "Type in the name of a piece you want to exchange it for.";
         let piece_str = get_piece_from_console () in 
-        let piece = get_piece_from_string (piece_str ^ " " ^ (string_color clr))  in 
-        row.(x) <- piece
+        let piece = get_piece_from_string (piece_str ^ " " ^ (string_color clr))  
+        in row.(x) <- piece
       | _ -> ()
     done in
   let row1 = List.hd t in 
@@ -537,7 +553,8 @@ let print_row ind row =
     print_string "  ";
     iter := !iter + 1;
     print_extra_space string_piece;
-    if !iter = 8 then ANSITerminal.(print_string [red] ((string_of_int ind)^"  \n")); 
+    if !iter = 8 then ANSITerminal.(print_string [red] 
+                                      ((string_of_int ind)^"  \n")); 
   done 
 
 let print_board t = 
