@@ -27,7 +27,7 @@ finalcheck: check
 	bash finalcheck.sh
 
 zip:
-	zip chess_final.zip *.ml* _tags Makefile
+	zip chess_final.zip *.ml* _tags install.txt Makefile
 	
 docs: docs-public docs-private
 	
