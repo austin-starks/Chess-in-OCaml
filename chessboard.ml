@@ -162,7 +162,6 @@ let rec bishop_path_blocked t start_pos end_pos =
     let ind_new_letter = (List.assoc start_pos.letter pos_letter_assoc_list) + 1 in 
     let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
     let new_pos = {number = start_pos.number + 1; letter = new_letter} in 
-    if (get_piece t new_pos) = None then print_endline "\npiece: None" else print_endline "\npiece: not None";
     if (get_piece t new_pos) = None then bishop_path_blocked t new_pos end_pos
     else not (new_pos.number = end_pos.number && 
               (new_pos.letter |> String.lowercase_ascii) = 
@@ -171,7 +170,6 @@ let rec bishop_path_blocked t start_pos end_pos =
           List.assoc start_pos.letter pos_letter_assoc_list > 
           List.assoc end_pos.letter pos_letter_assoc_list
   then 
-    let () = print_endline "\n\ncheck 2" in
     let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list - 1 in 
     let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
     let new_pos = {number = start_pos.number + 1; letter = new_letter} in
@@ -183,7 +181,6 @@ let rec bishop_path_blocked t start_pos end_pos =
           List.assoc start_pos.letter pos_letter_assoc_list < 
           List.assoc end_pos.letter pos_letter_assoc_list
   then 
-    let () = print_endline "\n\ncheck 3" in
     let ind_new_letter = List.assoc start_pos.letter pos_letter_assoc_list + 1 in 
     let new_letter = List.assoc ind_new_letter number_to_letter_pos_assoc_list in
     let new_pos = {number = start_pos.number - 1; letter = new_letter} in
@@ -288,7 +285,6 @@ let is_bishop_move piece pos1 pos2 =
 
 let is_valid_move t piece pos1 pos2 = 
   if (pos1.number > 8 || pos1.number < 1 || pos2.number > 8 || pos2.number < 1)
-  || path_is_blocked t piece pos1 pos2 
   then false else match piece with 
     | Pawn Black-> if 
       (
@@ -399,7 +395,8 @@ let move_piece t pos1 pos2 =
   let position2 = parse_position pos2 in  
   let piece_to_move = 
     get_piece t position1 in
-  if is_valid_move t piece_to_move position1 position2 
+  if is_valid_move t piece_to_move position1 position2 && not 
+       (path_is_blocked t piece_to_move position1 position2 )
   then
     let pos1_letter_index = 
       List.assoc position1.letter pos_letter_assoc_list - 1 in
