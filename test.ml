@@ -39,7 +39,7 @@
 
    Lastly, we are also testing the functiality of State to make sure it works 
    as intended. 
-   *)
+*)
 
 
 open Chessboard
@@ -436,3 +436,5 @@ let _ = match Chessboard.move_piece c2 "d1" "d2" with
 let _ = match Chessboard.move_piece c2 "g1" "e2" with 
   | exception SameColorMoveError -> assert true 
   | _ -> assert false
+
+
