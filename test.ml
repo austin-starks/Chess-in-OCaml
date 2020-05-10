@@ -32,11 +32,14 @@
    - Can take pieces
    - Can castle
 
+   Also, we are testing to ensure that pieces cannot move inappropiately; they 
+   can only move in spaces that are legal in the game of chess. For example, a 
+   rook cannot move horizontally, and a knight can't move vertically. In 
+   addition, pieces (except knights) can't move through other pieces.
 
-   We are also testing the functiality of State to make sure it works at intended. 
-   Considering State is responsible for making the game actually proceed, it is the
-   biggest part towards making a complete game. Testing state will also ensure the 
-   necessary exceptions are actually thrown. *)
+   Lastly, we are also testing the functiality of State to make sure it works 
+   as intended. 
+   *)
 
 
 open Chessboard
