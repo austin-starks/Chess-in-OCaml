@@ -35,9 +35,9 @@
    Also, we are testing to ensure that pieces cannot move inappropiately; they 
    can only move in spaces that are legal in the game of chess. For example, a 
    rook cannot move horizontally, and a knight can't move vertically. In 
-   addition, pieces (except knights) can't move through other pieces.
+   addition,
 
-   Lastly, we are also testing the functionality of State to make sure it works 
+   Lastly, we are also testing the functiality of State to make sure it works 
    as intended. 
 *)
 
