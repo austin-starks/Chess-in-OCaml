@@ -37,7 +37,7 @@
    rook cannot move horizontally, and a knight can't move vertically. In 
    addition, pieces (except knights) can't move through other pieces.
 
-   Lastly, we are also testing the functiality of State to make sure it works 
+   Lastly, we are also testing the functionality of State to make sure it works 
    as intended. 
    *)
 
