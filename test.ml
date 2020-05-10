@@ -438,3 +438,80 @@ let _ = match Chessboard.move_piece c2 "g1" "e2" with
   | _ -> assert false
 
 
+
+(* Now testing different illegal moves *)
+let c3 = Chessboard.initialize_chessboard ()
+
+let _  = (Chessboard.move_piece c3 "e2" "e4") 
+
+(* Pawns *)
+(* Test that pawn can only move two spaces during it's first move *)
+let _ = match Chessboard.move_piece c3 "e4" "e6" with 
+  | exception IllegalMoveError -> assert true 
+  | _ -> assert false
+
+(* Test that pawn can not move diagonal if it is not taking a piece *)
+let _ = match Chessboard.move_piece c3 "e4" "f5" with 
+  | exception IllegalMoveError -> assert true 
+  | _ -> assert false
+
+(* Test that pawn can not move backwards *)
+let _ = match Chessboard.move_piece c3 "e4" "e3" with 
+  | exception IllegalMoveError -> assert true 
+  | _ -> assert false
+
+(* Rooks *)
+let _  = (Chessboard.move_piece c3 "a2" "a4") 
+let _  = (Chessboard.move_piece c3 "a1" "a3") 
+let _  = (Chessboard.move_piece c3 "a3" "c3") 
+
+(* Test that rooks can not move diagnal *)
+let _ = match Chessboard.move_piece c3 "c3" "d4" with 
+  | exception IllegalMoveError -> assert true 
+  | _ -> assert false
+
+(* Test that rooks can not move like knights *)
+let _ = match Chessboard.move_piece c3 "c3" "e2" with 
+  | exception IllegalMoveError -> assert true 
+  | _ -> assert false
+
+(* Queens *)
+let _  = (Chessboard.move_piece c3 "f7" "f5") 
+let _  = (Chessboard.move_piece c3 "f5" "e4") 
+let _  = (Chessboard.move_piece c3 "d1" "e2") 
+let _  = (Chessboard.move_piece c3 "e2" "e4") 
+
+(* Test that queens can not move like knights *)
+let _ = match Chessboard.move_piece c3 "e4" "g5" with 
+  | exception IllegalMoveError -> assert true 
+  | _ -> assert false
+
+(* Test that queens can not move randomly *)
+let _ = match Chessboard.move_piece c3 "e4" "f7" with 
+  | exception IllegalMoveError -> assert true 
+  | _ -> assert false
+
+(* Knight *)
+let _  = (Chessboard.move_piece c3 "g1" "f3") 
+
+(* Test that knights can not move vertically *)
+let _ = match Chessboard.move_piece c3 "f3" "f4" with 
+  | exception IllegalMoveError -> assert true 
+  | _ -> assert false
+
+(* Test that knights can not move horizontally *)
+let _ = match Chessboard.move_piece c3 "f3" "e3" with 
+  | exception IllegalMoveError -> assert true 
+  | _ -> assert false
+
+(* King *)
+(* Test that Kings can not move more than one space *)
+let _ = match Chessboard.move_piece c3 "e1" "e3" with 
+  | exception IllegalMoveError -> assert true 
+  | _ -> assert false
+
+(* Bishop *)
+(* Test that Bishops can not move horizontally *)
+let _ = match Chessboard.move_piece c3 "c1" "d1" with 
+  | exception IllegalMoveError -> assert true 
+  | _ -> assert false
