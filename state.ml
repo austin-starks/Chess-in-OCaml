@@ -40,7 +40,7 @@ let score t =
     if int_of_string p1_score > 100000000 then raise (P1Checkmate p1);
     if int_of_string p2_score > 100000000 then raise (P2Checkmate p2);
 
-    p1 ^ " has " ^ p1_score ^ " points\n"^ p2 ^ " has " ^ p2_score ^ " points.\n";
+    p1 ^ " has " ^ p1_score ^ " points.\n"^ p2 ^ " has " ^ p2_score ^ " points.\n";
   | _ -> failwith "There should be exactly two players"
 
 
