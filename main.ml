@@ -31,8 +31,8 @@ let rec play_game state =
       | exception Failure _ -> 
         error_handling "That piece can not move in that way." state; 
 
-(** [error_handling msg state] handles any error that is raised from state or 
-    the chessboard by printing a message and continuing to play a game. *)
+        (** [error_handling msg state] handles any error that is raised from state or 
+            the chessboard by printing a message and continuing to play a game. *)
 and error_handling msg state = 
   print_endline ("\n"^msg); 
   print_endline "Please try a different move."; 
