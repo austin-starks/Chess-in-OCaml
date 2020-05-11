@@ -228,6 +228,7 @@ let rec rook_path_blocked t start_pos end_pos =
     else let intermediate_position = 
            {letter = start_pos.letter; number = start_pos.number-1} in
       if get_piece t intermediate_position <> None &&
+      end_pos.number <> intermediate_position.number &&
          String.lowercase_ascii end_pos.letter <> 
          String.lowercase_ascii intermediate_position.letter then true 
       else rook_path_blocked t intermediate_position end_pos 
